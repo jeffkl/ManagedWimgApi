@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -22,15 +23,15 @@ namespace Microsoft.Wim.Tests
                 }
             }
 
-            Assert.IsTrue(File.Exists(exportWimPath));
+            File.Exists(exportWimPath).ShouldBeTrue();
 
-            Assert.AreNotEqual(0, new FileInfo(exportWimPath).Length);
+            new FileInfo(exportWimPath).Length.ShouldNotBe(0);
         }
 
         [Test]
         public void ExportImageTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.ExportImage(null, null, WimExportImageOptions.None));
         }
 
@@ -41,7 +42,7 @@ namespace Microsoft.Wim.Tests
             {
                 var imageHandleCopy = imageHandle;
 
-                AssertThrows<ArgumentNullException>("wimHandle", () =>
+                ShouldThrow<ArgumentNullException>("wimHandle", () =>
                     WimgApi.ExportImage(imageHandleCopy, null, WimExportImageOptions.None));
             }
         }

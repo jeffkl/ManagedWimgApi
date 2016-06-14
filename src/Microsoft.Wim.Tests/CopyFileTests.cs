@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Win32;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -16,7 +17,7 @@ namespace Microsoft.Wim.Tests
 
         #region Setup/Cleanup
 
-        [OneTimeSetUp]
+        [SetUp]
         public override void Setup()
         {
             base.Setup();
@@ -36,20 +37,20 @@ namespace Microsoft.Wim.Tests
         {
             WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None);
 
-            Assert.IsTrue(File.Exists(_destinationPath), "File exists '{0}'", _destinationPath);
+            File.Exists(_destinationPath).ShouldBe(true);
         }
 
         [Test]
         public void CopyFileTest_ThrowsArgumentNullException_destinationFile()
         {
-            AssertThrows<ArgumentNullException>("destinationFile", () =>
+            ShouldThrow<ArgumentNullException>("destinationFile", () =>
                 WimgApi.CopyFile("", null, WimCopyFileOptions.None));
         }
 
         [Test]
         public void CopyFileTest_ThrowsArgumentNullException_sourceFile()
         {
-            AssertThrows<ArgumentNullException>("sourceFile", () =>
+            ShouldThrow<ArgumentNullException>("sourceFile", () =>
                 WimgApi.CopyFile(null, "", WimCopyFileOptions.None));
         }
 
@@ -58,12 +59,12 @@ namespace Microsoft.Wim.Tests
         {
             WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None);
 
-            Assert.IsTrue(File.Exists(_destinationPath), "File exists '{0}'", _destinationPath);
+            File.Exists(_destinationPath).ShouldBeTrue();
 
-            var win32Exception = AssertThrows<Win32Exception>(() =>
+            var win32Exception = Should.Throw<Win32Exception>(() =>
                 WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.FailIfExists));
 
-            Assert.AreEqual("The file exists", win32Exception.Message);
+            win32Exception.Message.ShouldBe("The file exists");
         }
 
         [Test]
@@ -82,9 +83,9 @@ namespace Microsoft.Wim.Tests
 
             WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None, copyFileProgressCallback, stringBuilder);
 
-            Assert.IsTrue(_callbackCalled, "The callback was called");
+            _callbackCalled.ShouldBeTrue("The callback should have been called");
 
-            Assert.AreEqual(CallbackText, stringBuilder.ToString());
+            stringBuilder.ToString().ShouldBe(CallbackText);
         }
     }
 }

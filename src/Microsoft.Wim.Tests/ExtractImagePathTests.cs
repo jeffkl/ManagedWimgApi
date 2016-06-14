@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -19,13 +20,14 @@ namespace Microsoft.Wim.Tests
                 {
                     var fileName = Path.GetFileName(file);
 
-                    Assert.IsNotNull(fileName, "fileName should not be null");
+                    fileName.ShouldNotBeNull();
 
+                    // ReSharper disable once AssignNullToNotNullAttribute
                     var destinationPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, fileName);
 
                     WimgApi.ExtractImagePath(imageHandle, file, destinationPath);
 
-                    Assert.IsTrue(File.Exists(destinationPath), "File exists '{0}'", destinationPath);
+                    File.Exists(destinationPath).ShouldBeTrue();
                 }
             }
         }
@@ -37,7 +39,7 @@ namespace Microsoft.Wim.Tests
             {
                 var imageHandleCopy = imageHandle;
 
-                AssertThrows<ArgumentNullException>("destinationFile", () =>
+                ShouldThrow<ArgumentNullException>("destinationFile", () =>
                     WimgApi.ExtractImagePath(imageHandleCopy, "", null));
             }
         }
@@ -45,7 +47,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void ExtractImagePathTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.ExtractImagePath(null, "", ""));
         }
 
@@ -56,7 +58,7 @@ namespace Microsoft.Wim.Tests
             {
                 var imageHandleCopy = imageHandle;
 
-                AssertThrows<ArgumentNullException>("sourceFile", () =>
+                ShouldThrow<ArgumentNullException>("sourceFile", () =>
                     WimgApi.ExtractImagePath(imageHandleCopy, null, ""));
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -11,32 +12,32 @@ namespace Microsoft.Wim.Tests
         {
             WimgApi.DeleteImage(TestWimHandle, TestWimImageCount);
 
-            Assert.AreEqual(TestWimImageCount - 1, WimgApi.GetImageCount(TestWimHandle));
+            WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount - 1);
         }
 
         [Test]
         public void DeleteImageTest_ThrowsArgumentNullException_wimHandle()
         {
-            AssertThrows<ArgumentNullException>("wimHandle", () =>
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.DeleteImage(null, 1));
         }
 
         [Test]
         public void DeleteImageTest_ThrowsIndexOutOfRangeException_indexOutOfRange()
         {
-            var indexOutOfRangeException = AssertThrows<IndexOutOfRangeException>(() =>
+            var indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.DeleteImage(TestWimHandle, 10));
 
-            Assert.AreEqual("There is no image at index 10.", indexOutOfRangeException.Message);
+            indexOutOfRangeException.Message.ShouldBe("There is no image at index 10.");
         }
 
         [Test]
         public void DeleteImageTest_ThrowsIndexOutOfRangeException_indexZero()
         {
-            var indexOutOfRangeException = AssertThrows<IndexOutOfRangeException>(() =>
+            var indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.DeleteImage(TestWimHandle, 0));
 
-            Assert.AreEqual("There is no image at index 0.", indexOutOfRangeException.Message);
+            indexOutOfRangeException.Message.ShouldBe("There is no image at index 0.");
         }
 
         [Test]
@@ -44,46 +45,46 @@ namespace Microsoft.Wim.Tests
         {
             using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                Assert.IsNotNull(imageHandle);
+                imageHandle.ShouldNotBeNull();
 
-                Assert.IsFalse(imageHandle.IsInvalid);
+                imageHandle.IsInvalid.ShouldBeFalse();
 
-                Assert.IsFalse(imageHandle.IsClosed);
+                imageHandle.IsClosed.ShouldBeFalse();
             }
         }
 
         [Test]
         public void LoadImageTest_ThrowsArgumentNullException_wimHandle()
         {
-            AssertThrows<ArgumentNullException>("wimHandle", () =>
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.LoadImage(null, 1));
         }
 
         [Test]
         public void LoadImageTest_ThrowsIndexOutOfRangeException_indexMinusOne()
         {
-            var indexOutOfRangeException = AssertThrows<IndexOutOfRangeException>(() =>
+            var indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.LoadImage(TestWimHandle, -1));
 
-            Assert.AreEqual("There is no image at index -1.", indexOutOfRangeException.Message);
+            indexOutOfRangeException.Message.ShouldBe("There is no image at index -1.");
         }
 
         [Test]
         public void LoadImageTest_ThrowsIndexOutOfRangeException_indexOutOfRange()
         {
-            var indexOutOfRangeException = AssertThrows<IndexOutOfRangeException>(() =>
+            var indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.LoadImage(TestWimHandle, 10));
 
-            Assert.AreEqual("There is no image at index 10.", indexOutOfRangeException.Message);
+            indexOutOfRangeException.Message.ShouldBe("There is no image at index 10.");
         }
 
         [Test]
         public void LoadImageTest_ThrowsIndexOutOfRangeException_indexZero()
         {
-            var indexOutOfRangeException = AssertThrows<IndexOutOfRangeException>(() =>
+            var indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.LoadImage(TestWimHandle, 0));
 
-            Assert.AreEqual("There is no image at index 0.", indexOutOfRangeException.Message);
+            indexOutOfRangeException.Message.ShouldBe("There is no image at index 0.");
         }
     }
 }

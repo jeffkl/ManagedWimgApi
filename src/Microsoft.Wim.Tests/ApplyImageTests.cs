@@ -1,7 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -23,31 +24,34 @@ namespace Microsoft.Wim.Tests
                 }
             }
 
-            var fileCount = Directory.EnumerateFiles(ApplyPath).Count();
-
-            Assert.AreEqual(TestWimFileCount, fileCount);
+            Directory.EnumerateFiles(ApplyPath).Count().ShouldBe(TestWimFileCount);
         }
 
         [Test]
         public void ApplyImageTest_Abort()
         {
-            WimMessageCallback messageCallback = (messageType, message, userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
-
-            WimgApi.RegisterMessageCallback(TestWimHandle, messageCallback);
-
-            try
+            using (var wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
-                using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+                WimgApi.SetTemporaryPath(wimHandle, TempPath);
+
+                WimMessageCallback messageCallback = (messageType, message, userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
+
+                WimgApi.RegisterMessageCallback(wimHandle, messageCallback);
+
+                try
                 {
-                    var imageHandleCopy = imageHandle;
+                    using (var imageHandle = WimgApi.LoadImage(wimHandle, 1))
+                    {
+                        var imageHandleCopy = imageHandle;
 
-                    AssertThrows<OperationCanceledException>(() =>
-                        WimgApi.ApplyImage(imageHandleCopy, ApplyPath, WimApplyImageOptions.NoApply));
+                        Should.Throw<OperationCanceledException>(() =>
+                            WimgApi.ApplyImage(imageHandleCopy, ApplyPath, WimApplyImageOptions.NoApply));
+                    }
                 }
-            }
-            finally
-            {
-                WimgApi.UnregisterMessageCallback(TestWimHandle, messageCallback);
+                finally
+                {
+                    WimgApi.UnregisterMessageCallback(wimHandle, messageCallback);
+                }
             }
         }
 
@@ -58,7 +62,7 @@ namespace Microsoft.Wim.Tests
             {
                 if (messageType == WimMessageType.SetRange)
                 {
-                    _noApplyFileCount = ((WimMessageSetRange)message).FileCount;
+                    _noApplyFileCount = ((WimMessageSetRange) message).FileCount;
                 }
 
                 return WimMessageResult.Done;
@@ -66,7 +70,7 @@ namespace Microsoft.Wim.Tests
 
             var applyPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Apply");
 
-            using (var wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using (var wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
@@ -87,15 +91,15 @@ namespace Microsoft.Wim.Tests
 
             var fileCount = Directory.EnumerateFiles(ApplyPath).Count();
 
-            Assert.AreEqual(0, fileCount);
+            fileCount.ShouldBe(0);
 
-            Assert.AreEqual(TestWimFileCount, _noApplyFileCount);
+            _noApplyFileCount.ShouldBe(TestWimFileCount);
         }
 
         [Test]
         public void ApplyImageTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.ApplyImage(null, "", WimApplyImageOptions.None));
         }
     }

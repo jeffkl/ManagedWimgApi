@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -37,14 +38,14 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void RemountImageTest_ThrowsArgumentNullException_mountPath()
         {
-            AssertThrows<ArgumentNullException>("mountPath", () =>
+            ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.RemountImage(null));
         }
 
         [Test]
         public void RemountImageTest_ThrowsDirectoryNotFoundException_mountPath()
         {
-            AssertThrows<DirectoryNotFoundException>(() =>
+            Should.Throw<DirectoryNotFoundException>(() =>
                 WimgApi.RemountImage(Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString())));
         }
 
@@ -52,7 +53,7 @@ namespace Microsoft.Wim.Tests
         {
             var wimServProcesses = Process.GetProcessesByName("wimserv");
 
-            Assert.AreNotEqual(0, wimServProcesses.Length, "WimServ.exe processes were found");
+            wimServProcesses.Length.ShouldNotBe(0);
 
             foreach (var process in wimServProcesses)
             {
@@ -64,7 +65,7 @@ namespace Microsoft.Wim.Tests
         {
             var mountedImageInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
-            Assert.AreEqual(expectedMountPointState, mountedImageInfo.State | expectedMountPointState);
+            (mountedImageInfo.State | expectedMountPointState).ShouldBe(expectedMountPointState);
         }
     }
 }

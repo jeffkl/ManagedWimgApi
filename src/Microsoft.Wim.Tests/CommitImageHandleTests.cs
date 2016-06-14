@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Shouldly;
 
 // ReSharper disable UnusedVariable
 
@@ -19,7 +20,7 @@ namespace Microsoft.Wim.Tests
                 {
                     using (var newImageHandle = WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
-                        Assert.AreEqual(TestWimImageCount, WimgApi.GetImageCount(TestWimHandle));
+                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount);
                     }
                 }
                 finally
@@ -40,7 +41,7 @@ namespace Microsoft.Wim.Tests
                 {
                     using (var newImageHandle = WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
-                        Assert.AreEqual(TestWimImageCount + 1, WimgApi.GetImageCount(TestWimHandle));
+                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount + 1);
                     }
                 }
                 finally
@@ -53,7 +54,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CommitImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.CommitImageHandle(null, false, WimCommitImageOptions.None));
         }
     }

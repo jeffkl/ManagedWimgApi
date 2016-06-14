@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -20,19 +21,19 @@ namespace Microsoft.Wim.Tests
                 {
                     try
                     {
-                        Assert.IsNotNull(actualWimHandle, "GetMountedImageHandle() returned a WIM handle");
+                        actualWimHandle.ShouldNotBeNull();
 
-                        Assert.IsNotNull(actualImageHandle, "GetMountedImageHandle() returned an image handle");
+                        actualImageHandle.ShouldNotBeNull();
 
                         var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
 
-                        Assert.IsNotNull(wimMountInfo, "WimMountInfo is not null");
+                        wimMountInfo.ShouldNotBeNull();
 
-                        Assert.AreEqual(1, wimMountInfo.ImageIndex);
-                        Assert.AreEqual(MountPath, wimMountInfo.MountPath);
-                        Assert.AreEqual(TestWimPath, wimMountInfo.Path);
-                        Assert.AreEqual(true, wimMountInfo.ReadOnly);
-                        Assert.AreEqual(WimMountPointState.Mounted, wimMountInfo.State);
+                        wimMountInfo.ImageIndex.ShouldBe(1);
+                        wimMountInfo.MountPath.ShouldBe(MountPath);
+                        wimMountInfo.Path.ShouldBe(TestWimPath);
+                        wimMountInfo.ReadOnly.ShouldBeTrue();
+                        wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
                     }
                     finally
                     {
@@ -53,19 +54,19 @@ namespace Microsoft.Wim.Tests
                 {
                     try
                     {
-                        Assert.IsNotNull(actualWimHandle, "GetMountedImageHandle() returned a WIM handle");
+                        actualWimHandle.ShouldNotBeNull();
 
-                        Assert.IsNotNull(actualImageHandle, "GetMountedImageHandle() returned an image handle");
+                        actualImageHandle.ShouldNotBeNull();
 
                         var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
 
-                        Assert.IsNotNull(wimMountInfo, "WimMountInfo is not null");
+                        wimMountInfo.ShouldNotBeNull();
 
-                        Assert.AreEqual(1, wimMountInfo.ImageIndex);
-                        Assert.AreEqual(MountPath, wimMountInfo.MountPath);
-                        Assert.AreEqual(TestWimPath, wimMountInfo.Path);
-                        Assert.AreEqual(true, wimMountInfo.ReadOnly);
-                        Assert.AreEqual(WimMountPointState.Mounted, wimMountInfo.State);
+                        wimMountInfo.ImageIndex.ShouldBe(1);
+                        wimMountInfo.MountPath.ShouldBe(MountPath);
+                        wimMountInfo.Path.ShouldBe(TestWimPath);
+                        wimMountInfo.ReadOnly.ShouldBeTrue();
+                        wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
                     }
                     finally
                     {
@@ -80,7 +81,7 @@ namespace Microsoft.Wim.Tests
         {
             WimHandle wimHandle;
 
-            AssertThrows<ArgumentNullException>("mountPath", () =>
+            ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.GetMountedImageHandle(null, false, out wimHandle));
         }
 
@@ -91,20 +92,20 @@ namespace Microsoft.Wim.Tests
             {
                 var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
-                Assert.IsNotNull(wimMountInfo, "WimMountInfo is not null");
+                wimMountInfo.ShouldNotBeNull();
 
-                Assert.AreEqual(1, wimMountInfo.ImageIndex);
-                Assert.AreEqual(MountPath, wimMountInfo.MountPath);
-                Assert.AreEqual(TestWimPath, wimMountInfo.Path);
-                Assert.AreEqual(true, wimMountInfo.ReadOnly);
-                Assert.AreEqual(WimMountPointState.Mounted, wimMountInfo.State);
+                wimMountInfo.ImageIndex.ShouldBe(1);
+                wimMountInfo.MountPath.ShouldBe(MountPath);
+                wimMountInfo.Path.ShouldBe(TestWimPath);
+                wimMountInfo.ReadOnly.ShouldBeTrue();
+                wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
             });
         }
 
         [Test]
         public void GetMountedImageInfoFromHandleTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.GetMountedImageInfoFromHandle(null));
         }
 
@@ -115,39 +116,40 @@ namespace Microsoft.Wim.Tests
             {
                 var wimMountInfos = WimgApi.GetMountedImageInfo();
 
-                Assert.IsNotNull(wimMountInfos, "GetMountedImageInfo() returned a value");
+                wimMountInfos.ShouldNotBeNull();
 
-                Assert.AreEqual(1, wimMountInfos.Count, "1 image is mounted");
+                wimMountInfos.Count.ShouldBe(1);
 
                 var wimMountInfo = wimMountInfos.FirstOrDefault();
 
-                Assert.IsNotNull(wimMountInfo, "WimMountInfo is not null");
+                wimMountInfo.ShouldNotBeNull();
 
-                Assert.AreEqual(1, wimMountInfo.ImageIndex);
-                Assert.AreEqual(MountPath, wimMountInfo.MountPath);
-                Assert.AreEqual(TestWimPath, wimMountInfo.Path);
-                Assert.AreEqual(true, wimMountInfo.ReadOnly);
-                Assert.AreEqual(WimMountPointState.Mounted, wimMountInfo.State);
+                // ReSharper disable once PossibleNullReferenceException
+                wimMountInfo.ImageIndex.ShouldBe(1);
+                wimMountInfo.MountPath.ShouldBe(MountPath);
+                wimMountInfo.Path.ShouldBe(TestWimPath);
+                wimMountInfo.ReadOnly.ShouldBeTrue();
+                wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
             });
         }
 
         [Test]
         public void MountImageHandleTest_ReadOnly()
         {
-            const bool readOnly = false;
+            const bool readOnly = true;
 
             ExecuteAgainstMountedImage(readOnly, (wimHandle, imageHandle) =>
             {
-                Assert.IsNotNull(wimHandle);
-                Assert.IsTrue(!wimHandle.IsInvalid);
-                Assert.IsTrue(!wimHandle.IsClosed);
-                Assert.IsNotNull(imageHandle);
-                Assert.IsTrue(!imageHandle.IsInvalid);
-                Assert.IsTrue(!imageHandle.IsClosed);
+                wimHandle.ShouldNotBeNull();
+                wimHandle.IsInvalid.ShouldBeFalse();
+                wimHandle.IsClosed.ShouldBeFalse();
+                imageHandle.ShouldNotBeNull();
+                imageHandle.IsClosed.ShouldBeFalse();
+                imageHandle.IsInvalid.ShouldBeFalse();
 
                 var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
-                Assert.AreEqual(readOnly, wimMountInfo.ReadOnly);
+                wimMountInfo.ReadOnly.ShouldBe(readOnly);
             });
         }
 
@@ -158,23 +160,23 @@ namespace Microsoft.Wim.Tests
 
             ExecuteAgainstMountedImage(readOnly, (wimHandle, imageHandle) =>
             {
-                Assert.IsNotNull(wimHandle);
-                Assert.IsTrue(!wimHandle.IsInvalid);
-                Assert.IsTrue(!wimHandle.IsClosed);
-                Assert.IsNotNull(imageHandle);
-                Assert.IsTrue(!imageHandle.IsInvalid);
-                Assert.IsTrue(!imageHandle.IsClosed);
+                wimHandle.ShouldNotBeNull();
+                wimHandle.IsInvalid.ShouldBeFalse();
+                wimHandle.IsClosed.ShouldBeFalse();
+                imageHandle.ShouldNotBeNull();
+                imageHandle.IsClosed.ShouldBeFalse();
+                imageHandle.IsInvalid.ShouldBeFalse();
 
                 var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
-                Assert.AreEqual(readOnly, wimMountInfo.ReadOnly);
+                wimMountInfo.ReadOnly.ShouldBe(readOnly);
             });
         }
 
         [Test]
         public void MountImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.MountImage(null, MountPath, WimMountImageOptions.None));
         }
 
@@ -185,7 +187,7 @@ namespace Microsoft.Wim.Tests
             {
                 var imageHandleCopy = imageHandle;
 
-                AssertThrows<ArgumentNullException>("mountPath", () =>
+                ShouldThrow<ArgumentNullException>("mountPath", () =>
                     WimgApi.MountImage(imageHandleCopy, null, WimMountImageOptions.None));
             }
         }
@@ -197,7 +199,7 @@ namespace Microsoft.Wim.Tests
             {
                 var imageHandleCopy = imageHandle;
 
-                AssertThrows<DirectoryNotFoundException>(() =>
+                Should.Throw<DirectoryNotFoundException>(() =>
                     WimgApi.MountImage(imageHandleCopy, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), WimMountImageOptions.None));
             }
         }
@@ -210,7 +212,7 @@ namespace Microsoft.Wim.Tests
             {
                 var mountedImages = WimgApi.GetMountedImageInfo();
 
-                Assert.AreEqual(1, mountedImages.Count);
+                mountedImages.Count.ShouldBe(1);
             }
             finally
             {
@@ -221,100 +223,100 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void MountImageTest_ThrowsArgumentNullException_imagePath()
         {
-            AssertThrows<ArgumentNullException>("imagePath", () =>
+            ShouldThrow<ArgumentNullException>("imagePath", () =>
                 WimgApi.MountImage(MountPath, null, 1));
         }
 
         [Test]
         public void MountImageTest_ThrowsArgumentNullException_mountPath()
         {
-            AssertThrows<ArgumentNullException>("mountPath", () =>
+            ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.MountImage(null, TestWimPath, 1));
         }
 
         [Test]
         public void MountImageTest_ThrowsDirectoryNotFoundException_mountPathDoesNotExist()
         {
-            AssertThrows<DirectoryNotFoundException>(() =>
+            Should.Throw<DirectoryNotFoundException>(() =>
                 WimgApi.MountImage(Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), TestWimPath, 1));
         }
 
         [Test]
         public void MountImageTest_ThrowsFileNotFoundException_imagePathDoesNotExist()
         {
-            AssertThrows<FileNotFoundException>(() =>
+            Should.Throw<FileNotFoundException>(() =>
                 WimgApi.MountImage(MountPath, "NonExistentFile.wim", 1));
         }
 
         [Test]
         public void MountImageTest_ThrowsIndexOutOfRangeException_imageIndex_0()
         {
-            AssertThrows<IndexOutOfRangeException>(() =>
+            Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, 0));
         }
 
         [Test]
         public void MountImageTest_ThrowsIndexOutOfRangeException_imageIndex_minusOne()
         {
-            AssertThrows<IndexOutOfRangeException>(() =>
+            Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, -1));
         }
 
         [Test]
         public void MountImageTest_ThrowsWin32Exception_imageIndexOutOfRange()
         {
-            var invalidParameterException = AssertThrows<Win32Exception>(() =>
+            var invalidParameterException = Should.Throw<Win32Exception>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, 10));
 
-            Assert.AreEqual("The parameter is incorrect", invalidParameterException.Message);
+            invalidParameterException.Message.ShouldBe("The parameter is incorrect");
         }
 
         [Test]
         public void UnmountImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
-            AssertThrows<ArgumentNullException>("imageHandle", () =>
+            ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.UnmountImage(null));
         }
 
         [Test]
         public void UnmountImageTest_ThrowsArgumentNullException_imagePath()
         {
-            AssertThrows<ArgumentNullException>("imagePath", () =>
+            ShouldThrow<ArgumentNullException>("imagePath", () =>
                 WimgApi.UnmountImage("", null, 1, false));
         }
 
         [Test]
         public void UnmountImageTest_ThrowsArgumentNullException_mountPath()
         {
-            AssertThrows<ArgumentNullException>("mountPath", () =>
+            ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.UnmountImage(null, "", 1, false));
         }
 
         [Test]
         public void UnmountImageTest_ThrowsDirectoryNotFoundException_mountPathDoesNotExist()
         {
-            AssertThrows<DirectoryNotFoundException>(() =>
+            Should.Throw<DirectoryNotFoundException>(() =>
                 WimgApi.UnmountImage(Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), "", 1, false));
         }
 
         [Test]
         public void UnmountImageTest_ThrowsFileNotFoundExceptionException_imagePathDoesNotExist()
         {
-            AssertThrows<FileNotFoundException>(() =>
+            Should.Throw<FileNotFoundException>(() =>
                 WimgApi.UnmountImage(MountPath, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), 1, false));
         }
 
         [Test]
         public void UnmountImageTest_ThrowsIndexOutOfRangeException_imageIndex_0()
         {
-            AssertThrows<IndexOutOfRangeException>(() =>
+            Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.UnmountImage("", "", 0, false));
         }
 
         [Test]
         public void UnmountImageTest_ThrowsIndexOutOfRangeException_imageIndex_minusOne()
         {
-            AssertThrows<IndexOutOfRangeException>(() =>
+            Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.UnmountImage("", "", -1, false));
         }
 

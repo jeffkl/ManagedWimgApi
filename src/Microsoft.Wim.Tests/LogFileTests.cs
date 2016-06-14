@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -11,7 +12,7 @@ namespace Microsoft.Wim.Tests
 
         #region Setup/Cleanup
 
-        [OneTimeTearDown]
+        [TearDown]
         public override void Cleanup()
         {
             if (File.Exists(_logFilePath))
@@ -22,7 +23,7 @@ namespace Microsoft.Wim.Tests
             base.Cleanup();
         }
 
-        [OneTimeSetUp]
+        [SetUp]
         public override void Setup()
         {
             base.Setup();
@@ -43,7 +44,7 @@ namespace Microsoft.Wim.Tests
             WimgApi.RegisterLogFile(_logFilePath);
             try
             {
-                Assert.IsTrue(File.Exists(_logFilePath), "Registered log file exists");
+                File.Exists(_logFilePath).ShouldBeTrue();
             }
             finally
             {
@@ -54,14 +55,14 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void RegisterLogFileTest_ThrowsArgumentNullException_logFile()
         {
-            AssertThrows<ArgumentNullException>("logFile", () =>
+            ShouldThrow<ArgumentNullException>("logFile", () =>
                 WimgApi.RegisterLogFile(null));
         }
 
         [Test]
         public void UnregisterLogFileTest_ThrowsArgumentNullException_logFile()
         {
-            AssertThrows<ArgumentNullException>("logFile", () =>
+            ShouldThrow<ArgumentNullException>("logFile", () =>
                 WimgApi.UnregisterLogFile(null));
         }
     }

@@ -11,7 +11,7 @@ namespace Microsoft.Wim.Tests
     {
         #region Setup/Cleanup
 
-        [OneTimeSetUp]
+        [SetUp]
         public override void Setup()
         {
             base.Setup();
@@ -38,7 +38,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CreateFileTest_ThrowsArgumentNullException_path()
         {
-            AssertThrows<ArgumentNullException>("path", () =>
+            ShouldThrow<ArgumentNullException>("path", () =>
                 WimgApi.CreateFile(null, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None));
         }
     }

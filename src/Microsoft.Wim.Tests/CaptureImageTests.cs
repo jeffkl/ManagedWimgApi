@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using Shouldly;
 
 // ReSharper disable UnusedVariable
 
@@ -27,7 +28,7 @@ namespace Microsoft.Wim.Tests
                 {
                     var imageCount = WimgApi.GetImageCount(wimHandle);
 
-                    Assert.AreEqual(1, imageCount);
+                    imageCount.ShouldBe(1);
                 }
             }
         }
@@ -35,21 +36,21 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CaptureImageTest_ThrowsArgumentNullException_path()
         {
-            AssertThrows<ArgumentNullException>("path", () =>
+            ShouldThrow<ArgumentNullException>("path", () =>
                 WimgApi.CaptureImage(TestWimHandle, null, WimCaptureImageOptions.None));
         }
 
         [Test]
         public void CaptureImageTest_ThrowsArgumentNullException_wimHandle()
         {
-            AssertThrows<ArgumentNullException>("wimHandle", () =>
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.CaptureImage(null, TempPath, WimCaptureImageOptions.None));
         }
 
         [Test]
         public void CaptureImageTest_ThrowsDirectoryNotFoundException_path()
         {
-            AssertThrows<DirectoryNotFoundException>(() =>
+            Should.Throw<DirectoryNotFoundException>(() =>
                 WimgApi.CaptureImage(TestWimHandle, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), WimCaptureImageOptions.None));
         }
 
@@ -74,12 +75,11 @@ namespace Microsoft.Wim.Tests
                     WimgApi.UnregisterMessageCallback(wimHandle, CaptureImageWithCallbackTestCallback);
                 }
             }
+            _captureWithCallbackCalled.ShouldBe(true, "The callback should have been called");
 
-            Assert.IsTrue(_captureWithCallbackCalled, "The callback was called");
+            userData.WasCalled.ShouldBe(true, "The callback should have set user data");
 
-            Assert.IsTrue(userData.WasCalled, "The callback set user data");
-
-            Assert.AreEqual(TestWimFileCount, _captureWithCallbackFileCount);
+            _captureWithCallbackFileCount.ShouldBe(TestWimFileCount);
         }
 
         private WimMessageResult CaptureImageWithCallbackTestCallback(WimMessageType messageType, object message, object userData)

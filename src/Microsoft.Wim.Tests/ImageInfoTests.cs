@@ -2,6 +2,7 @@
 using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -13,22 +14,22 @@ namespace Microsoft.Wim.Tests
         public void GetAttributesTest()
         {
             var wimInfo = WimgApi.GetAttributes(TestWimHandle);
+            wimInfo.ShouldNotBeNull();
 
-            Assert.IsNotNull(wimInfo, "WimInfo is not null.");
-            Assert.AreEqual(WimInfoAttributes.Normal, wimInfo.Attributes);
-            Assert.AreEqual(0, wimInfo.BootIndex);
-            Assert.AreEqual(WimCompressionType.Lzx, wimInfo.CompressionType);
-            Assert.AreNotEqual(Guid.Empty, wimInfo.Guid);
-            Assert.AreEqual(TestWimImageCount, wimInfo.ImageCount);
-            Assert.AreEqual(1, wimInfo.PartNumber);
-            Assert.AreEqual(1, wimInfo.TotalParts);
+            wimInfo.Attributes.ShouldBe(WimInfoAttributes.Normal);
+            wimInfo.BootIndex.ShouldBe(0);
+            wimInfo.CompressionType.ShouldBe(WimCompressionType.Lzx);
+            wimInfo.Guid.ShouldNotBe(Guid.Empty);
+            wimInfo.ImageCount.ShouldBe(TestWimImageCount);
+            wimInfo.PartNumber.ShouldBe(1);
+            wimInfo.TotalParts.ShouldBe(1);
         }
 
         [Test]
         [Description("Verifies that the GetAttributes throws an ArgumentNullException when wimHandle is null.")]
         public void GetAttributesTest_ThrowsArgumentNullException_wimHandle()
         {
-            AssertThrows<ArgumentNullException>("wimHandle", () =>
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.GetAttributes(null));
         }
 
@@ -37,8 +38,7 @@ namespace Microsoft.Wim.Tests
         public void GetImageCountTest()
         {
             var imageCount = WimgApi.GetImageCount(TestWimHandle);
-
-            Assert.AreEqual(TestWimImageCount, imageCount);
+            imageCount.ShouldBe(TestWimImageCount);
         }
 
         [Test]
@@ -89,11 +89,11 @@ namespace Microsoft.Wim.Tests
 
             var imageInformation = WimgApi.GetImageInformation(TestWimHandle);
 
-            Assert.IsNotNull(imageInformation, "Image information is not null");
+            imageInformation.ShouldNotBeNull();
 
             var documentElement = imageInformation.CreateNavigator();
 
-            Assert.IsNotNull(documentElement, "XPathNavigator is not null");
+            documentElement.ShouldNotBeNull();
 
             VerifyXmlNodeText(documentElement, "//WIM/TOTALBYTES/text()");
 
@@ -130,7 +130,7 @@ namespace Microsoft.Wim.Tests
         [Description("Verifies that the GetAttributes throws an ArgumentNullException when wimHandle is null.")]
         public void GetImageInformationTest_ThrowsArgumentNullException_wimHandle()
         {
-            AssertThrows<ArgumentNullException>("wimHandle", () =>
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.GetImageInformation(null));
         }
 
@@ -151,14 +151,14 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void SetImageInformationTest_ThrowsArgumentNullException_wimHandle()
         {
-            AssertThrows<ArgumentNullException>("wimHandle", () =>
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.SetImageInformation(null, null));
         }
 
         [Test]
         public void SetImageInformationTest_ThrowsArgumentNullException_imageInfoXml()
         {
-            AssertThrows<ArgumentNullException>("imageInfoXml", () =>
+            ShouldThrow<ArgumentNullException>("imageInfoXml", () =>
                 WimgApi.SetImageInformation(TestWimHandle, null));
         }
 
@@ -166,7 +166,7 @@ namespace Microsoft.Wim.Tests
         {
             var node = parentNode.SelectSingleNode(xpath);
 
-            Assert.IsNotNull(node, $"Found node '{xpath}'");
+            node.ShouldNotBeNull($"Could not find node '{xpath}'");
 
             return node;
         }
@@ -175,7 +175,7 @@ namespace Microsoft.Wim.Tests
         {
             var node = VerifyXmlNode(parentNode, xpath);
 
-            Assert.IsTrue(!String.IsNullOrEmpty(node.Value), $"Node value is null '{xpath}'");
+            node.Value.ShouldNotBeNullOrEmpty($"Node value '{xpath}' should not be empty");
         }
     }
 }

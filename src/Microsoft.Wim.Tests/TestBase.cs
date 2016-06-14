@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -23,26 +24,27 @@ namespace Microsoft.Wim.Tests
         private string _testWimPath;
         private string _testWimTemplatePath;
 
-        #region Setup/Cleanup
-
-        [OneTimeTearDown]
+        [TearDown]
         public virtual void Cleanup()
         {
-            _testWimHandle?.Dispose();
-
             if (_applyPath != null && Directory.Exists(_applyPath))
             {
                 Directory.Delete(_applyPath, true);
             }
         }
 
-        [OneTimeSetUp]
+        [SetUp]
         public virtual void Setup()
         {
             _captureWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "capture.wim");
         }
 
-        #endregion Setup/Cleanup
+
+        [OneTimeTearDown]
+        public virtual void OneTimeTearDown()
+        {
+            _testWimHandle?.Dispose();
+        }
 
         public string ApplyPath
         {
@@ -174,31 +176,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        protected Exception AssertThrows<T>(Action action)
-            where T : Exception
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                // TODO: Fix this
-                //Assert.IsInstanceOfType(ex, typeof(T));
-                return ex;
-            }
-
-            Assert.Fail(typeof(T) == new Exception().GetType() ? "Expected exception but no exception was thrown." : $"Expected exception of type {typeof (T)} but no exception was thrown.");
-
-            return null;
-        }
-
-        protected Exception AssertThrows<T>(string paramName, Action action)
+        protected Exception ShouldThrow<T>(string paramName, Action action)
             where T : ArgumentException
         {
             if (action == null)
@@ -206,26 +184,11 @@ namespace Microsoft.Wim.Tests
                 throw new ArgumentNullException(nameof(action));
             }
 
-            try
-            {
-                action();
-            }
-            catch (ArgumentException argumentException)
-            {
-                Assert.AreEqual(paramName, argumentException.ParamName, "Expected parameter name was found");
-                return argumentException;
-            }
-            catch (Exception exception)
-            {
-                // TODO: Fix this
-                //Assert.IsInstanceOfType(exception, typeof(T));
+            T exception = Should.Throw<T>(action);
 
-                return exception;
-            }
+            exception.ParamName.ShouldBe(paramName);
 
-            Assert.Fail(typeof(T) == new Exception().GetType() ? "Expected exception but no exception was thrown." : $"Expected exception of type {typeof (T)} but no exception was thrown.");
-
-            return null;
+            return exception;
         }
 
         protected void CaptureTestImage(string imagePath, string capturePath)
@@ -256,14 +219,16 @@ namespace Microsoft.Wim.Tests
 
                 var xml = WimgApi.GetImageInformation(wimHandle).CreateNavigator();
 
-                Assert.IsNotNull(xml, "xml should not be null");
+                xml.ShouldNotBeNull();
 
+                // ReSharper disable once PossibleNullReferenceException
                 xmlDocument.LoadXml(xml.OuterXml);
 
                 var imageNodes = xmlDocument.SelectNodes("//WIM/IMAGE");
-                
-                Assert.IsNotNull(imageNodes, "imageNodes should not be null");
 
+                imageNodes.ShouldNotBeNull();
+
+                // ReSharper disable once PossibleNullReferenceException
                 foreach (XmlElement imageNode in imageNodes)
                 {
                     var fragment = xmlDocument.CreateDocumentFragment();
