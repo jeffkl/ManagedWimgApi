@@ -28,10 +28,7 @@ namespace Microsoft.Wim.Tests
         [OneTimeTearDown]
         public virtual void Cleanup()
         {
-            if (_testWimHandle != null)
-            {
-                _testWimHandle.Dispose();
-            }
+            _testWimHandle?.Dispose();
 
             if (_applyPath != null && Directory.Exists(_applyPath))
             {
@@ -85,13 +82,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        public string CaptureWimPath
-        {
-            get
-            {
-                return _captureWimPath;
-            }
-        }
+        public string CaptureWimPath => _captureWimPath;
 
         public string MountPath
         {
@@ -188,7 +179,7 @@ namespace Microsoft.Wim.Tests
         {
             if (action == null)
             {
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             }
 
             try
@@ -202,7 +193,7 @@ namespace Microsoft.Wim.Tests
                 return ex;
             }
 
-            Assert.Fail(typeof(T) == new Exception().GetType() ? "Expected exception but no exception was thrown." : String.Format("Expected exception of type {0} but no exception was thrown.", typeof(T)));
+            Assert.Fail(typeof(T) == new Exception().GetType() ? "Expected exception but no exception was thrown." : $"Expected exception of type {typeof (T)} but no exception was thrown.");
 
             return null;
         }
@@ -212,7 +203,7 @@ namespace Microsoft.Wim.Tests
         {
             if (action == null)
             {
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             }
 
             try
@@ -232,7 +223,7 @@ namespace Microsoft.Wim.Tests
                 return exception;
             }
 
-            Assert.Fail(typeof(T) == new Exception().GetType() ? "Expected exception but no exception was thrown." : String.Format("Expected exception of type {0} but no exception was thrown.", typeof(T)));
+            Assert.Fail(typeof(T) == new Exception().GetType() ? "Expected exception but no exception was thrown." : $"Expected exception of type {typeof (T)} but no exception was thrown.");
 
             return null;
         }
@@ -241,7 +232,7 @@ namespace Microsoft.Wim.Tests
         {
             if (String.IsNullOrEmpty(imagePath))
             {
-                throw new ArgumentNullException("imagePath");
+                throw new ArgumentNullException(nameof(imagePath));
             }
 
             if (!Directory.Exists(capturePath))
@@ -301,11 +292,11 @@ namespace Microsoft.Wim.Tests
 
                     imageNode.AppendChild(fragment);
 
-                    fragment.InnerXml = String.Format(@"<NAME>Test Image {0}</NAME>", imageNode.Attributes["INDEX"].Value);
+                    fragment.InnerXml = $@"<NAME>Test Image {imageNode.Attributes["INDEX"].Value}</NAME>";
 
                     imageNode.AppendChild(fragment);
 
-                    fragment.InnerXml = String.Format(@"<DESCRIPTION>Test Image {0}</DESCRIPTION>", imageNode.Attributes["INDEX"].Value);
+                    fragment.InnerXml = $@"<DESCRIPTION>Test Image {imageNode.Attributes["INDEX"].Value}</DESCRIPTION>";
 
                     imageNode.AppendChild(fragment);
 
@@ -318,7 +309,7 @@ namespace Microsoft.Wim.Tests
         {
             for (var i = 0; i < fileCount; i++)
             {
-                var filePath = Path.Combine(path, String.Format("TestFile{0}.txt", Guid.NewGuid()));
+                var filePath = Path.Combine(path, $"TestFile{Guid.NewGuid()}.txt");
 
                 using (var fs = File.CreateText(filePath))
                 {

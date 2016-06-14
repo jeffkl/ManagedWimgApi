@@ -342,10 +342,7 @@ namespace Microsoft.Wim.Tests
 
                     try
                     {
-                        if (action != null)
-                        {
-                            action(wimHandle, imageHandle);
-                        }
+                        action?.Invoke(wimHandle, imageHandle);
                     }
                     finally
                     {

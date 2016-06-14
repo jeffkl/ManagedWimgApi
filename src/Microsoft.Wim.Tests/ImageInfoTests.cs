@@ -166,7 +166,7 @@ namespace Microsoft.Wim.Tests
         {
             var node = parentNode.SelectSingleNode(xpath);
 
-            Assert.IsNotNull(node, String.Format("Found node '{0}'", xpath));
+            Assert.IsNotNull(node, $"Found node '{xpath}'");
 
             return node;
         }
@@ -175,7 +175,7 @@ namespace Microsoft.Wim.Tests
         {
             var node = VerifyXmlNode(parentNode, xpath);
 
-            Assert.IsTrue(!String.IsNullOrEmpty(node.Value), String.Format("Node value is null '{0}'", xpath));
+            Assert.IsTrue(!String.IsNullOrEmpty(node.Value), $"Node value is null '{xpath}'");
         }
     }
 }
