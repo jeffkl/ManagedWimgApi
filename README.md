@@ -1,6 +1,6 @@
 # Managed WimgApi Wrapper
 
-[![Microsoft.Wim](https://img.shields.io/nuget/v/Microsoft.Wim.svg?maxAge=2592000)](https://www.nuget.org/packages/Microsoft.Dism)
+[![Microsoft.Wim](https://img.shields.io/nuget/v/Microsoft.Wim.svg?maxAge=2592000)](https://www.nuget.org/packages/Microsoft.Wim)
 
 A managed wrapper for the native Windows Imaging API (WIMGAPI). The classes and methods are as close to the original API as possible.
 
