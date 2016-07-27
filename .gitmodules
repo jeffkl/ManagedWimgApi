@@ -1,3 +1,0 @@
-[submodule ".build\\CBT"]
-	path = .build\\CBT
-	url = https://github.com/CommonBuildToolset/Release.git
