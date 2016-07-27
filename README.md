@@ -5,3 +5,6 @@
 A managed wrapper for the native Windows Imaging API (WIMGAPI). The classes and methods are as close to the original API as possible.
 
 See the [wiki](https://github.com/josemesona/ManagedWimgApi/wiki) for more information.
+
+# Contributing
+Please read the [Contributing doc](CONTRIBUTING.md) for information on building the code and contributing to the project.
