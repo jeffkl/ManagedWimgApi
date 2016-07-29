@@ -2,9 +2,11 @@
 It is highly encouraged that you contribute to this project.  Please [open an issue](https://github.com/josemesona/ManagedWimgApi/issues/new) first so that a
 discussion can be had around the overall implementation.
 
-Once your issue has been discussed, clone this repository and open the Solution File in Visual
+Once your issue has been discussed, fork this repository and open the Solution File in Visual
 Studio or the source code in your favorite editor.  To compile the code, build in Visual Studio
 or run MSBuild.exe against src\dirs.proj.
+
+Send off your pull request and it'll get reviewed as soon as possible.
 
 # Unit tests
 The Windows Imaging API (WimgApi) requires that operations run in an elevated context.  This means
