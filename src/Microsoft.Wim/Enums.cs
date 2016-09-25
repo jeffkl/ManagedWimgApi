@@ -182,6 +182,11 @@ namespace Microsoft.Wim
         None = 0,
 
         /// <summary>
+        /// Allow cross-file WIM like ESD.
+        /// </summary>
+        Chunked = WimgApi.WIM_FLAG_CHUNKED,
+
+        /// <summary>
         /// Opens the .wim file in a mode that enables simultaneous reading and writing.
         /// </summary>
         ShareWrite = WimgApi.WIM_FLAG_SHARE_WRITE,
