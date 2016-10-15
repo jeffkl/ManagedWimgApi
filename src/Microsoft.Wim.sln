@@ -10,9 +10,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.build\local\Extensions\AssemblyInfo.props = ..\.build\local\Extensions\AssemblyInfo.props
 		..\build.props = ..\build.props
 		key.snk = key.snk
+		..\NuGet.config = ..\NuGet.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Wim.Tests", "Microsoft.Wim.Tests\Microsoft.Wim.Tests.csproj", "{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{CDB22DD4-5317-4187-A522-393F6F7741BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "local", "local", "{5526A485-DBED-4796-B9C5-EDF94ED2DD64}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CBTModules", "CBTModules", "{3F584CF7-9AE4-4689-AF1D-CFCAF6AC7305}"
+	ProjectSection(SolutionItems) = preProject
+		..\.build\local\CBTModules\packages.config = ..\.build\local\CBTModules\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,5 +41,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDB22DD4-5317-4187-A522-393F6F7741BF} = {ACEBD36D-52B4-4F23-9758-E695BCE247FA}
+		{5526A485-DBED-4796-B9C5-EDF94ED2DD64} = {CDB22DD4-5317-4187-A522-393F6F7741BF}
+		{3F584CF7-9AE4-4689-AF1D-CFCAF6AC7305} = {5526A485-DBED-4796-B9C5-EDF94ED2DD64}
 	EndGlobalSection
 EndGlobal
