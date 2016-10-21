@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CBTModules", "CBTModules", 
 		..\.build\local\CBTModules\packages.config = ..\.build\local\CBTModules\packages.config
 	EndProjectSection
 EndProject
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Microsoft.Wim.Package", "Microsoft.Wim.Package\Microsoft.Wim.Package.nuproj", "{18E4321C-8437-4349-8218-295B5756F95A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18E4321C-8437-4349-8218-295B5756F95A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18E4321C-8437-4349-8218-295B5756F95A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18E4321C-8437-4349-8218-295B5756F95A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18E4321C-8437-4349-8218-295B5756F95A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
