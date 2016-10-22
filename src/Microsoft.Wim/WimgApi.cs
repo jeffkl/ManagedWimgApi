@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -57,7 +56,7 @@ namespace Microsoft.Wim
 
                 switch (win32Exception.NativeErrorCode)
                 {
-                    case Win32Error.ERROR_REQUEST_ABORTED:
+                    case WimgApi.ERROR_REQUEST_ABORTED:
                         // If the operation was aborted, throw an OperationCanceledException exception
                         //
                         throw new OperationCanceledException(win32Exception.Message, win32Exception);
@@ -597,7 +596,7 @@ namespace Microsoft.Wim
                     //
                     return new WimMountInfoCollection(new List<WimMountInfo>());
 
-                case Win32Error.ERROR_INSUFFICIENT_BUFFER:
+                case WimgApi.ERROR_INSUFFICIENT_BUFFER:
 
                     // Continue on because we now know how much memory is needed
                     //
@@ -1327,7 +1326,7 @@ namespace Microsoft.Wim
             {
                 // See if the return code was not ERROR_MORE_DATA
                 //
-                if (Marshal.GetLastWin32Error() != Win32Error.ERROR_MORE_DATA)
+                if (Marshal.GetLastWin32Error() != WimgApi.ERROR_MORE_DATA)
                 {
                     // Throw a Win32Exception based on the last error code
                     //

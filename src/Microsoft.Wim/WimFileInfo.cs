@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -14,8 +13,8 @@ namespace Microsoft.Wim
         /// Initializes a new instance of the WimFileInfo class.
         /// </summary>
         /// <param name="fullPath">The full path to the file or directory.</param>
-        /// <param name="findData">A <see cref="WIN32_FIND_DATA"/> containing information about the file or directory.</param>
-        internal WimFileInfo(string fullPath, WIN32_FIND_DATA findData)
+        /// <param name="findData">A <see cref="WimgApi.WIN32_FIND_DATA"/> containing information about the file or directory.</param>
+        internal WimFileInfo(string fullPath, WimgApi.WIN32_FIND_DATA findData)
         {
             // Save the full name
             //
@@ -41,9 +40,9 @@ namespace Microsoft.Wim
         /// Initializes a new instance of the WimFileInfo class.
         /// </summary>
         /// <param name="fullPath">The full path to the file or directory.</param>
-        /// <param name="findDataPtr">A pointer to a <see cref="WIN32_FIND_DATA"/> containing information about the file or directory.</param>
+        /// <param name="findDataPtr">A pointer to a <see cref="WimgApi.WIN32_FIND_DATA"/> containing information about the file or directory.</param>
         internal WimFileInfo(string fullPath, IntPtr findDataPtr)
-            : this(fullPath, (WIN32_FIND_DATA) Marshal.PtrToStructure(findDataPtr, typeof (WIN32_FIND_DATA)))
+            : this(fullPath, (WimgApi.WIN32_FIND_DATA) Marshal.PtrToStructure(findDataPtr, typeof (WimgApi.WIN32_FIND_DATA)))
         {
         }
 

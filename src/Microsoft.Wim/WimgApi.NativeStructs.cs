@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
 using USHORT = System.UInt16;
@@ -11,6 +13,211 @@ namespace Microsoft.Wim
 {
     public static partial class WimgApi
     {
+        /// <summary>
+        /// Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct FILETIME
+        {
+            /// <summary>
+            /// The low-order part of the file time.
+            /// </summary>
+            public DWORD dwLowDateTime;
+
+            /// <summary>
+            /// The high-order part of the file time.
+            /// </summary>
+            public DWORD dwHighDateTime;
+
+            /// <summary>
+            /// Creates a new instance of the FILETIME struct.
+            /// </summary>
+            /// <param name="dateTime">A <see cref="DateTime"/> object to copy data from.</param>
+            public FILETIME(DateTime dateTime)
+            {
+                // Get the file time as a long in Utc
+                //
+                long fileTime = dateTime.ToFileTimeUtc();
+
+                // Copy the low bits
+                //
+                dwLowDateTime = (DWORD)(fileTime & 0xFFFFFFFF);
+
+                // Copy the high bits
+                //
+                dwHighDateTime = (DWORD)(fileTime >> 32);
+            }
+
+            /// <summary>
+            /// Converts a <see cref="FILETIME"/> to a <see cref="System.DateTime"/>
+            /// </summary>
+            public static implicit operator DateTime(FILETIME fileTime)
+            {
+                return fileTime.ToDateTime();
+            }
+
+            /// <summary>
+            /// Converts a <see cref="System.DateTime"/> to a <see cref="FILETIME"/>.
+            /// </summary>
+            public static implicit operator FILETIME(DateTime dateTime)
+            {
+                return new FILETIME(dateTime);
+            }
+
+            /// <summary>
+            /// Gets the current FILETIME as a <see cref="DateTime"/> object.
+            /// </summary>
+            /// <returns>A <see cref="DateTime"/> object that represents the FILETIME.</returns>
+            public DateTime ToDateTime()
+            {
+                // Convert the file time to a long and then to a DateTime
+                //
+                return DateTime.FromFileTimeUtc((long)dwHighDateTime << 32 | dwLowDateTime);
+            }
+
+            /// <summary>
+            /// Converts the value of the current FILETIME object to its equivalent string representation.
+            /// </summary>
+            /// <returns>A string representation of value of the current FILETIME object</returns>
+            /// <exception cref="ArgumentOutOfRangeException">The date and time is outside the range of dates supported by the calendar used by the current culture.</exception>
+            public override string ToString()
+            {
+                // Call the DateTime.ToString() method
+                //
+                return ((DateTime)this).ToString(CultureInfo.CurrentCulture);
+            }
+
+            /// <summary>
+            /// Converts the value of the current FILETIME object to its equivalent string representation using the specified culture-specific format information.
+            /// </summary>
+            /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+            /// <returns>A string representation of value of the current FILETIME object as specified by provider.</returns>
+            /// <exception cref="ArgumentOutOfRangeException">The date and time is outside the range of dates supported by the calendar used by provider.</exception>
+            public string ToString(IFormatProvider provider)
+            {
+                // Call the DateTime.ToString() method
+                //
+                return ((DateTime)this).ToString(provider);
+            }
+
+            /// <summary>
+            /// Converts the value of the current DateTime object to its equivalent string representation using the specified format.
+            /// </summary>
+            /// <param name="format">A standard or custom date and time format string.</param>
+            /// <returns>A string representation of value of the current DateTime object as specified by format.</returns>
+            /// <exception cref="FormatException">The length of format is 1, and it is not one of the format specifier characters defined for DateTimeFormatInfo.
+            /// -or-
+            /// format does not contain a valid custom format pattern.</exception>
+            /// <exception cref="ArgumentOutOfRangeException">The date and time is outside the range of dates supported by the calendar used by the current culture.</exception>
+            public string ToString(string format)
+            {
+                // Call the DateTime.ToString() method
+                //
+                return ((DateTime)this).ToString(format, CultureInfo.CurrentCulture);
+            }
+
+            /// <summary>
+            /// Converts the value of the current DateTime object to its equivalent string representation using the specified format and culture-specific format information.
+            /// </summary>
+            /// <param name="format">A standard or custom date and time format string.</param>
+            /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+            /// <returns>A string representation of value of the current DateTime object as specified by format and provider.</returns>
+            /// <exception cref="FormatException">The length of format is 1, and it is not one of the format specifier characters defined for DateTimeFormatInfo.
+            /// -or-
+            /// format does not contain a valid custom format pattern.</exception>
+            /// <exception cref="ArgumentOutOfRangeException">The date and time is outside the range of dates supported by the calendar used by the current culture.</exception>
+            public string ToString(string format, IFormatProvider provider)
+            {
+                // Call the DateTime.ToString() method
+                //
+                return ((DateTime)this).ToString(format, provider);
+            }
+        }
+
+        /// <summary>
+        /// Contains information about the file that is found by the FindFirstFile, FindFirstFileEx, or FindNextFile function.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        internal struct WIN32_FIND_DATA
+        {
+            /// <summary>
+            /// The file attributes of a file.
+            /// </summary>
+            public FileAttributes dwFileAttributes;
+
+            /// <summary>
+            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure that specifies when a file or directory was created.
+            ///
+            /// If the underlying file system does not support creation time, this member is zero.
+            /// </summary>
+            public FILETIME ftCreationTime;
+
+            /// <summary>
+            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure.
+            ///
+            /// For a file, the structure specifies when the file was last read from, written to, or for executable files, run.
+            ///
+            /// For a directory, the structure specifies when the directory is created. If the underlying file system does not support last access time, this member is zero.
+            ///
+            /// On the FAT file system, the specified date for both files and directories is correct, but the time of day is always set to midnight.
+            /// </summary>
+            public FILETIME ftLastAccessTime;
+
+            /// <summary>
+            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure.
+            ///
+            /// For a file, the structure specifies when the file was last written to, truncated, or overwritten, for example, when WriteFile or SetEndOfFile are used. The date and time are not updated when file attributes or security descriptors are changed.
+            ///
+            /// For a directory, the structure specifies when the directory is created. If the underlying file system does not support last write time, this member is zero.
+            /// </summary>
+            public FILETIME ftLastWriteTime;
+
+            /// <summary>
+            /// The high-order DWORD value of the file size, in bytes.
+            ///
+            /// This value is zero unless the file size is greater than MAXDWORD.
+            ///
+            /// The size of the file is equal to (nFileSizeHigh * (MAXDWORD+1)) + nFileSizeLow.
+            /// </summary>
+            public DWORD nFileSizeHigh;
+
+            /// <summary>
+            /// The low-order DWORD value of the file size, in bytes.
+            /// </summary>
+            public DWORD nFileSizeLow;
+
+            /// <summary>
+            /// If the dwFileAttributes member includes the FILE_ATTRIBUTE_REPARSE_POINT attribute, this member specifies the re-parse point tag.
+            ///
+            /// Otherwise, this value is undefined and should not be used.
+            /// </summary>
+            public DWORD dwReserved0;
+
+            /// <summary>
+            /// Reserved for future use.
+            /// </summary>
+            public DWORD dwReserved1;
+
+            /// <summary>
+            /// The name of the file.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string cFileName;
+
+            /// <summary>
+            /// An alternative name for the file.
+            ///
+            /// This name is in the classic 8.3 file name format.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
+            public string cAlternateFileName;
+
+            /// <summary>
+            /// Gets the file size by combining nFileSizeLow and nFileSizeHigh.
+            /// </summary>
+            public long FileSize => (nFileSizeHigh * ((long)DWORD.MaxValue + 1)) + nFileSizeLow;
+        }
+
         /// <summary>
         /// Contains information retrieved by the WIMGetAttributes function.
         /// </summary>

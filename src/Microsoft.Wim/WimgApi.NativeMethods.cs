@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
+
+using LARGE_INTEGER = System.UInt64;
 using DWORD = System.UInt32;
 
 // ReSharper disable RedundantNameQualifier
@@ -158,7 +159,7 @@ namespace Microsoft.Wim
             /// </remarks>
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool WIMCopyFile(string pszExistingFileName, string pszNewFileName, Kernel32.CopyProgressRoutine pProgressRoutine, IntPtr pvData, [MarshalAs(UnmanagedType.Bool)] ref bool pbCancel, DWORD dwCopyFlags);
+            public static extern bool WIMCopyFile(string pszExistingFileName, string pszNewFileName, CopyProgressRoutine pProgressRoutine, IntPtr pvData, [MarshalAs(UnmanagedType.Bool)] ref bool pbCancel, DWORD dwCopyFlags);
 
             /// <summary>
             /// Makes a new image file or opens an existing image file.
@@ -730,5 +731,28 @@ namespace Microsoft.Wim
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool WIMUnregisterMessageCallback([Optional] WimHandle hWim, WimgApi.WIMMessageCallback fpMessageProc);
         }
+        
+        /// <summary>
+        /// An application-defined callback function used with the CopyFileEx, MoveFileTransacted, and MoveFileWithProgress functions. It is called when a portion of a copy or move operation is completed. The LPPROGRESS_ROUTINE type defines a pointer to this callback function. CopyProgressRoutine is a placeholder for the application-defined function name.
+        /// </summary>
+        /// <param name="TotalFileSize">The total size of the file, in bytes.</param>
+        /// <param name="TotalBytesTransferred">The total number of bytes transferred from the source file to the destination file since the copy operation began.</param>
+        /// <param name="StreamSize">The total size of the current file stream, in bytes.</param>
+        /// <param name="StreamBytesTransferred">The total number of bytes in the current stream that have been transferred from the source file to the destination file since the copy operation began.</param>
+        /// <param name="dwStreamNumber">A handle to the current stream. The first time CopyProgressRoutine is called, the stream number is 1.</param>
+        /// <param name="dwCallbackReason">The reason that CopyProgressRoutine was called.</param>
+        /// <param name="hSourceFile">A handle to the source file.</param>
+        /// <param name="hDestinationFile">A handle to the destination file.</param>
+        /// <param name="lpData">Argument passed to CopyProgressRoutine by CopyFileEx, MoveFileTransacted, or MoveFileWithProgress.</param>
+        /// <returns>The CopyProgressRoutine function should return one of the following values.
+        /// PROGRESS_CANCEL - Cancel the copy operation and delete the destination file.
+        /// PROGRESS_CONTINUE - Continue the copy operation.
+        /// PROGRESS_QUIET - Continue the copy operation, but stop invoking CopyProgressRoutine to report progress.
+        /// PROGRESS_STOP - Stop the copy operation. It can be restarted at a later time.
+        /// </returns>
+        /// http://msdn.microsoft.com/en-us/library/windows/desktop/aa363854(v=vs.85).aspx
+        // ReSharper disable InconsistentNaming
+        public delegate CopyFileProgressAction CopyProgressRoutine(LARGE_INTEGER TotalFileSize, LARGE_INTEGER TotalBytesTransferred, LARGE_INTEGER StreamSize, LARGE_INTEGER StreamBytesTransferred, DWORD dwStreamNumber, DWORD dwCallbackReason, IntPtr hSourceFile, IntPtr hDestinationFile, IntPtr lpData);
+        // ReSharper restore InconsistentNaming
     }
 }
