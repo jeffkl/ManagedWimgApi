@@ -10,7 +10,7 @@
   
   <PropertyGroup>
     <VersionMajor>1</VersionMajor>
-    <VersionMinor>0</VersionMinor>
-    <VersionBuildNumberStartDate>2016-07-27</VersionBuildNumberStartDate>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuildNumberStartDate>2016-10-21</VersionBuildNumberStartDate>
   </PropertyGroup>
 </Project>

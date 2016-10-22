@@ -32,4 +32,14 @@
     <ProjectReference Include="..\Microsoft.Wim\Microsoft.Wim.csproj" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
+
+  <PropertyGroup>
+    <VersionDependsOn>$(VersionDependsOn);GetNuPkgVersion</VersionDependsOn>
+  </PropertyGroup>
+
+  <Target Name="GetNuPkgVersion" DependsOnTargets="DetermineAssemblyVersionInfo">
+    <PropertyGroup>
+      <Version>$(VersionMajor).$(VersionMinor).$(VersionBuildNumber)</Version>
+    </PropertyGroup>
+  </Target>
 </Project>
