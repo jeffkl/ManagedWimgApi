@@ -258,5 +258,20 @@ namespace Microsoft.Wim
         /// The specified .wim file becomes the only item in the list.
         /// </summary>
         internal const uint WIM_REFERENCE_REPLACE = 0x00020000;
+
+        /// <summary>
+        /// The data area passed to a system call is too small.
+        /// </summary>
+        internal const int ERROR_INSUFFICIENT_BUFFER = 0x0000007A;  // 122
+
+        /// <summary>
+        /// More data is available.
+        /// </summary>
+        internal const int ERROR_MORE_DATA = 0x000000EA;  // 234
+
+        /// <summary>
+        /// The request was aborted.
+        /// </summary>
+        internal const int ERROR_REQUEST_ABORTED = 0x000004D3;  // 1235
     }
 }

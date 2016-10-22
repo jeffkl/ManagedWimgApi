@@ -18,22 +18,16 @@
   <PropertyGroup Label="Configuration">
     <Id>Microsoft.Wim</Id>
     <Version>1.0.0</Version>
-    <Title>Managed Windows Imaging API (WIMGAPI)</Title>
+    <Title>Microsoft.Wim</Title>
     <Authors>josemesona</Authors>
     <Owners>josemesona</Owners>
-    <Summary>Microsoft.Wim.Package</Summary>
-    <Description>Microsoft.Wim.Package</Description>
+    <Description>Managed Windows Imaging API (WIMGAPI)</Description>
     <ReleaseNotes/>
     <ProjectUrl>https://github.com/josemesona/ManagedWimgApi</ProjectUrl>
     <LicenseUrl>https://github.com/josemesona/ManagedWimgApi/blob/master/LICENSE</LicenseUrl>
     <Copyright>Copyright © 2014</Copyright>
     <Tags>Wimgapi</Tags>
   </PropertyGroup>
-  <ItemGroup>
-    <Dependency Include="Microsoft.Win32Ex">
-      <Version>[1.2,)</Version>
-    </Dependency>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Wim\Microsoft.Wim.csproj" />
   </ItemGroup>
