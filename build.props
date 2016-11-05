@@ -50,4 +50,8 @@
     <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(CBTModule_NuProj)\tools</NuProjPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EnableNerdbank_GitVersioning>true</EnableNerdbank_GitVersioning>
+  </PropertyGroup>
+
 </Project>
