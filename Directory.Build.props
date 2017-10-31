@@ -4,11 +4,7 @@
     <EnlistmentRoot>$(MSBuildThisFileDirectory.TrimEnd('\\'))</EnlistmentRoot>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <BaseIntermediateOutputPath Condition=" '$(BaseIntermediateOutputPath)'=='' ">$(EnlistmentRoot)\obj</BaseIntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(IntermediateOutputPath)'=='' ">$(BaseIntermediateOutputPath)\$(Configuration)\$(Platform)\$(MSBuildProjectFile)</IntermediateOutputPath>
-    <OutputPath Condition=" '$(OutputPath)' == '' ">$(EnlistmentRoot)\bin\$(Configuration)\$(Platform)\$(MSBuildProjectName)</OutputPath>
-    <NuGetPackagesPath Condition=" '$(NuGetPackagesPath)' == '' ">$(EnlistmentRoot)\packages</NuGetPackagesPath>
-    <CBTIntermediateOutputPath Condition=" '$(CBTIntermediateOutputPath)' == '' ">$(BaseIntermediateOutputPath)\CBT</CBTIntermediateOutputPath>
+    <OutputPath Condition=" '$(OutputPath)' == '' ">bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,7 +12,6 @@
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">14.0</VisualStudioVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -46,7 +41,7 @@
   
   <Import Project="$(EnlistmentRoot)\.build\CBT\build.props" />
 
-  <PropertyGroup Condition=" '$(MSBuildProjectExtension)' == '.nuproj'" >
+  <PropertyGroup Condition=" '$(MSBuildProjectExtension)' == '.nuproj' ">
     <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(CBTModule_NuProj)\tools</NuProjPath>
   </PropertyGroup>
 

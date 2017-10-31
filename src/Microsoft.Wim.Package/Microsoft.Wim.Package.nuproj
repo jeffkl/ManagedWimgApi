@@ -12,8 +12,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>18e4321c-8437-4349-8218-295b5756f95a</ProjectGuid>
+    <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
   </PropertyGroup>
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), build.props))\build.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), Directory.Build.props))\Directory.Build.props" />
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>Microsoft.Wim</Id>

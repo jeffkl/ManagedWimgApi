@@ -1,27 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Wim", "Microsoft.Wim\Microsoft.Wim.csproj", "{2D098368-E3DE-4C16-B5BD-6223A6476483}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ACEBD36D-52B4-4F23-9758-E695BCE247FA}"
-	ProjectSection(SolutionItems) = preProject
-		..\.build\local\Extensions\AssemblyInfo.props = ..\.build\local\Extensions\AssemblyInfo.props
-		..\build.props = ..\build.props
-		key.snk = key.snk
-		..\NuGet.config = ..\NuGet.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Wim.Tests", "Microsoft.Wim.Tests\Microsoft.Wim.Tests.csproj", "{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{CDB22DD4-5317-4187-A522-393F6F7741BF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "local", "local", "{5526A485-DBED-4796-B9C5-EDF94ED2DD64}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CBTModules", "CBTModules", "{3F584CF7-9AE4-4689-AF1D-CFCAF6AC7305}"
 	ProjectSection(SolutionItems) = preProject
-		..\.build\local\CBTModules\packages.config = ..\.build\local\CBTModules\packages.config
+		..\.build\local\Extensions\AssemblyInfo.props = ..\.build\local\Extensions\AssemblyInfo.props
+		..\.build\local\CBTModules\CBTModules.proj = ..\.build\local\CBTModules\CBTModules.proj
+		..\Directory.Build.props = ..\Directory.Build.props
+		key.snk = key.snk
+		..\NuGet.config = ..\NuGet.config
 	EndProjectSection
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Microsoft.Wim.Package", "Microsoft.Wim.Package\Microsoft.Wim.Package.nuproj", "{18E4321C-8437-4349-8218-295B5756F95A}"
@@ -50,7 +44,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CDB22DD4-5317-4187-A522-393F6F7741BF} = {ACEBD36D-52B4-4F23-9758-E695BCE247FA}
-		{5526A485-DBED-4796-B9C5-EDF94ED2DD64} = {CDB22DD4-5317-4187-A522-393F6F7741BF}
-		{3F584CF7-9AE4-4689-AF1D-CFCAF6AC7305} = {5526A485-DBED-4796-B9C5-EDF94ED2DD64}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5781377-D2DB-4477-BC26-001AA4D65A21}
 	EndGlobalSection
 EndGlobal
