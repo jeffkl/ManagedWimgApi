@@ -13,7 +13,7 @@ namespace Microsoft.Wim.Tests
         [Description("Verifies that image attributes are correctly returned.")]
         public void GetAttributesTest()
         {
-            var wimInfo = WimgApi.GetAttributes(TestWimHandle);
+            WimInfo wimInfo = WimgApi.GetAttributes(TestWimHandle);
             wimInfo.ShouldNotBeNull();
 
             wimInfo.Attributes.ShouldBe(WimInfoAttributes.Normal);
@@ -37,7 +37,7 @@ namespace Microsoft.Wim.Tests
         [Description("Verifies that image count is correctly returned.")]
         public void GetImageCountTest()
         {
-            var imageCount = WimgApi.GetImageCount(TestWimHandle);
+            int imageCount = WimgApi.GetImageCount(TestWimHandle);
             imageCount.ShouldBe(TestWimImageCount);
         }
 
@@ -87,19 +87,19 @@ namespace Microsoft.Wim.Tests
                 </WIM>
             */
 
-            var imageInformation = WimgApi.GetImageInformation(TestWimHandle);
+            IXPathNavigable imageInformation = WimgApi.GetImageInformation(TestWimHandle);
 
             imageInformation.ShouldNotBeNull();
 
-            var documentElement = imageInformation.CreateNavigator();
+            XPathNavigator documentElement = imageInformation.CreateNavigator();
 
             documentElement.ShouldNotBeNull();
 
             VerifyXmlNodeText(documentElement, "//WIM/TOTALBYTES/text()");
 
-            var imageNode = VerifyXmlNode(documentElement, "//WIM/IMAGE[@INDEX = '1']");
+            XPathNavigator imageNode = VerifyXmlNode(documentElement, "//WIM/IMAGE[@INDEX = '1']");
 
-            var windowsNode = VerifyXmlNode(imageNode, "WINDOWS");
+            XPathNavigator windowsNode = VerifyXmlNode(imageNode, "WINDOWS");
 
             VerifyXmlNodeText(imageNode, "DIRCOUNT/text()");
             VerifyXmlNodeText(imageNode, "FILECOUNT/text()");
@@ -137,9 +137,9 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void SetImageInformationTest()
         {
-            var xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument();
 
-            var fragment = xmlDocument.CreateDocumentFragment();
+            XmlDocumentFragment fragment = xmlDocument.CreateDocumentFragment();
 
             fragment.InnerXml = @"<WIM><TEST>This is a test</TEST></WIM>";
 
@@ -164,7 +164,7 @@ namespace Microsoft.Wim.Tests
 
         private XPathNavigator VerifyXmlNode(XPathNavigator parentNode, string xpath)
         {
-            var node = parentNode.SelectSingleNode(xpath);
+            XPathNavigator node = parentNode.SelectSingleNode(xpath);
 
             node.ShouldNotBeNull($"Could not find node '{xpath}'");
 
@@ -173,7 +173,7 @@ namespace Microsoft.Wim.Tests
 
         private void VerifyXmlNodeText(XPathNavigator parentNode, string xpath)
         {
-            var node = VerifyXmlNode(parentNode, xpath);
+            XPathNavigator node = VerifyXmlNode(parentNode, xpath);
 
             node.Value.ShouldNotBeNullOrEmpty($"Node value '{xpath}' should not be empty");
         }

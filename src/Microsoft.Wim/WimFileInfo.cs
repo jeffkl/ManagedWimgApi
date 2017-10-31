@@ -49,7 +49,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the attributes for the current file or directory.
         /// </summary>
-        public FileAttributes Attributes { get; private set; }
+        public FileAttributes Attributes { get; }
 
         /// <summary>
         /// Gets the creation time of the current file or directory.
@@ -99,7 +99,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the size, in bytes, of the current file.
         /// </summary>
-        public long Length { get; private set; }
+        public long Length { get; }
 
         /// <summary>
         /// Gets the name of the file.

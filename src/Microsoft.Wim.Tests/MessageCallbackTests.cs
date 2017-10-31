@@ -48,7 +48,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void UnregisterMessageCallback_ThrowsArgumentOutOfRangeException_messageCallback()
         {
-            var argumentOutOfRangeException = ShouldThrow<ArgumentOutOfRangeException>("messageCallback", () =>
+            Exception argumentOutOfRangeException = ShouldThrow<ArgumentOutOfRangeException>("messageCallback", () =>
                 WimgApi.UnregisterMessageCallback(TestMessageCallback));
 
             argumentOutOfRangeException.Message.ShouldStartWith("Message callback is not registered.");

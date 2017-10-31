@@ -12,7 +12,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void RemountImageTest()
         {
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
                 WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix | WimMountImageOptions.ReadOnly);
 
@@ -51,11 +51,11 @@ namespace Microsoft.Wim.Tests
 
         private void KillWimServ()
         {
-            var wimServProcesses = Process.GetProcessesByName("wimserv");
+            Process[] wimServProcesses = Process.GetProcessesByName("wimserv");
 
             wimServProcesses.Length.ShouldNotBe(0);
 
-            foreach (var process in wimServProcesses)
+            foreach (Process process in wimServProcesses)
             {
                 process.Kill();
             }
@@ -63,7 +63,7 @@ namespace Microsoft.Wim.Tests
 
         private void VerifyMountState(WimHandle imageHandle, WimMountPointState expectedMountPointState)
         {
-            var mountedImageInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
+            WimMountInfo mountedImageInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
             (mountedImageInfo.State | expectedMountPointState).ShouldBe(expectedMountPointState);
         }

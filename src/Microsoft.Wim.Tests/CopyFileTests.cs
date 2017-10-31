@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Text;
-using Microsoft.Win32;
 using NUnit.Framework;
 using Shouldly;
 
@@ -61,7 +60,7 @@ namespace Microsoft.Wim.Tests
 
             File.Exists(_destinationPath).ShouldBeTrue();
 
-            var win32Exception = Should.Throw<Win32Exception>(() =>
+            Win32Exception win32Exception = Should.Throw<Win32Exception>(() =>
                 WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.FailIfExists));
 
             win32Exception.Message.ShouldBe("The file exists");
@@ -70,18 +69,18 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CopyFileWithCallbackTest()
         {
-            var stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
-            CopyFileProgressCallback copyFileProgressCallback = delegate(CopyFileProgress progress, object userData)
+            CopyFileProgressAction CopyFileProgressCallback(CopyFileProgress progress, object userData)
             {
                 _callbackCalled = true;
 
-                ((StringBuilder)userData).Append(CallbackText);
+                ((StringBuilder) userData).Append(CallbackText);
 
                 return CopyFileProgressAction.Quiet;
-            };
+            }
 
-            WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None, copyFileProgressCallback, stringBuilder);
+            WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None, CopyFileProgressCallback, stringBuilder);
 
             _callbackCalled.ShouldBeTrue("The callback should have been called");
 

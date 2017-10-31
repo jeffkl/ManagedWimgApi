@@ -13,7 +13,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void SplitFileTest()
         {
-            var splitWims = CreateSplitWim();
+            IEnumerable<string> splitWims = CreateSplitWim();
 
             splitWims.Count().ShouldNotBe(0);
         }
@@ -42,9 +42,9 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void SplitFileMinimumSizeTest()
         {
-            var partPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "out.wim");
+            string partPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "out.wim");
 
-            var partSize = WimgApi.SplitFile(TestWimHandle, partPath);
+            long partSize = WimgApi.SplitFile(TestWimHandle, partPath);
 
             partSize.ShouldNotBe(0);
         }
@@ -66,13 +66,13 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void SetReferenceFileTest()
         {
-            var splitWims = CreateSplitWim().ToArray();
+            string[] splitWims = CreateSplitWim().ToArray();
 
-            using (var wimHandle = WimgApi.CreateFile(splitWims[0], WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using (WimHandle wimHandle = WimgApi.CreateFile(splitWims[0], WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                foreach (var referenceFile in splitWims.Skip(1))
+                foreach (string referenceFile in splitWims.Skip(1))
                 {
                     WimgApi.SetReferenceFile(wimHandle, referenceFile, WimSetReferenceMode.Append, WimSetReferenceOptions.None);
                 }
@@ -102,7 +102,7 @@ namespace Microsoft.Wim.Tests
 
         private IEnumerable<string> CreateSplitWim()
         {
-            var partPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Split");
+            string partPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Split");
 
             if (Directory.Exists(partPath))
             {
@@ -111,7 +111,7 @@ namespace Microsoft.Wim.Tests
 
             Directory.CreateDirectory(partPath);
 
-            var partSize = new FileInfo(TestWimPath).Length / 5;
+            long partSize = new FileInfo(TestWimPath).Length / 5;
 
             WimgApi.SplitFile(TestWimHandle, Path.Combine(partPath, "split.wim"), partSize);
 

@@ -13,20 +13,16 @@ namespace Microsoft.Wim.Tests
         private bool _captureWithCallbackCalled;
         private int _captureWithCallbackFileCount;
 
-        #region Setup/Cleanup
-
-        #endregion Setup/Cleanup
-
         [Test]
         public void CaptureImageTest()
         {
-            using (var wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
+            using (WimHandle wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                using (var imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None))
+                using (WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None))
                 {
-                    var imageCount = WimgApi.GetImageCount(wimHandle);
+                    int imageCount = WimgApi.GetImageCount(wimHandle);
 
                     imageCount.ShouldBe(1);
                 }
@@ -57,16 +53,16 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CaptureImageWithCallbackTest()
         {
-            var userData = new CallbackObject();
+            CallbackObject userData = new CallbackObject();
 
-            using (var wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
+            using (WimHandle wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
                 WimgApi.RegisterMessageCallback(wimHandle, CaptureImageWithCallbackTestCallback, userData);
                 try
                 {
-                    using (var imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None))
+                    using (WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None))
                     {
                     }
                 }
@@ -86,9 +82,8 @@ namespace Microsoft.Wim.Tests
         {
             _captureWithCallbackCalled = true;
 
-            var callbackObject = userData as CallbackObject;
 
-            if (callbackObject != null)
+            if (userData is CallbackObject callbackObject)
             {
                 callbackObject.WasCalled = true;
             }

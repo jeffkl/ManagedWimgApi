@@ -15,9 +15,7 @@ namespace Microsoft.Wim.Tests
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
             {
-                WimHandle actualImageHandle;
-
-                using (var actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, true, out actualImageHandle))
+                using (WimHandle actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, true, out WimHandle actualImageHandle))
                 {
                     try
                     {
@@ -25,7 +23,7 @@ namespace Microsoft.Wim.Tests
 
                         actualImageHandle.ShouldNotBeNull();
 
-                        var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
+                        WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
 
                         wimMountInfo.ShouldNotBeNull();
 
@@ -48,9 +46,7 @@ namespace Microsoft.Wim.Tests
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
             {
-                WimHandle actualImageHandle;
-
-                using (var actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, false, out actualImageHandle))
+                using (WimHandle actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, false, out WimHandle actualImageHandle))
                 {
                     try
                     {
@@ -58,7 +54,7 @@ namespace Microsoft.Wim.Tests
 
                         actualImageHandle.ShouldNotBeNull();
 
-                        var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
+                        WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
 
                         wimMountInfo.ShouldNotBeNull();
 
@@ -79,10 +75,8 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void GetMountedImageHandleTest_ThrowsArgumentNullException_mountPath()
         {
-            WimHandle wimHandle;
-
             ShouldThrow<ArgumentNullException>("mountPath", () =>
-                WimgApi.GetMountedImageHandle(null, false, out wimHandle));
+                WimgApi.GetMountedImageHandle(null, false, out _));
         }
 
         [Test]
@@ -90,7 +84,7 @@ namespace Microsoft.Wim.Tests
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
             {
-                var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
+                WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
                 wimMountInfo.ShouldNotBeNull();
 
@@ -114,13 +108,13 @@ namespace Microsoft.Wim.Tests
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
             {
-                var wimMountInfos = WimgApi.GetMountedImageInfo();
+                WimMountInfoCollection wimMountInfos = WimgApi.GetMountedImageInfo();
 
                 wimMountInfos.ShouldNotBeNull();
 
                 wimMountInfos.Count.ShouldBe(1);
 
-                var wimMountInfo = wimMountInfos.FirstOrDefault();
+                WimMountInfo wimMountInfo = wimMountInfos.FirstOrDefault();
 
                 wimMountInfo.ShouldNotBeNull();
 
@@ -147,7 +141,7 @@ namespace Microsoft.Wim.Tests
                 imageHandle.IsClosed.ShouldBeFalse();
                 imageHandle.IsInvalid.ShouldBeFalse();
 
-                var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
+                WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
                 wimMountInfo.ReadOnly.ShouldBe(readOnly);
             });
@@ -167,7 +161,7 @@ namespace Microsoft.Wim.Tests
                 imageHandle.IsClosed.ShouldBeFalse();
                 imageHandle.IsInvalid.ShouldBeFalse();
 
-                var wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
+                WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(imageHandle);
 
                 wimMountInfo.ReadOnly.ShouldBe(readOnly);
             });
@@ -183,9 +177,9 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void MountImageHandleTest_ThrowsArgumentNullException_mountPath()
         {
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                var imageHandleCopy = imageHandle;
+                WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("mountPath", () =>
                     WimgApi.MountImage(imageHandleCopy, null, WimMountImageOptions.None));
@@ -195,9 +189,9 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void MountImageHandleTest_ThrowsDirectoryNotFoundException_mountPath()
         {
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                var imageHandleCopy = imageHandle;
+                WimHandle imageHandleCopy = imageHandle;
 
                 Should.Throw<DirectoryNotFoundException>(() =>
                     WimgApi.MountImage(imageHandleCopy, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), WimMountImageOptions.None));
@@ -210,7 +204,7 @@ namespace Microsoft.Wim.Tests
             WimgApi.MountImage(MountPath, TestWimPath, 1);
             try
             {
-                var mountedImages = WimgApi.GetMountedImageInfo();
+                WimMountInfoCollection mountedImages = WimgApi.GetMountedImageInfo();
 
                 mountedImages.Count.ShouldBe(1);
             }
@@ -265,7 +259,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void MountImageTest_ThrowsWin32Exception_imageIndexOutOfRange()
         {
-            var invalidParameterException = Should.Throw<Win32Exception>(() =>
+            Win32Exception invalidParameterException = Should.Throw<Win32Exception>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, 10));
 
             invalidParameterException.Message.ShouldBe("The parameter is incorrect");
@@ -327,13 +321,13 @@ namespace Microsoft.Wim.Tests
 
         internal static void ExecuteAgainstMountedImage(string imagePath, string mountPath, string tempPath, bool readOnly, Action<WimHandle, WimHandle> action)
         {
-            using (var wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, tempPath);
 
-                using (var imageHandle = WimgApi.LoadImage(wimHandle, 1))
+                using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
                 {
-                    var flags = WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix;
+                    WimMountImageOptions flags = WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix;
 
                     if (readOnly)
                     {

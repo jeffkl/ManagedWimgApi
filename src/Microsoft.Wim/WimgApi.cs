@@ -52,7 +52,7 @@ namespace Microsoft.Wim
             {
                 // Get the last error
                 //
-                var win32Exception = new Win32Exception();
+                Win32Exception win32Exception = new Win32Exception();
 
                 switch (win32Exception.NativeErrorCode)
                 {
@@ -137,13 +137,9 @@ namespace Microsoft.Wim
                 throw new ArgumentNullException(nameof(imageHandle));
             }
 
-            // A WimHandle is returned only if WimCommitImageOptions.Append is passed but we'll create one any way
-            //
-            WimHandle newImageHandle;
-
             // Call the native function, add the append flag if needed
             //
-            if (!WimgApi.NativeMethods.WIMCommitImageHandle(imageHandle, append ? WimgApi.WIM_COMMIT_FLAG_APPEND : 0 | (DWORD) options, out newImageHandle))
+            if (!WimgApi.NativeMethods.WIMCommitImageHandle(imageHandle, append ? WimgApi.WIM_COMMIT_FLAG_APPEND : 0 | (DWORD) options, out WimHandle newImageHandle))
             {
                 // Throw a Win32Exception based on the last error code
                 //
@@ -198,7 +194,7 @@ namespace Microsoft.Wim
 
             // Create a CopyFileProgress object
             //
-            var fileInfoCopyProgress = new CopyFileProgress(sourceFile, destinationFile, copyFileProgressCallback, userData);
+            CopyFileProgress fileInfoCopyProgress = new CopyFileProgress(sourceFile, destinationFile, copyFileProgressCallback, userData);
 
             // Cancel flag is always false
             //
@@ -233,13 +229,9 @@ namespace Microsoft.Wim
                 throw new ArgumentNullException(nameof(path));
             }
 
-            // Stores the creation result
-            //
-            WimCreationResult creationResult;
-
             // Call the native function
             //
-            WimHandle wimHandle = WimgApi.NativeMethods.WIMCreateFile(path, (DWORD) desiredAccess, (DWORD) creationDisposition, (DWORD) options, (DWORD) compressionType, out creationResult);
+            WimHandle wimHandle = WimgApi.NativeMethods.WIMCreateFile(path, (DWORD) desiredAccess, (DWORD) creationDisposition, (DWORD) options, (DWORD) compressionType, out _);
 
             // See if the handle returned is valid
             //
@@ -403,7 +395,7 @@ namespace Microsoft.Wim
 
             // Calculate the size of the buffer needed
             //
-            var wimInfoSize = (DWORD) Marshal.SizeOf(typeof (WimgApi.WIM_INFO));
+            uint wimInfoSize = (DWORD) Marshal.SizeOf(typeof (WimgApi.WIM_INFO));
 
             // Allocate a buffer to receive the native struct
             //
@@ -466,13 +458,9 @@ namespace Microsoft.Wim
 
             try
             {
-                // Receives the buffer size
-                //
-                DWORD imageInfoSize;
-
                 // Call the native function
                 //
-                if (!NativeMethods.WIMGetImageInformation(wimHandle, out imageInfoPtr, out imageInfoSize))
+                if (!NativeMethods.WIMGetImageInformation(wimHandle, out imageInfoPtr, out _))
                 {
                     // Throw a Win32Exception based on the last error code
                     //
@@ -481,11 +469,11 @@ namespace Microsoft.Wim
 
                 // Marshal the buffer as a Unicode string, remove the Unicode file marker, and load it into a StringReader
                 //
-                var str = Marshal.PtrToStringUni(imageInfoPtr);
+                string str = Marshal.PtrToStringUni(imageInfoPtr);
 
                 if (str != null)
                 {
-                    using (var stringReader = new StringReader(str.Substring(1)))
+                    using (StringReader stringReader = new StringReader(str.Substring(1)))
                     {
                         // Return the string as an XPathDocument
                         //
@@ -552,11 +540,9 @@ namespace Microsoft.Wim
                 throw new ArgumentNullException(nameof(mountPath));
             }
 
-            WimHandle wimHandle;
-
             // Call the native function
             //
-            if (!WimgApi.NativeMethods.WIMGetMountedImageHandle(mountPath, readOnly ? WimgApi.WIM_FLAG_MOUNT_READONLY : 0, out wimHandle, out imageHandle))
+            if (!WimgApi.NativeMethods.WIMGetMountedImageHandle(mountPath, readOnly ? WimgApi.WIM_FLAG_MOUNT_READONLY : 0, out WimHandle wimHandle, out imageHandle))
             {
                 // Throw a Win32Exception based on the last error code
                 //
@@ -576,17 +562,10 @@ namespace Microsoft.Wim
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public static WimMountInfoCollection GetMountedImageInfo()
         {
-            // Receives the image count
-            //
-            DWORD imageCount;
-
-            // Receives the size of the buffer needed to store the array of structs
-            //
-            DWORD returnLength;
 
             // Call the native function first to get the necessary buffer size
             //
-            WimgApi.NativeMethods.WIMGetMountedImageInfo(WimMountInfo.MountInfoLevel, out imageCount, IntPtr.Zero, 0, out returnLength);
+            WimgApi.NativeMethods.WIMGetMountedImageInfo(WimMountInfo.MountInfoLevel, out DWORD imageCount, IntPtr.Zero, 0, out DWORD returnLength);
 
             switch (Marshal.GetLastWin32Error())
             {
@@ -611,7 +590,7 @@ namespace Microsoft.Wim
 
             // Create a collection of WimMountInfo objects
             //
-            var wimMountInfos = new List<WimMountInfo>();
+            List<WimMountInfo> wimMountInfos = new List<WimMountInfo>();
 
             // Allocate enough memory for the return array
             //
@@ -634,7 +613,7 @@ namespace Microsoft.Wim
                 {
                     // Get the current pointer based on the index
                     //
-                    var currentImageInfoPtr = new IntPtr(mountInfoPtr.ToInt64() + (i * (returnLength / imageCount)));
+                    IntPtr currentImageInfoPtr = new IntPtr(mountInfoPtr.ToInt64() + (i * (returnLength / imageCount)));
 
                     // Read a pointer and add a new WimMountInfo object to the collection
                     //
@@ -679,13 +658,9 @@ namespace Microsoft.Wim
 
             try
             {
-                // Receives the size of buffer needed if we pass a buffer that is too small
-                //
-                DWORD returnLength;
-
                 // Call the native function (the buffer may be too small)
                 //
-                if (!WimgApi.NativeMethods.WIMGetMountedImageInfoFromHandle(imageHandle, WimMountInfo.MountInfoLevel, mountInfoPtr, (DWORD) mountInfoSize, out returnLength))
+                if (!WimgApi.NativeMethods.WIMGetMountedImageInfoFromHandle(imageHandle, WimMountInfo.MountInfoLevel, mountInfoPtr, (DWORD) mountInfoSize, out DWORD returnLength))
                 {
                     // See if the return value isn't ERROR_INSUFFICIENT_BUFFER
                     //
@@ -1513,7 +1488,7 @@ namespace Microsoft.Wim
 
                 // See if the message callback is null, meaning the user wants to unregister all callbacks
                 //
-                var success = messageCallback == null ?
+                bool success = messageCallback == null ?
                     // Call the native function and pass null for the callback
                     //
                     WimgApi.NativeMethods.WIMUnregisterMessageCallback(wimHandle, fpMessageProc: null) : WimgApi.NativeMethods.WIMUnregisterMessageCallback(wimHandle, wimHandle == WimHandle.Null ? WimgApi.RegisteredCallbacks.GetNativeCallback(messageCallback) :
