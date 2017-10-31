@@ -30,7 +30,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CreateFileTest()
         {
-            using (var wimHandle = WimgApi.CreateFile(CreateWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
+            using (WimHandle wimHandle = WimgApi.CreateFile(CreateWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
             {
             }
         }

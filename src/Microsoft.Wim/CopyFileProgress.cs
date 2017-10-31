@@ -104,7 +104,6 @@ namespace Microsoft.Wim
         public string DestinationFilePath
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -131,7 +130,6 @@ namespace Microsoft.Wim
         public string SourceFilePath
         {
             get;
-            private set;
         }
 
         /// <summary>

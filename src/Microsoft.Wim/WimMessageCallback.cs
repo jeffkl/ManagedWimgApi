@@ -93,7 +93,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the native callback delegate to be executed.
         /// </summary>
-        public WimgApi.WIMMessageCallback NativeCallback { get; private set; }
+        public WimgApi.WIMMessageCallback NativeCallback { get; }
 
         /// <summary>
         /// </summary>

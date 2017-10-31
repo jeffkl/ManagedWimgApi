@@ -14,11 +14,11 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void ApplyImageTest()
         {
-            using (var wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                using (var imageHandle = WimgApi.LoadImage(wimHandle, 1))
+                using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
                 {
                     WimgApi.ApplyImage(imageHandle, ApplyPath, WimApplyImageOptions.Index | WimApplyImageOptions.DisableDirectoryAcl | WimApplyImageOptions.DisableFileAcl | WimApplyImageOptions.DisableRPFix);
                 }
@@ -30,19 +30,19 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void ApplyImageTest_Abort()
         {
-            using (var wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                WimMessageCallback messageCallback = (messageType, message, userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
+                WimMessageResult MessageCallback(WimMessageType messageType, object message, object userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
 
-                WimgApi.RegisterMessageCallback(wimHandle, messageCallback);
+                WimgApi.RegisterMessageCallback(wimHandle, MessageCallback);
 
                 try
                 {
-                    using (var imageHandle = WimgApi.LoadImage(wimHandle, 1))
+                    using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
                     {
-                        var imageHandleCopy = imageHandle;
+                        WimHandle imageHandleCopy = imageHandle;
 
                         Should.Throw<OperationCanceledException>(() =>
                             WimgApi.ApplyImage(imageHandleCopy, ApplyPath, WimApplyImageOptions.NoApply));
@@ -50,7 +50,7 @@ namespace Microsoft.Wim.Tests
                 }
                 finally
                 {
-                    WimgApi.UnregisterMessageCallback(wimHandle, messageCallback);
+                    WimgApi.UnregisterMessageCallback(wimHandle, MessageCallback);
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void ApplyImageTest_NoApply()
         {
-            WimMessageCallback messageCallback = (messageType, message, userData) =>
+            WimMessageResult MessageCallback(WimMessageType messageType, object message, object userData)
             {
                 if (messageType == WimMessageType.SetRange)
                 {
@@ -66,30 +66,30 @@ namespace Microsoft.Wim.Tests
                 }
 
                 return WimMessageResult.Done;
-            };
+            }
 
-            var applyPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Apply");
+            string applyPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Apply");
 
-            using (var wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                WimgApi.RegisterMessageCallback(wimHandle, messageCallback);
+                WimgApi.RegisterMessageCallback(wimHandle, MessageCallback);
 
                 try
                 {
-                    using (var imageHandle = WimgApi.LoadImage(wimHandle, 1))
+                    using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
                     {
                         WimgApi.ApplyImage(imageHandle, applyPath, WimApplyImageOptions.NoApply);
                     }
                 }
                 finally
                 {
-                    WimgApi.UnregisterMessageCallback(wimHandle, messageCallback);
+                    WimgApi.UnregisterMessageCallback(wimHandle, MessageCallback);
                 }
             }
 
-            var fileCount = Directory.EnumerateFiles(ApplyPath).Count();
+            int fileCount = Directory.EnumerateFiles(ApplyPath).Count();
 
             fileCount.ShouldBe(0);
 

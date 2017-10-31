@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
+using System.Xml.XPath;
 using NUnit.Framework;
 using Shouldly;
 
@@ -149,7 +150,7 @@ namespace Microsoft.Wim.Tests
 
                 if (!File.Exists(_testWimTemplatePath))
                 {
-                    var capturePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestCapture");
+                    string capturePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestCapture");
 
                     Directory.CreateDirectory(capturePath);
 
@@ -203,35 +204,35 @@ namespace Microsoft.Wim.Tests
                 throw new DirectoryNotFoundException(String.Format(CultureInfo.CurrentCulture, "Could not find part of the path '{0}'", capturePath));
             }
 
-            var xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument();
 
-            using (var wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Write, WimCreationDisposition.CreateNew, WimCreateFileOptions.None, WimCompressionType.Lzx))
+            using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Write, WimCreationDisposition.CreateNew, WimCreateFileOptions.None, WimCompressionType.Lzx))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                for (var i = 0; i < TestWimImageCount; i++)
+                for (int i = 0; i < TestWimImageCount; i++)
                 {
                     // ReSharper disable once UnusedVariable
-                    using (var imageHandle = WimgApi.CaptureImage(wimHandle, capturePath, WimCaptureImageOptions.DisableDirectoryAcl | WimCaptureImageOptions.DisableFileAcl | WimCaptureImageOptions.DisableRPFix))
+                    using (WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, capturePath, WimCaptureImageOptions.DisableDirectoryAcl | WimCaptureImageOptions.DisableFileAcl | WimCaptureImageOptions.DisableRPFix))
                     {
                     }
                 }
 
-                var xml = WimgApi.GetImageInformation(wimHandle).CreateNavigator();
+                XPathNavigator xml = WimgApi.GetImageInformation(wimHandle).CreateNavigator();
 
                 xml.ShouldNotBeNull();
 
                 // ReSharper disable once PossibleNullReferenceException
                 xmlDocument.LoadXml(xml.OuterXml);
 
-                var imageNodes = xmlDocument.SelectNodes("//WIM/IMAGE");
+                XmlNodeList imageNodes = xmlDocument.SelectNodes("//WIM/IMAGE");
 
                 imageNodes.ShouldNotBeNull();
 
                 // ReSharper disable once PossibleNullReferenceException
                 foreach (XmlElement imageNode in imageNodes)
                 {
-                    var fragment = xmlDocument.CreateDocumentFragment();
+                    XmlDocumentFragment fragment = xmlDocument.CreateDocumentFragment();
 
                     fragment.InnerXml =
                         @"<WINDOWS>
@@ -272,13 +273,13 @@ namespace Microsoft.Wim.Tests
 
         protected void CreateTestFiles(string path, int fileCount, int lineCount)
         {
-            for (var i = 0; i < fileCount; i++)
+            for (int i = 0; i < fileCount; i++)
             {
-                var filePath = Path.Combine(path, $"TestFile{Guid.NewGuid()}.txt");
+                string filePath = Path.Combine(path, $"TestFile{Guid.NewGuid()}.txt");
 
-                using (var fs = File.CreateText(filePath))
+                using (StreamWriter fs = File.CreateText(filePath))
                 {
-                    for (var x = 0; x < lineCount; x++)
+                    for (int x = 0; x < lineCount; x++)
                     {
                         fs.WriteLine(Guid.NewGuid().ToString());
                     }

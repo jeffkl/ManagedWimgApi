@@ -11,11 +11,11 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void ExportImageTest()
         {
-            var exportWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "export.wim");
+            string exportWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "export.wim");
 
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                using (var wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Lzx))
+                using (WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Lzx))
                 {
                     WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
@@ -38,9 +38,9 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void ExportImageTest_ThrowsArgumentNullException_wimHandle()
         {
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                var imageHandleCopy = imageHandle;
+                WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("wimHandle", () =>
                     WimgApi.ExportImage(imageHandleCopy, null, WimExportImageOptions.None));

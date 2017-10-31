@@ -89,7 +89,7 @@ namespace Microsoft.Wim
         /// </summary>
         public int AlignmentBoundary
         {
-            get { return Param2; }
+            get => Param2;
             set
             {
                 Param2 = value;
@@ -195,7 +195,7 @@ namespace Microsoft.Wim
         /// </summary>
         public bool Compress
         {
-            get { return Param2; }
+            get => Param2;
             set
             {
                 Param2 = value;
@@ -409,7 +409,7 @@ namespace Microsoft.Wim
         /// </summary>
         public bool Process
         {
-            get { return Param2; }
+            get => Param2;
             set
             {
                 Param2 = value;
@@ -603,7 +603,7 @@ namespace Microsoft.Wim
         /// </summary>
         public string PartPath
         {
-            get { return Param1; }
+            get => Param1;
             set
             {
                 Param1 = value;
@@ -623,7 +623,7 @@ namespace Microsoft.Wim
         /// </summary>
         public long PartSize
         {
-            get { return Param2; }
+            get => Param2;
             set
             {
                 Param2 = value;

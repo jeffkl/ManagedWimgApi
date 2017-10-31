@@ -12,13 +12,13 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CommitImageHandleTest()
         {
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
                 WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix);
 
                 try
                 {
-                    using (var newImageHandle = WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
+                    using (WimHandle newImageHandle = WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
                         WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount);
                     }
@@ -33,13 +33,13 @@ namespace Microsoft.Wim.Tests
         [Test]
         public void CommitImageHandleTest_Append()
         {
-            using (var imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
                 WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix);
 
                 try
                 {
-                    using (var newImageHandle = WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
+                    using (WimHandle newImageHandle = WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
                         WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount + 1);
                     }
