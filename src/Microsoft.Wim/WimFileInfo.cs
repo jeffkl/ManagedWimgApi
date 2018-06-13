@@ -33,7 +33,7 @@ namespace Microsoft.Wim
 
             // Determine the file size
             //
-            Length = ((long) findData.nFileSizeHigh << 32) | findData.nFileSizeLow;
+            Length = ((long)findData.nFileSizeHigh << 32) | findData.nFileSizeLow;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Microsoft.Wim
         /// <param name="fullPath">The full path to the file or directory.</param>
         /// <param name="findDataPtr">A pointer to a <see cref="WimgApi.WIN32_FIND_DATA"/> containing information about the file or directory.</param>
         internal WimFileInfo(string fullPath, IntPtr findDataPtr)
-            : this(fullPath, (WimgApi.WIN32_FIND_DATA) Marshal.PtrToStructure(findDataPtr, typeof (WimgApi.WIN32_FIND_DATA)))
+            : this(fullPath, (WimgApi.WIN32_FIND_DATA)Marshal.PtrToStructure(findDataPtr, typeof(WimgApi.WIN32_FIND_DATA)))
         {
         }
 

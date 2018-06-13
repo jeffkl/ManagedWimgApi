@@ -1,10 +1,10 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -71,11 +71,11 @@ namespace Microsoft.Wim.Tests
             {
                 if (messageType == WimMessageType.FileInfo)
                 {
-                    WimMessageFileInfo messageFileInfo = (WimMessageFileInfo) message;
+                    WimMessageFileInfo messageFileInfo = (WimMessageFileInfo)message;
 
                     if ((messageFileInfo.FileInfo.Attributes | FileAttributes.Directory) != FileAttributes.Directory)
                     {
-                        ((List<String>) userData).Add(messageFileInfo.Path.Replace(ApplyPath, ""));
+                        ((List<String>)userData).Add(messageFileInfo.Path.Replace(ApplyPath, ""));
                     }
                 }
 

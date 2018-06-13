@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Shouldly;
+using System;
 using System.Xml;
 using System.Xml.XPath;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -149,17 +149,17 @@ namespace Microsoft.Wim.Tests
         }
 
         [Test]
-        public void SetImageInformationTest_ThrowsArgumentNullException_wimHandle()
-        {
-            ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SetImageInformation(null, null));
-        }
-
-        [Test]
         public void SetImageInformationTest_ThrowsArgumentNullException_imageInfoXml()
         {
             ShouldThrow<ArgumentNullException>("imageInfoXml", () =>
                 WimgApi.SetImageInformation(TestWimHandle, null));
+        }
+
+        [Test]
+        public void SetImageInformationTest_ThrowsArgumentNullException_wimHandle()
+        {
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
+                WimgApi.SetImageInformation(null, null));
         }
 
         private XPathNavigator VerifyXmlNode(XPathNavigator parentNode, string xpath)

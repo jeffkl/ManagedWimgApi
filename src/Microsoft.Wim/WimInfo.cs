@@ -18,7 +18,7 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="wimInfoPtr">A pointer to a native <see cref="WimgApi.WIM_INFO" /> struct.</param>
         internal WimInfo(IntPtr wimInfoPtr)
-            : this((WimgApi.WIM_INFO) Marshal.PtrToStructure(wimInfoPtr, typeof (WimgApi.WIM_INFO)))
+            : this((WimgApi.WIM_INFO)Marshal.PtrToStructure(wimInfoPtr, typeof(WimgApi.WIM_INFO)))
         {
         }
 
@@ -36,13 +36,13 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets a <see cref="WimInfoAttributes" /> value that indicates how the file is treated and what features will be used.
         /// </summary>
-        public WimInfoAttributes Attributes => (WimInfoAttributes) _wimInfo.WimAttributes;
+        public WimInfoAttributes Attributes => (WimInfoAttributes)_wimInfo.WimAttributes;
 
         /// <summary>
         /// Gets the index of the bootable image in the .wim file. If this value is zero, then there are no bootable images
         /// available. To set a bootable image, call the WIMSetBootImage function.
         /// </summary>
-        public int BootIndex => (int) _wimInfo.BootIndex;
+        public int BootIndex => (int)_wimInfo.BootIndex;
 
         /// <summary>
         /// Gets a <see cref="WimCompressionType" /> value that indicates the method of compression used to compress resources in
@@ -53,7 +53,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets a <see cref="WimCreateFileOptions" /> value that indicates the options used when the .wim file was created.
         /// </summary>
-        public WimCreateFileOptions CreateOptions => (WimCreateFileOptions) _wimInfo.WimFlagsAndAttr;
+        public WimCreateFileOptions CreateOptions => (WimCreateFileOptions)_wimInfo.WimFlagsAndAttr;
 
         /// <summary>
         /// Gets the unique identifier for the Windows® image (.wim) file.
@@ -63,7 +63,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the number of images contained in the .wim file.
         /// </summary>
-        public int ImageCount => (int) _wimInfo.ImageCount;
+        public int ImageCount => (int)_wimInfo.ImageCount;
 
         /// <summary>
         /// Gets the part number of the current .wim file in a spanned set.  This value should be one, unless the data of the .wim

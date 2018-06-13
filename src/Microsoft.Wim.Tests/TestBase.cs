@@ -1,11 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using NUnit.Framework;
+using Shouldly;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -24,28 +24,6 @@ namespace Microsoft.Wim.Tests
         private WimHandle _testWimHandle;
         private string _testWimPath;
         private string _testWimTemplatePath;
-
-        [TearDown]
-        public virtual void Cleanup()
-        {
-            if (_applyPath != null && Directory.Exists(_applyPath))
-            {
-                Directory.Delete(_applyPath, true);
-            }
-        }
-
-        [SetUp]
-        public virtual void Setup()
-        {
-            _captureWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "capture.wim");
-        }
-
-
-        [OneTimeTearDown]
-        public virtual void OneTimeTearDown()
-        {
-            _testWimHandle?.Dispose();
-        }
 
         public string ApplyPath
         {
@@ -177,19 +155,25 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        protected Exception ShouldThrow<T>(string paramName, Action action)
-            where T : ArgumentException
+        [TearDown]
+        public virtual void Cleanup()
         {
-            if (action == null)
+            if (_applyPath != null && Directory.Exists(_applyPath))
             {
-                throw new ArgumentNullException(nameof(action));
+                Directory.Delete(_applyPath, true);
             }
+        }
 
-            T exception = Should.Throw<T>(action);
+        [OneTimeTearDown]
+        public virtual void OneTimeTearDown()
+        {
+            _testWimHandle?.Dispose();
+        }
 
-            exception.ParamName.ShouldBe(paramName);
-
-            return exception;
+        [SetUp]
+        public virtual void Setup()
+        {
+            _captureWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "capture.wim");
         }
 
         protected void CaptureTestImage(string imagePath, string capturePath)
@@ -285,6 +269,21 @@ namespace Microsoft.Wim.Tests
                     }
                 }
             }
+        }
+
+        protected Exception ShouldThrow<T>(string paramName, Action action)
+                            where T : ArgumentException
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            T exception = Should.Throw<T>(action);
+
+            exception.ParamName.ShouldBe(paramName);
+
+            return exception;
         }
     }
 }

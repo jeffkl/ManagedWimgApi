@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Shouldly;
+using System;
 using System.Diagnostics;
 using System.IO;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {

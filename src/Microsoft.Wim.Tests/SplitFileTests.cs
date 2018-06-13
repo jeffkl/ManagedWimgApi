@@ -1,68 +1,15 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
     [TestFixture]
     public class SplitFileTests : TestBase
     {
-        [Test]
-        public void SplitFileTest()
-        {
-            IEnumerable<string> splitWims = CreateSplitWim();
-
-            splitWims.Count().ShouldNotBe(0);
-        }
-
-        [Test]
-        public void SplitFileTest_ThrowsArgumentNullException_wimHandle()
-        {
-            ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SplitFile(null, "file.wim", 1000));
-        }
-
-        [Test]
-        public void SplitFileTest_ThrowsArgumentNullException_partPath()
-        {
-            ShouldThrow<ArgumentNullException>("partPath", () =>
-                WimgApi.SplitFile(TestWimHandle, null, 1000));
-        }
-
-        [Test]
-        public void SplitFileTest_ThrowsDirectoryNotFoundException_partPath()
-        {
-            Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.SplitFile(TestWimHandle, Path.Combine(Guid.NewGuid().ToString(), "out.wim"), 1000));
-        }
-
-        [Test]
-        public void SplitFileMinimumSizeTest()
-        {
-            string partPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "out.wim");
-
-            long partSize = WimgApi.SplitFile(TestWimHandle, partPath);
-
-            partSize.ShouldNotBe(0);
-        }
-
-        [Test]
-        public void SplitFileMinimumSizeTest_ThrowsArgumentNullException_wimHandle()
-        {
-            ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SplitFile(null, "file.wim"));
-        }
-
-        [Test]
-        public void SplitFileMinimumSizeTest_ThrowsArgumentNullException_partPath()
-        {
-            ShouldThrow<ArgumentNullException>("partPath", () =>
-                WimgApi.SplitFile(TestWimHandle, null));
-        }
-
         [Test]
         public void SetReferenceFileTest()
         {
@@ -80,13 +27,6 @@ namespace Microsoft.Wim.Tests
         }
 
         [Test]
-        public void SetReferenceFileTest_ThrowsArgumentNullException_wimHandle()
-        {
-            ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SetReferenceFile(null, null, WimSetReferenceMode.Append, WimSetReferenceOptions.None));
-        }
-
-        [Test]
         public void SetReferenceFileTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>
@@ -94,10 +34,70 @@ namespace Microsoft.Wim.Tests
         }
 
         [Test]
+        public void SetReferenceFileTest_ThrowsArgumentNullException_wimHandle()
+        {
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
+                WimgApi.SetReferenceFile(null, null, WimSetReferenceMode.Append, WimSetReferenceOptions.None));
+        }
+
+        [Test]
         public void SetReferenceFileTest_ThrowsFileNotFoundException_path()
         {
             Should.Throw<FileNotFoundException>(() =>
                 WimgApi.SetReferenceFile(TestWimHandle, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), WimSetReferenceMode.Append, WimSetReferenceOptions.None));
+        }
+
+        [Test]
+        public void SplitFileMinimumSizeTest()
+        {
+            string partPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "out.wim");
+
+            long partSize = WimgApi.SplitFile(TestWimHandle, partPath);
+
+            partSize.ShouldNotBe(0);
+        }
+
+        [Test]
+        public void SplitFileMinimumSizeTest_ThrowsArgumentNullException_partPath()
+        {
+            ShouldThrow<ArgumentNullException>("partPath", () =>
+                WimgApi.SplitFile(TestWimHandle, null));
+        }
+
+        [Test]
+        public void SplitFileMinimumSizeTest_ThrowsArgumentNullException_wimHandle()
+        {
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
+                WimgApi.SplitFile(null, "file.wim"));
+        }
+
+        [Test]
+        public void SplitFileTest()
+        {
+            IEnumerable<string> splitWims = CreateSplitWim();
+
+            splitWims.Count().ShouldNotBe(0);
+        }
+
+        [Test]
+        public void SplitFileTest_ThrowsArgumentNullException_partPath()
+        {
+            ShouldThrow<ArgumentNullException>("partPath", () =>
+                WimgApi.SplitFile(TestWimHandle, null, 1000));
+        }
+
+        [Test]
+        public void SplitFileTest_ThrowsArgumentNullException_wimHandle()
+        {
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
+                WimgApi.SplitFile(null, "file.wim", 1000));
+        }
+
+        [Test]
+        public void SplitFileTest_ThrowsDirectoryNotFoundException_partPath()
+        {
+            Should.Throw<DirectoryNotFoundException>(() =>
+                WimgApi.SplitFile(TestWimHandle, Path.Combine(Guid.NewGuid().ToString(), "out.wim"), 1000));
         }
 
         private IEnumerable<string> CreateSplitWim()

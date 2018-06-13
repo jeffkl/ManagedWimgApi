@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
+using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -62,7 +62,7 @@ namespace Microsoft.Wim.Tests
             {
                 if (messageType == WimMessageType.SetRange)
                 {
-                    _noApplyFileCount = ((WimMessageSetRange) message).FileCount;
+                    _noApplyFileCount = ((WimMessageSetRange)message).FileCount;
                 }
 
                 return WimMessageResult.Done;

@@ -121,7 +121,7 @@ namespace Microsoft.Wim
         {
             // Marshal the drive letter
             //
-            Param1 = (char) wParam;
+            Param1 = (char)wParam;
 
             // This not used and is always zero
             //
@@ -154,7 +154,7 @@ namespace Microsoft.Wim
 
             // This not used and is always zero
             //
-            Param2 = (int) lParam != 0;
+            Param2 = (int)lParam != 0;
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace Microsoft.Wim
 
             // Default to true
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace Microsoft.Wim
 
             // Default to true
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -359,11 +359,11 @@ namespace Microsoft.Wim
         {
             // Marshal the percent complete
             //
-            Param1 = (int) wParam;
+            Param1 = (int)wParam;
 
             // Marshal the estimated number of milliseconds until the cleanup operation is complete
             //
-            Param2 = TimeSpan.FromMilliseconds((uint) lParam);
+            Param2 = TimeSpan.FromMilliseconds((uint)lParam);
         }
 
         /// <summary>
@@ -436,11 +436,11 @@ namespace Microsoft.Wim
         {
             // Marshal the percent complete
             //
-            Param1 = (int) wParam;
+            Param1 = (int)wParam;
 
             // Marshal the ETA
             //
-            Param2 = TimeSpan.FromMilliseconds((int) lParam);
+            Param2 = TimeSpan.FromMilliseconds((int)lParam);
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace Microsoft.Wim
 
             // Marshal the error code
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -502,11 +502,11 @@ namespace Microsoft.Wim
         {
             // Marshal the directory count
             //
-            Param1 = (int) wParam;
+            Param1 = (int)wParam;
 
             // Marshal to file count
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -539,7 +539,7 @@ namespace Microsoft.Wim
 
             // Marshal to file count
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -567,7 +567,7 @@ namespace Microsoft.Wim
 
             // Marshal to file count
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -674,11 +674,11 @@ namespace Microsoft.Wim
         {
             // Marshal the files deleted
             //
-            Param1 = (long) wParam;
+            Param1 = (long)wParam;
 
             // Marshal the drive letter
             //
-            Param2 = (char) lParam;
+            Param2 = (char)lParam;
         }
 
         /// <summary>
@@ -740,7 +740,7 @@ namespace Microsoft.Wim
 
             // Marshal the error code
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>
@@ -773,7 +773,7 @@ namespace Microsoft.Wim
 
             // Marshal the error code
             //
-            Param2 = (int) lParam;
+            Param2 = (int)lParam;
         }
 
         /// <summary>

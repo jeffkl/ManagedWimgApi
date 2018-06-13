@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Shouldly;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {

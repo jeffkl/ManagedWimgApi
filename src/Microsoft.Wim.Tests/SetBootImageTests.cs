@@ -1,6 +1,6 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Shouldly;
+using System;
 
 namespace Microsoft.Wim.Tests
 {
@@ -25,13 +25,6 @@ namespace Microsoft.Wim.Tests
         }
 
         [Test]
-        public void SetBootImageTest_ThrowsIndexOutOfRangeException_zero()
-        {
-            Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.SetBootImage(TestWimHandle, 0));
-        }
-
-        [Test]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_minusOne()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
@@ -43,6 +36,13 @@ namespace Microsoft.Wim.Tests
         {
             Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.SetBootImage(TestWimHandle, TestWimImageCount + 2));
+        }
+
+        [Test]
+        public void SetBootImageTest_ThrowsIndexOutOfRangeException_zero()
+        {
+            Should.Throw<IndexOutOfRangeException>(() =>
+                WimgApi.SetBootImage(TestWimHandle, 0));
         }
     }
 }
