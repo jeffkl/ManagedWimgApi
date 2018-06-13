@@ -500,24 +500,35 @@ namespace Microsoft.Wim
         internal WimMessageScanning(IntPtr wParam, IntPtr lParam)
             : base(wParam, lParam)
         {
-            // Marshal the directory count
+            // If wParam is 0, lParam is a file count
+            // If wParam is 1, lParam is a directory count
             //
             Param1 = (int)wParam;
 
-            // Marshal to file count
+            // Marshal to file or directory count
             //
             Param2 = (int)lParam;
         }
 
         /// <summary>
-        /// Gets the number of directories that were scanned.
+        /// Gets the number of directories that were scanned if <see cref="IsDirectoryCount"/> is <code>true</code>, otherwise zero.
         /// </summary>
-        public int DirectoryCount => Param1;
+        public int DirectoryCount => IsDirectoryCount ? Param2 : 0;
 
         /// <summary>
-        /// Gets the number of files that were scanned.
+        /// Gets the number of files that were scanned if <see cref="IsFileCount"/> is <code>true</code>, otherwise zero.
         /// </summary>
-        public int FileCount => Param2;
+        public int FileCount => IsFileCount ? Param2 : 0;
+
+        /// <summary>
+        /// Gets a value indicating if the message contains a directory count.
+        /// </summary>
+        public bool IsDirectoryCount => Param1 == 1;
+
+        /// <summary>
+        /// Gets a value indicating if the message contains a file count.
+        /// </summary>
+        public bool IsFileCount => !IsDirectoryCount;
     }
 
     /// <summary>
