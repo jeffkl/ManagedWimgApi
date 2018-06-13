@@ -28,7 +28,7 @@ namespace Microsoft.Wim.Tests
                         wimMountInfo.ShouldNotBeNull();
 
                         wimMountInfo.ImageIndex.ShouldBe(1);
-                        wimMountInfo.MountPath.ShouldBe(MountPath);
+                        wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
                         wimMountInfo.Path.ShouldBe(TestWimPath);
                         wimMountInfo.ReadOnly.ShouldBeTrue();
                         wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
@@ -59,7 +59,7 @@ namespace Microsoft.Wim.Tests
                         wimMountInfo.ShouldNotBeNull();
 
                         wimMountInfo.ImageIndex.ShouldBe(1);
-                        wimMountInfo.MountPath.ShouldBe(MountPath);
+                        wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
                         wimMountInfo.Path.ShouldBe(TestWimPath);
                         wimMountInfo.ReadOnly.ShouldBeTrue();
                         wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
@@ -89,7 +89,7 @@ namespace Microsoft.Wim.Tests
                 wimMountInfo.ShouldNotBeNull();
 
                 wimMountInfo.ImageIndex.ShouldBe(1);
-                wimMountInfo.MountPath.ShouldBe(MountPath);
+                wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
                 wimMountInfo.Path.ShouldBe(TestWimPath);
                 wimMountInfo.ReadOnly.ShouldBeTrue();
                 wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
@@ -120,7 +120,7 @@ namespace Microsoft.Wim.Tests
 
                 // ReSharper disable once PossibleNullReferenceException
                 wimMountInfo.ImageIndex.ShouldBe(1);
-                wimMountInfo.MountPath.ShouldBe(MountPath);
+                wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
                 wimMountInfo.Path.ShouldBe(TestWimPath);
                 wimMountInfo.ReadOnly.ShouldBeTrue();
                 wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
