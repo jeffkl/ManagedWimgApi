@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Microsoft.Wim")]
-[assembly: AssemblyDescription("Managed Windows Imaging API (WIMGAPI)")]
+[assembly: ComVisible(false)]
+[assembly: CLSCompliant(false)]

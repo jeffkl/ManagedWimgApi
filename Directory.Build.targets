@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DebugType Condition="'$(Configuration)' == 'Debug'">Full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\GlobalSuppressions.cs" Condition="'$(RunCodeAnalysis)' == 'true'">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+</Project>
