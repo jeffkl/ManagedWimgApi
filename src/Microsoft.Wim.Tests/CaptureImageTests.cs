@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Shouldly;
+using System;
+using System.IO;
 
 // ReSharper disable UnusedVariable
 
@@ -81,7 +81,6 @@ namespace Microsoft.Wim.Tests
         private WimMessageResult CaptureImageWithCallbackTestCallback(WimMessageType messageType, object message, object userData)
         {
             _captureWithCallbackCalled = true;
-
 
             if (userData is CallbackObject callbackObject)
             {

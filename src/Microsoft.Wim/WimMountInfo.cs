@@ -25,7 +25,7 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="wimMountInfoPtr">A pointer to a native <see cref="WimgApi.WIM_MOUNT_INFO_LEVEL1" /> struct.</param>
         internal WimMountInfo(IntPtr wimMountInfoPtr)
-            : this((WimgApi.WIM_MOUNT_INFO_LEVEL1) Marshal.PtrToStructure(wimMountInfoPtr, typeof (WimgApi.WIM_MOUNT_INFO_LEVEL1)))
+            : this((WimgApi.WIM_MOUNT_INFO_LEVEL1)Marshal.PtrToStructure(wimMountInfoPtr, typeof(WimgApi.WIM_MOUNT_INFO_LEVEL1)))
         {
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the image index within the .wim file specified in <see cref="Path" />.
         /// </summary>
-        public int ImageIndex => (int) _wimMountInfo.ImageIndex;
+        public int ImageIndex => (int)_wimMountInfo.ImageIndex;
 
         /// <summary>
         /// Gets the full path to the directory where the image is mounted.

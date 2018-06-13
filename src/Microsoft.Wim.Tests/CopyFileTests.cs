@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Shouldly;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
-using NUnit.Framework;
-using Shouldly;
 
 namespace Microsoft.Wim.Tests
 {
@@ -75,7 +75,7 @@ namespace Microsoft.Wim.Tests
             {
                 _callbackCalled = true;
 
-                ((StringBuilder) userData).Append(CallbackText);
+                ((StringBuilder)userData).Append(CallbackText);
 
                 return CopyFileProgressAction.Quiet;
             }
