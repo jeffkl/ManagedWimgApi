@@ -1,17 +1,21 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.IO;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class ExportImageTests : TestBase
     {
-        [Test]
+        public ExportImageTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void ExportImageTest()
         {
-            string exportWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "export.wim");
+            string exportWimPath = Path.Combine(TestDirectory, "export.wim");
 
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
@@ -28,14 +32,14 @@ namespace Microsoft.Wim.Tests
             new FileInfo(exportWimPath).Length.ShouldNotBe(0);
         }
 
-        [Test]
+        [Fact]
         public void ExportImageTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.ExportImage(null, null, WimExportImageOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void ExportImageTest_ThrowsArgumentNullException_wimHandle()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))

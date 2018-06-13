@@ -1,19 +1,23 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.IO;
+using Xunit;
 
 // ReSharper disable UnusedVariable
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class CaptureImageTests : TestBase
     {
         private bool _captureWithCallbackCalled;
         private int _captureWithCallbackFileCount;
 
-        [Test]
+        public CaptureImageTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void CaptureImageTest()
         {
             using (WimHandle wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
@@ -29,28 +33,28 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void CaptureImageTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>
                 WimgApi.CaptureImage(TestWimHandle, null, WimCaptureImageOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void CaptureImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.CaptureImage(null, TempPath, WimCaptureImageOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void CaptureImageTest_ThrowsDirectoryNotFoundException_path()
         {
             Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.CaptureImage(TestWimHandle, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), WimCaptureImageOptions.None));
+                WimgApi.CaptureImage(TestWimHandle, Path.Combine(TestDirectory, Guid.NewGuid().ToString()), WimCaptureImageOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void CaptureImageWithCallbackTest()
         {
             CallbackObject userData = new CallbackObject();
@@ -75,7 +79,7 @@ namespace Microsoft.Wim.Tests
 
             userData.WasCalled.ShouldBe(true, "The callback should have set user data");
 
-            _captureWithCallbackFileCount.ShouldBe(TestWimFileCount);
+            _captureWithCallbackFileCount.ShouldBe(TestWimTemplate.FileCount);
         }
 
         private WimMessageResult CaptureImageWithCallbackTestCallback(WimMessageType messageType, object message, object userData)

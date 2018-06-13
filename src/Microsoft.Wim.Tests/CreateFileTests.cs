@@ -1,25 +1,18 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.IO;
+using Xunit;
 
 // ReSharper disable UnusedVariable
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class CreateFileTests : TestBase
     {
-        #region Setup/Cleanup
-
-        [SetUp]
-        public override void Setup()
+        public CreateFileTests(TestWimTemplate template)
+            : base(template)
         {
-            base.Setup();
-
-            CreateWimPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "create.wim");
+            CreateWimPath = Path.Combine(TestDirectory, "create.wim");
         }
-
-        #endregion Setup/Cleanup
 
         protected string CreateWimPath
         {
@@ -27,15 +20,18 @@ namespace Microsoft.Wim.Tests
             private set;
         }
 
-        [Test]
-        public void CreateFileTest()
+        [Theory]
+        [InlineData(WimCompressionType.Lzx)]
+        [InlineData(WimCompressionType.None)]
+        [InlineData(WimCompressionType.Xpress)]
+        public void CreateFileTest(WimCompressionType compressionType)
         {
-            using (WimHandle wimHandle = WimgApi.CreateFile(CreateWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
+            using (WimHandle wimHandle = WimgApi.CreateFile(CreateWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, compressionType))
             {
             }
         }
 
-        [Test]
+        [Fact]
         public void CreateFileTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>

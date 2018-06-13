@@ -1,15 +1,21 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class RemountImageTests : TestBase
     {
-        [Test]
+        private const string WimServProcessName = "wimserv";
+
+        public RemountImageTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void RemountImageTest()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -35,23 +41,23 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void RemountImageTest_ThrowsArgumentNullException_mountPath()
         {
             ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.RemountImage(null));
         }
 
-        [Test]
+        [Fact]
         public void RemountImageTest_ThrowsDirectoryNotFoundException_mountPath()
         {
             Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.RemountImage(Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString())));
+                WimgApi.RemountImage(Path.Combine(TestDirectory, Guid.NewGuid().ToString())));
         }
 
         private void KillWimServ()
         {
-            Process[] wimServProcesses = Process.GetProcessesByName("wimserv");
+            Process[] wimServProcesses = Process.GetProcessesByName(WimServProcessName);
 
             wimServProcesses.Length.ShouldNotBe(0);
 

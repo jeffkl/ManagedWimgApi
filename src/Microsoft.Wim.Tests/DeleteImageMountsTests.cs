@@ -1,17 +1,22 @@
-﻿using NUnit.Framework;
+﻿
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class DeleteImageMountsTests : TestBase
     {
-        [Test]
+        public DeleteImageMountsTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void DeleteImageMountsTest_All()
         {
             WimgApi.DeleteImageMounts(true);
         }
 
-        [Test]
+        [Fact]
         public void DeleteImageMountsTest_InactiveOnly()
         {
             WimgApi.DeleteImageMounts(false);
