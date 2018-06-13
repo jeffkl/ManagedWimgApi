@@ -1,16 +1,20 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class MountImageTests : TestBase
     {
-        [Test]
+        public MountImageTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void GetMountedImageHandleTest_ReadOnly()
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
@@ -41,7 +45,7 @@ namespace Microsoft.Wim.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void GetMountedImageHandleTest_ReadWrite()
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
@@ -72,14 +76,14 @@ namespace Microsoft.Wim.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void GetMountedImageHandleTest_ThrowsArgumentNullException_mountPath()
         {
             ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.GetMountedImageHandle(null, false, out _));
         }
 
-        [Test]
+        [Fact]
         public void GetMountedImageInfoFromHandleTest()
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
@@ -96,14 +100,14 @@ namespace Microsoft.Wim.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void GetMountedImageInfoFromHandleTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.GetMountedImageInfoFromHandle(null));
         }
 
-        [Test]
+        [Fact]
         public void GetMountedImageInfoTest()
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
@@ -127,7 +131,7 @@ namespace Microsoft.Wim.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void MountImageHandleTest_ReadOnly()
         {
             const bool readOnly = true;
@@ -147,7 +151,7 @@ namespace Microsoft.Wim.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void MountImageHandleTest_ReadWrite()
         {
             const bool readOnly = false;
@@ -167,14 +171,14 @@ namespace Microsoft.Wim.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void MountImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.MountImage(null, MountPath, WimMountImageOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void MountImageHandleTest_ThrowsArgumentNullException_mountPath()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -186,7 +190,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void MountImageHandleTest_ThrowsDirectoryNotFoundException_mountPath()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -194,11 +198,11 @@ namespace Microsoft.Wim.Tests
                 WimHandle imageHandleCopy = imageHandle;
 
                 Should.Throw<DirectoryNotFoundException>(() =>
-                    WimgApi.MountImage(imageHandleCopy, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), WimMountImageOptions.None));
+                    WimgApi.MountImage(imageHandleCopy, Path.Combine(TestDirectory, Guid.NewGuid().ToString()), WimMountImageOptions.None));
             }
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest()
         {
             WimgApi.MountImage(MountPath, TestWimPath, 1);
@@ -214,49 +218,49 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsArgumentNullException_imagePath()
         {
             ShouldThrow<ArgumentNullException>("imagePath", () =>
                 WimgApi.MountImage(MountPath, null, 1));
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsArgumentNullException_mountPath()
         {
             ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.MountImage(null, TestWimPath, 1));
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsDirectoryNotFoundException_mountPathDoesNotExist()
         {
             Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.MountImage(Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), TestWimPath, 1));
+                WimgApi.MountImage(Path.Combine(TestDirectory, Guid.NewGuid().ToString()), TestWimPath, 1));
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsFileNotFoundException_imagePathDoesNotExist()
         {
             Should.Throw<FileNotFoundException>(() =>
                 WimgApi.MountImage(MountPath, "NonExistentFile.wim", 1));
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsIndexOutOfRangeException_imageIndex_0()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, 0));
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsIndexOutOfRangeException_imageIndex_minusOne()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, -1));
         }
 
-        [Test]
+        [Fact]
         public void MountImageTest_ThrowsWin32Exception_imageIndexOutOfRange()
         {
             Win32Exception invalidParameterException = Should.Throw<Win32Exception>(() =>
@@ -265,49 +269,49 @@ namespace Microsoft.Wim.Tests
             invalidParameterException.Message.ShouldBe("The parameter is incorrect");
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.UnmountImage(null));
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageTest_ThrowsArgumentNullException_imagePath()
         {
             ShouldThrow<ArgumentNullException>("imagePath", () =>
                 WimgApi.UnmountImage("", null, 1, false));
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageTest_ThrowsArgumentNullException_mountPath()
         {
             ShouldThrow<ArgumentNullException>("mountPath", () =>
                 WimgApi.UnmountImage(null, "", 1, false));
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageTest_ThrowsDirectoryNotFoundException_mountPathDoesNotExist()
         {
             Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.UnmountImage(Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), "", 1, false));
+                WimgApi.UnmountImage(Path.Combine(TestDirectory, Guid.NewGuid().ToString()), "", 1, false));
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageTest_ThrowsFileNotFoundExceptionException_imagePathDoesNotExist()
         {
             Should.Throw<FileNotFoundException>(() =>
-                WimgApi.UnmountImage(MountPath, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString()), 1, false));
+                WimgApi.UnmountImage(MountPath, Path.Combine(TestDirectory, Guid.NewGuid().ToString()), 1, false));
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageTest_ThrowsIndexOutOfRangeException_imageIndex_0()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.UnmountImage("", "", 0, false));
         }
 
-        [Test]
+        [Fact]
         public void UnmountImageTest_ThrowsIndexOutOfRangeException_imageIndex_minusOne()
         {
             Should.Throw<IndexOutOfRangeException>(() =>

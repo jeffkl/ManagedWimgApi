@@ -1,27 +1,22 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class CopyFileTests : TestBase
     {
         private const string CallbackText = "The callback user data was set correctly.";
         private bool _callbackCalled;
         private string _destinationPath;
 
-        #region Setup/Cleanup
-
-        [SetUp]
-        public override void Setup()
+        public CopyFileTests(TestWimTemplate template)
+            : base(template)
         {
-            base.Setup();
-
-            _destinationPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "copy.wim");
+            _destinationPath = Path.Combine(TestDirectory, "copy.wim");
 
             if (File.Exists(_destinationPath))
             {
@@ -29,9 +24,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        #endregion Setup/Cleanup
-
-        [Test]
+        [Fact]
         public void CopyFileTest()
         {
             WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None);
@@ -39,21 +32,21 @@ namespace Microsoft.Wim.Tests
             File.Exists(_destinationPath).ShouldBe(true);
         }
 
-        [Test]
+        [Fact]
         public void CopyFileTest_ThrowsArgumentNullException_destinationFile()
         {
             ShouldThrow<ArgumentNullException>("destinationFile", () =>
                 WimgApi.CopyFile("", null, WimCopyFileOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void CopyFileTest_ThrowsArgumentNullException_sourceFile()
         {
             ShouldThrow<ArgumentNullException>("sourceFile", () =>
                 WimgApi.CopyFile(null, "", WimCopyFileOptions.None));
         }
 
-        [Test]
+        [Fact]
         public void CopyFileTest_ThrowsWin32Exception_FailIfExists()
         {
             WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.None);
@@ -66,7 +59,7 @@ namespace Microsoft.Wim.Tests
             win32Exception.Message.ShouldBe("The file exists");
         }
 
-        [Test]
+        [Fact]
         public void CopyFileWithCallbackTest()
         {
             StringBuilder stringBuilder = new StringBuilder();

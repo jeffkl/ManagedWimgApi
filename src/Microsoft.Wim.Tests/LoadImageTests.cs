@@ -1,28 +1,32 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class LoadImageTests : TestBase
     {
-        [Test]
-        public void DeleteImageTest()
+        public LoadImageTests(TestWimTemplate template)
+            : base(template)
         {
-            WimgApi.DeleteImage(TestWimHandle, TestWimImageCount);
-
-            WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount - 1);
         }
 
-        [Test]
+        [Fact]
+        public void DeleteImageTest()
+        {
+            WimgApi.DeleteImage(TestWimHandle, TestWimTemplate.ImageCount);
+
+            WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount - 1);
+        }
+
+        [Fact]
         public void DeleteImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.DeleteImage(null, 1));
         }
 
-        [Test]
+        [Fact]
         public void DeleteImageTest_ThrowsIndexOutOfRangeException_indexOutOfRange()
         {
             IndexOutOfRangeException indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
@@ -31,7 +35,7 @@ namespace Microsoft.Wim.Tests
             indexOutOfRangeException.Message.ShouldBe("There is no image at index 10.");
         }
 
-        [Test]
+        [Fact]
         public void DeleteImageTest_ThrowsIndexOutOfRangeException_indexZero()
         {
             IndexOutOfRangeException indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
@@ -40,7 +44,7 @@ namespace Microsoft.Wim.Tests
             indexOutOfRangeException.Message.ShouldBe("There is no image at index 0.");
         }
 
-        [Test]
+        [Fact]
         public void LoadImageTest()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -53,14 +57,14 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void LoadImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.LoadImage(null, 1));
         }
 
-        [Test]
+        [Fact]
         public void LoadImageTest_ThrowsIndexOutOfRangeException_indexMinusOne()
         {
             IndexOutOfRangeException indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
@@ -69,7 +73,7 @@ namespace Microsoft.Wim.Tests
             indexOutOfRangeException.Message.ShouldBe("There is no image at index -1.");
         }
 
-        [Test]
+        [Fact]
         public void LoadImageTest_ThrowsIndexOutOfRangeException_indexOutOfRange()
         {
             IndexOutOfRangeException indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>
@@ -78,7 +82,7 @@ namespace Microsoft.Wim.Tests
             indexOutOfRangeException.Message.ShouldBe("There is no image at index 10.");
         }
 
-        [Test]
+        [Fact]
         public void LoadImageTest_ThrowsIndexOutOfRangeException_indexZero()
         {
             IndexOutOfRangeException indexOutOfRangeException = Should.Throw<IndexOutOfRangeException>(() =>

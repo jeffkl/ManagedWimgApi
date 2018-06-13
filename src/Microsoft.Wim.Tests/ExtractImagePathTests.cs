@@ -1,17 +1,21 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class ExtractImagePathTests : TestBase
     {
-        [Test]
+        public ExtractImagePathTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void ExtractImagePathTest()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -23,7 +27,7 @@ namespace Microsoft.Wim.Tests
                     fileName.ShouldNotBeNull();
 
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    string destinationPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, fileName);
+                    string destinationPath = Path.Combine(TestDirectory, fileName);
 
                     WimgApi.ExtractImagePath(imageHandle, file, destinationPath);
 
@@ -32,7 +36,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void ExtractImagePathTest_ThrowsArgumentNullException_destinationFile()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -44,14 +48,14 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void ExtractImagePathTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.ExtractImagePath(null, "", ""));
         }
 
-        [Test]
+        [Fact]
         public void ExtractImagePathTest_ThrowsArgumentNullException_sourceFile()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))

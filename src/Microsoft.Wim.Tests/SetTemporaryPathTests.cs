@@ -1,38 +1,42 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.IO;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class SetTemporaryPathTests : TestBase
     {
-        [Test]
+        public SetTemporaryPathTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void SetTemporaryPathTest()
         {
             WimgApi.SetTemporaryPath(TestWimHandle, TempPath);
         }
 
-        [Test]
+        [Fact]
         public void SetTemporaryPathTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>
                 WimgApi.SetTemporaryPath(TestWimHandle, null));
         }
 
-        [Test]
+        [Fact]
         public void SetTemporaryPathTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.SetTemporaryPath(null, ""));
         }
 
-        [Test]
+        [Fact]
         public void SetTemporaryPathTest_ThrowsDirectoryNotFoundException_pathDoesNotExist()
         {
             Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.SetTemporaryPath(TestWimHandle, Path.Combine(TestContext.CurrentContext.WorkDirectory, Guid.NewGuid().ToString())));
+                WimgApi.SetTemporaryPath(TestWimHandle, Path.Combine(TestDirectory, Guid.NewGuid().ToString())));
         }
     }
 }

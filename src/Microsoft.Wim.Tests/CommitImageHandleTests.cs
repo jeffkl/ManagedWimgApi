@@ -1,15 +1,17 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
-
-// ReSharper disable UnusedVariable
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class CommitImageHandleTests : TestBase
     {
-        [Test]
+        public CommitImageHandleTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void CommitImageHandleTest()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -20,7 +22,7 @@ namespace Microsoft.Wim.Tests
                 {
                     using (WimHandle newImageHandle = WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
-                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount);
+                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount);
                     }
                 }
                 finally
@@ -30,7 +32,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void CommitImageHandleTest_Append()
         {
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
@@ -41,7 +43,7 @@ namespace Microsoft.Wim.Tests
                 {
                     using (WimHandle newImageHandle = WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
-                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimImageCount + 1);
+                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount + 1);
                     }
                 }
                 finally
@@ -51,7 +53,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void CommitImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>

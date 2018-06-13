@@ -1,16 +1,19 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.Xml;
 using System.Xml.XPath;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class ImageInfoTests : TestBase
     {
-        [Test]
-        [Description("Verifies that image attributes are correctly returned.")]
+        public ImageInfoTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void GetAttributesTest()
         {
             WimInfo wimInfo = WimgApi.GetAttributes(TestWimHandle);
@@ -20,29 +23,26 @@ namespace Microsoft.Wim.Tests
             wimInfo.BootIndex.ShouldBe(0);
             wimInfo.CompressionType.ShouldBe(WimCompressionType.Lzx);
             wimInfo.Guid.ShouldNotBe(Guid.Empty);
-            wimInfo.ImageCount.ShouldBe(TestWimImageCount);
+            wimInfo.ImageCount.ShouldBe(TestWimTemplate.ImageCount);
             wimInfo.PartNumber.ShouldBe(1);
             wimInfo.TotalParts.ShouldBe(1);
         }
 
-        [Test]
-        [Description("Verifies that the GetAttributes throws an ArgumentNullException when wimHandle is null.")]
+        [Fact]
         public void GetAttributesTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.GetAttributes(null));
         }
 
-        [Test]
-        [Description("Verifies that image count is correctly returned.")]
+        [Fact]
         public void GetImageCountTest()
         {
             int imageCount = WimgApi.GetImageCount(TestWimHandle);
-            imageCount.ShouldBe(TestWimImageCount);
+            imageCount.ShouldBe(TestWimTemplate.ImageCount);
         }
 
-        [Test]
-        [Description("Verifies that image information XML is correctly returned.")]
+        [Fact]
         public void GetImageInformationTest()
         {
             /*
@@ -126,15 +126,14 @@ namespace Microsoft.Wim.Tests
             VerifyXmlNodeText(windowsNode, "SYSTEMROOT/text()");
         }
 
-        [Test]
-        [Description("Verifies that the GetAttributes throws an ArgumentNullException when wimHandle is null.")]
+        [Fact]
         public void GetImageInformationTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.GetImageInformation(null));
         }
 
-        [Test]
+        [Fact]
         public void SetImageInformationTest()
         {
             XmlDocument xmlDocument = new XmlDocument();
@@ -148,14 +147,14 @@ namespace Microsoft.Wim.Tests
             WimgApi.SetImageInformation(TestWimHandle, xmlDocument);
         }
 
-        [Test]
+        [Fact]
         public void SetImageInformationTest_ThrowsArgumentNullException_imageInfoXml()
         {
             ShouldThrow<ArgumentNullException>("imageInfoXml", () =>
                 WimgApi.SetImageInformation(TestWimHandle, null));
         }
 
-        [Test]
+        [Fact]
         public void SetImageInformationTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>

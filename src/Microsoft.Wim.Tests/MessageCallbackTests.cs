@@ -1,41 +1,45 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class MessageCallbackTests : TestBase
     {
-        [Test]
+        public MessageCallbackTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void GetMessageCallbackCount_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.GetMessageCallbackCount(null));
         }
 
-        [Test]
+        [Fact]
         public void RegisterMessageCallback_ThrowsArgumentNullException_messageCallback()
         {
             ShouldThrow<ArgumentNullException>("messageCallback", () =>
                 WimgApi.RegisterMessageCallback(TestWimHandle, null));
         }
 
-        [Test]
+        [Fact]
         public void RegisterMessageCallback_ThrowsArgumentNullException_messageCallbackGlobal()
         {
             ShouldThrow<ArgumentNullException>("messageCallback", () =>
                 WimgApi.RegisterMessageCallback(null));
         }
 
-        [Test]
+        [Fact]
         public void RegisterMessageCallback_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.RegisterMessageCallback(null, TestMessageCallback));
         }
 
-        [Test]
+        [Fact]
         public void RegisterUnregisterAndCountMessageCallbackTest_Global()
         {
             WimgApi.GetMessageCallbackCount().ShouldBe(0);
@@ -54,7 +58,7 @@ namespace Microsoft.Wim.Tests
             WimgApi.GetMessageCallbackCount().ShouldBe(0);
         }
 
-        [Test]
+        [Fact]
         public void RegisterUnregisterAndCountMessageCallbackTest_ImageHandle()
         {
             WimgApi.GetMessageCallbackCount().ShouldBe(0);
@@ -73,7 +77,7 @@ namespace Microsoft.Wim.Tests
             WimgApi.GetMessageCallbackCount().ShouldBe(0);
         }
 
-        [Test]
+        [Fact]
         public void UnregisterMessageCallback_ThrowsArgumentOutOfRangeException_messageCallback()
         {
             Exception argumentOutOfRangeException = ShouldThrow<ArgumentOutOfRangeException>("messageCallback", () =>

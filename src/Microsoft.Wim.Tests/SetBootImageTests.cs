@@ -1,44 +1,48 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class SetBootImageTests : TestBase
     {
-        [Test]
+        public SetBootImageTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void SetBootImageTest()
         {
-            const int bootImageIndex = TestWimImageCount;
+            const int bootImageIndex = TestWimTemplate.ImageCount;
 
             WimgApi.SetBootImage(TestWimHandle, bootImageIndex);
 
             WimgApi.GetAttributes(TestWimHandle).BootIndex.ShouldBe(bootImageIndex);
         }
 
-        [Test]
+        [Fact]
         public void SetBootImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
                 WimgApi.SetBootImage(null, 1));
         }
 
-        [Test]
+        [Fact]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_minusOne()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
                 WimgApi.SetBootImage(TestWimHandle, -1));
         }
 
-        [Test]
+        [Fact]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_outOfRange()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.SetBootImage(TestWimHandle, TestWimImageCount + 2));
+                WimgApi.SetBootImage(TestWimHandle, TestWimTemplate.ImageCount + 2));
         }
 
-        [Test]
+        [Fact]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_zero()
         {
             Should.Throw<IndexOutOfRangeException>(() =>

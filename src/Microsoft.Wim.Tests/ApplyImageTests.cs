@@ -1,17 +1,21 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class ApplyImageTests : TestBase
     {
         private int _noApplyFileCount;
 
-        [Test]
+        public ApplyImageTests(TestWimTemplate template)
+            : base(template)
+        {
+        }
+
+        [Fact]
         public void ApplyImageTest()
         {
             using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
@@ -24,10 +28,10 @@ namespace Microsoft.Wim.Tests
                 }
             }
 
-            Directory.EnumerateFiles(ApplyPath).Count().ShouldBe(TestWimFileCount);
+            Directory.EnumerateFiles(ApplyPath).Count().ShouldBe(TestWimTemplate.FileCount);
         }
 
-        [Test]
+        [Fact]
         public void ApplyImageTest_Abort()
         {
             using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
@@ -55,7 +59,7 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void ApplyImageTest_NoApply()
         {
             WimMessageResult MessageCallback(WimMessageType messageType, object message, object userData)
@@ -68,8 +72,6 @@ namespace Microsoft.Wim.Tests
                 return WimMessageResult.Done;
             }
 
-            string applyPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Apply");
-
             using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
@@ -80,7 +82,7 @@ namespace Microsoft.Wim.Tests
                 {
                     using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
                     {
-                        WimgApi.ApplyImage(imageHandle, applyPath, WimApplyImageOptions.NoApply);
+                        WimgApi.ApplyImage(imageHandle, ApplyPath, WimApplyImageOptions.NoApply);
                     }
                 }
                 finally
@@ -93,14 +95,16 @@ namespace Microsoft.Wim.Tests
 
             fileCount.ShouldBe(0);
 
-            _noApplyFileCount.ShouldBe(TestWimFileCount);
+            _noApplyFileCount.ShouldBe(TestWimTemplate.FileCount);
         }
 
-        [Test]
+        [Fact]
         public void ApplyImageTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
                 WimgApi.ApplyImage(null, "", WimApplyImageOptions.None));
         }
     }
+
+    
 }

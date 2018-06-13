@@ -1,34 +1,17 @@
-﻿using NUnit.Framework;
-using Shouldly;
+﻿using Shouldly;
 using System;
 using System.IO;
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {
-    [TestFixture]
     public class LogFileTests : TestBase
     {
         private string _logFilePath;
 
-        #region Setup/Cleanup
-
-        [TearDown]
-        public override void Cleanup()
+        public LogFileTests(TestWimTemplate template) : base(template)
         {
-            if (File.Exists(_logFilePath))
-            {
-                File.Delete(_logFilePath);
-            }
-
-            base.Cleanup();
-        }
-
-        [SetUp]
-        public override void Setup()
-        {
-            base.Setup();
-
-            _logFilePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "test.log");
+            _logFilePath = Path.Combine(TestDirectory, "test.log");
 
             if (File.Exists(_logFilePath))
             {
@@ -36,9 +19,17 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        #endregion Setup/Cleanup
+        public override void Dispose()
+        {
+            if (File.Exists(_logFilePath))
+            {
+                File.Delete(_logFilePath);
+            }
 
-        [Test]
+            base.Dispose();
+        }
+
+        [Fact]
         public void RegisterLogFileTest()
         {
             WimgApi.RegisterLogFile(_logFilePath);
@@ -52,14 +43,14 @@ namespace Microsoft.Wim.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void RegisterLogFileTest_ThrowsArgumentNullException_logFile()
         {
             ShouldThrow<ArgumentNullException>("logFile", () =>
                 WimgApi.RegisterLogFile(null));
         }
 
-        [Test]
+        [Fact]
         public void UnregisterLogFileTest_ThrowsArgumentNullException_logFile()
         {
             ShouldThrow<ArgumentNullException>("logFile", () =>
