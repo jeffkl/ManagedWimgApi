@@ -73,7 +73,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// The DateTime when the file copy began.
         /// </summary>
-        private DateTime _timeStarted;
+        private DateTime _timeStarted = DateTime.MinValue;
 
         /// <summary>
         /// Initializes a new instance of the CopyFileProgress class.
@@ -183,7 +183,7 @@ namespace Microsoft.Wim
 
             // See if the copy just started
             //
-            if (callbackReason == (DWORD)CopyFileProgressCallbackReason.StreamSwitch)
+            if (_timeStarted == DateTime.MinValue)
             {
                 // Save the time the copy started
                 //
@@ -193,9 +193,10 @@ namespace Microsoft.Wim
                 //
                 TotalFileSize = (long)totalFileSize;
             }
+            
             // See if copy progress was made and the file has any content
             //
-            else if (callbackReason == (DWORD)CopyFileProgressCallbackReason.ChunkFinished)
+            if (callbackReason == (DWORD)CopyFileProgressCallbackReason.ChunkFinished)
             {
                 // Default the percent complete to 100
                 //
