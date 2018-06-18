@@ -511,24 +511,14 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Gets the number of directories that were scanned if <see cref="IsDirectoryCount"/> is <code>true</code>, otherwise zero.
+        /// Gets the number of objects that were scanned.  Use the <see cref="WimMessageScanningType"/> property to determine if the count represents files or directories.
         /// </summary>
-        public int DirectoryCount => IsDirectoryCount ? Param2 : 0;
+        public int Count => Param2;
 
         /// <summary>
-        /// Gets the number of files that were scanned if <see cref="IsFileCount"/> is <code>true</code>, otherwise zero.
+        /// Gets a value indicating what <see cref="WimMessageScanningType"/> that the <see cref="Count"/> property represents.
         /// </summary>
-        public int FileCount => IsFileCount ? Param2 : 0;
-
-        /// <summary>
-        /// Gets a value indicating if the message contains a directory count.
-        /// </summary>
-        public bool IsDirectoryCount => Param1 == 1;
-
-        /// <summary>
-        /// Gets a value indicating if the message contains a file count.
-        /// </summary>
-        public bool IsFileCount => !IsDirectoryCount;
+        public WimMessageScanningType WimMessageScanningType => (WimMessageScanningType)Param1;
     }
 
     /// <summary>

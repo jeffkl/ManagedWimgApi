@@ -371,6 +371,22 @@ namespace Microsoft.Wim
     }
 
     /// <summary>
+    /// Specifies what the count represents for a <see cref="WimMessageScanning"/> object.
+    /// </summary>
+    public enum WimMessageScanningType
+    {
+        /// <summary>
+        /// The count is the number of files scanned.
+        /// </summary>
+        Files = 0,
+
+        /// <summary>
+        /// The count is the number of directories scanned.
+        /// </summary>
+        Directories = 1
+    }
+
+    /// <summary>
     /// Specifies the type of message sent to the WIMMessageCallback.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
