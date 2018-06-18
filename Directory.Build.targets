@@ -2,6 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <DebugType Condition="'$(Configuration)' == 'Debug'">Full</DebugType>
+    <DebugType Condition="'$(Configuration)' == 'Release'">PdbOnly</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
