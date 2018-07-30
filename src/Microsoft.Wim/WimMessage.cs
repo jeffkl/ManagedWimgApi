@@ -583,6 +583,11 @@ namespace Microsoft.Wim
     public sealed class WimMessageSplit : WimMessage<string, long>
     {
         /// <summary>
+        /// Whether the PartPath has been modified from the one originally set by the native API.
+        /// </summary>
+        private bool isPathModified = false;
+
+        /// <summary>
         /// Initializes a new instance of the WimMessageSplit class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
@@ -609,13 +614,21 @@ namespace Microsoft.Wim
             {
                 Param1 = value;
 
-                // Free the original buffer
+                // Free the previous buffer
+                // We don't want to free the memory allocated by the native API, only the memory we have allocated.
                 //
-                Marshal.FreeHGlobal(Marshal.ReadIntPtr(wParam));
+                if (isPathModified)
+                {
+                    Marshal.FreeHGlobal(Marshal.ReadIntPtr(wParam));
+                }
 
                 // Write the string back to a pointer for the native API
                 //
                 Marshal.WriteIntPtr(wParam, Marshal.StringToHGlobalUni(value));
+
+                // Set the modified flag to indicate that the allocated memory should be freed next time this changes.
+                //
+                isPathModified = true;
             }
         }
 
