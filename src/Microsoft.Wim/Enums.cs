@@ -514,7 +514,7 @@ namespace Microsoft.Wim
         /// </summary>
         /// <remarks>This message is provided to allow applications to abort imaging operations that would otherwise not be aborted until the next WIM_MSG_PROCESS message.</remarks>
         QueryAbort = 0x948E,
-    };
+    }
 
     /// <summary>
     /// Represents options when mounting an image.

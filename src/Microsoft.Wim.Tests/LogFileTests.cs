@@ -7,7 +7,7 @@ namespace Microsoft.Wim.Tests
 {
     public class LogFileTests : TestBase
     {
-        private string _logFilePath;
+        private readonly string _logFilePath;
 
         public LogFileTests(TestWimTemplate template) : base(template)
         {
