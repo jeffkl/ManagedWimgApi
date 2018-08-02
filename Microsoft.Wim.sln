@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{ACEBD36D
 		Packages.props = Packages.props
 		README.md = README.md
 		version.json = version.json
+		wimgapi.h = wimgapi.h
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Wim.Tests", "src\Microsoft.Wim.Tests\Microsoft.Wim.Tests.csproj", "{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}"
