@@ -14,11 +14,7 @@ namespace Microsoft.Wim.Tests
             CreateWimPath = Path.Combine(TestDirectory, "create.wim");
         }
 
-        protected string CreateWimPath
-        {
-            get;
-            private set;
-        }
+        protected string CreateWimPath { get; }
 
         [Theory]
         [InlineData(WimCompressionType.Lzx)]

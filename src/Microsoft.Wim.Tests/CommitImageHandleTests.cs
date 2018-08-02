@@ -20,7 +20,7 @@ namespace Microsoft.Wim.Tests
 
                 try
                 {
-                    using (WimHandle newImageHandle = WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
+                    using (WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
                         WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount);
                     }
@@ -41,7 +41,7 @@ namespace Microsoft.Wim.Tests
 
                 try
                 {
-                    using (WimHandle newImageHandle = WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
+                    using (WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                     {
                         WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount + 1);
                     }

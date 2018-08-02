@@ -15,7 +15,7 @@ namespace Microsoft.Wim.Tests
 
         private const string TestWimTemplateFilename = @"test_template.wim";
 
-        private readonly string TestWimTemplateDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
+        private readonly string _testWimTemplateDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
 
         private readonly Lazy<string> _testWimTemplatePathLazy;
 
@@ -24,7 +24,7 @@ namespace Microsoft.Wim.Tests
 
         public TestWimTemplate()
         {
-            _testWimTempPath = Directory.CreateDirectory(Path.Combine(TestWimTemplateDirectory, "temp")).FullName;
+            _testWimTempPath = Directory.CreateDirectory(Path.Combine(_testWimTemplateDirectory, "temp")).FullName;
 
             _testWimTemplatePathLazy = new Lazy<string>(CreateTemplateImage, isThreadSafe: true);
         }
@@ -33,7 +33,7 @@ namespace Microsoft.Wim.Tests
 
         private string CreateTemplateImage()
         {
-            string capturePath = Directory.CreateDirectory(Path.Combine(TestWimTemplateDirectory, "capture")).FullName;
+            string capturePath = Directory.CreateDirectory(Path.Combine(_testWimTemplateDirectory, "capture")).FullName;
 
             CreateTestFiles(capturePath, FileCount, FileLineCount);
             try
@@ -48,7 +48,7 @@ namespace Microsoft.Wim.Tests
 
         private string CaptureTemplateImage(string capturePath)
         {
-            string imagePath = Path.Combine(TestWimTemplateDirectory, TestWimTemplateFilename);
+            string imagePath = Path.Combine(_testWimTemplateDirectory, TestWimTemplateFilename);
 
             if (!Directory.Exists(capturePath))
             {
@@ -126,7 +126,7 @@ namespace Microsoft.Wim.Tests
 
         public void Dispose()
         {
-            Directory.Delete(TestWimTemplateDirectory, recursive: true);
+            Directory.Delete(_testWimTemplateDirectory, recursive: true);
         }
 
         public static void CreateTestFiles(string path, int fileCount, int lineCount)

@@ -585,7 +585,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Whether the PartPath has been modified from the one originally set by the native API.
         /// </summary>
-        private bool isPathModified = false;
+        private bool isPathModified;
 
         /// <summary>
         /// Initializes a new instance of the WimMessageSplit class.

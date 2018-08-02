@@ -11,7 +11,7 @@ namespace Microsoft.Wim.Tests
     {
         private const string CallbackText = "The callback user data was set correctly.";
         private bool _callbackCalled;
-        private string _destinationPath;
+        private readonly string _destinationPath;
 
         public CopyFileTests(TestWimTemplate template)
             : base(template)

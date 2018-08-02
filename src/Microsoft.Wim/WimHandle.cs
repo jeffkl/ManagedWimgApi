@@ -33,18 +33,7 @@ namespace Microsoft.Wim
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
-            // Verify the handle is still valid
-            //
-            if (!IsInvalid)
-            {
-                // Close the handle
-                //
-                return WimgApi.CloseHandle(handle);
-            }
-
-            // Default to return true
-            //
-            return true;
+            return !IsInvalid && WimgApi.CloseHandle(handle);
         }
     }
 }
