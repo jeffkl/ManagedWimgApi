@@ -12,11 +12,11 @@
   <PropertyGroup Label="Package properties">
     <IncludeSymbols>true</IncludeSymbols>
     <Description>Managed Windows Imaging API (WIMGAPI)</Description>
-    <Authors>josemesona</Authors>
+    <Authors>jeffkl</Authors>
     <Copyright>Copyright © 2014. All rights reserved.</Copyright>
-    <PackageLicenseUrl>https://github.com/josemesona/ManagedWimgApi/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/josemesona/ManagedWimgApi</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/josemesona/ManagedWimgApi.git</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/jeffkl/ManagedWimgApi/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/jeffkl/ManagedWimgApi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jeffkl/ManagedWimgApi.git</RepositoryUrl>
     <PackageTags>Wimgapi</PackageTags>
   </PropertyGroup>
 </Project>
