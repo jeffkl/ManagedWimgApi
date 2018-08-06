@@ -1,5 +1,5 @@
 # How to contribute
-It is highly encouraged that you contribute to this project.  Please [open an issue](https://github.com/josemesona/ManagedWimgApi/issues/new) first so that a
+It is highly encouraged that you contribute to this project.  Please [open an issue](https://github.com/jeffkl/ManagedWimgApi/issues/new) first so that a
 discussion can be had around the overall implementation.
 
 Once your issue has been discussed, fork this repository and open the Solution File in Visual
