@@ -1,6 +1,8 @@
 ﻿using Shouldly;
 using System;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 using Xunit;
 
@@ -40,6 +42,55 @@ namespace Microsoft.Wim.Tests
         {
             int imageCount = WimgApi.GetImageCount(TestWimHandle);
             imageCount.ShouldBe(TestWimTemplate.ImageCount);
+        }
+
+        [Fact]
+        public void GetImageInformationAsStringTest()
+        {
+            string imageInformation = WimgApi.GetImageInformationAsString(TestWimHandle);
+
+            imageInformation.ShouldStartWith(@"<WIM>
+  <TOTALBYTES>");
+        }
+
+        [Fact]
+        public void GetImageInformationAsXDocumentTest()
+        {
+            XDocument imageInformation = WimgApi.GetImageInformationAsXDocument(TestWimHandle);
+
+            imageInformation?.Root.ShouldNotBeNull();
+
+            XElement root = imageInformation.Root;
+
+            root.Element("TOTALBYTES").Value.ShouldNotBeNullOrWhiteSpace();
+
+            XElement image = root.Elements("IMAGE").FirstOrDefault();
+
+            image.ShouldNotBeNull();
+
+            image.Attribute("INDEX").Value.ShouldBe("1");
+        }
+
+        [Fact]
+        public void GetImageInformationAsXmlDocumentTest()
+        {
+            XmlDocument imageInformation = WimgApi.GetImageInformationAsXmlDocument(TestWimHandle);
+
+            imageInformation?.DocumentElement.ShouldNotBeNull();
+
+            XmlElement root = imageInformation.DocumentElement;
+
+            var totalBytesElement = root.GetElementsByTagName("TOTALBYTES").Cast<XmlElement>().FirstOrDefault();
+
+            totalBytesElement.ShouldNotBeNull();
+
+            totalBytesElement.InnerText.ShouldNotBeNullOrWhiteSpace();
+
+            XmlElement image = root.GetElementsByTagName("IMAGE").Cast<XmlElement>().FirstOrDefault();
+
+            image.ShouldNotBeNull();
+
+            image.GetAttribute("INDEX").ShouldBe("1");
         }
 
         [Fact]
@@ -87,19 +138,15 @@ namespace Microsoft.Wim.Tests
                 </WIM>
             */
 
-            IXPathNavigable imageInformation = WimgApi.GetImageInformation(TestWimHandle);
+            XmlDocument imageInformation = WimgApi.GetImageInformationAsXmlDocument(TestWimHandle);
 
             imageInformation.ShouldNotBeNull();
 
-            XPathNavigator documentElement = imageInformation.CreateNavigator();
+            VerifyXmlNodeText(imageInformation, "//WIM/TOTALBYTES/text()");
 
-            documentElement.ShouldNotBeNull();
+            XmlElement imageNode = VerifyXmlNode<XmlElement>(imageInformation, "//WIM/IMAGE[@INDEX = '1']");
 
-            VerifyXmlNodeText(documentElement, "//WIM/TOTALBYTES/text()");
-
-            XPathNavigator imageNode = VerifyXmlNode(documentElement, "//WIM/IMAGE[@INDEX = '1']");
-
-            XPathNavigator windowsNode = VerifyXmlNode(imageNode, "WINDOWS");
+            XmlElement windowsNode = VerifyXmlNode<XmlElement>(imageNode, "WINDOWS");
 
             VerifyXmlNodeText(imageNode, "DIRCOUNT/text()");
             VerifyXmlNodeText(imageNode, "FILECOUNT/text()");
@@ -134,6 +181,12 @@ namespace Microsoft.Wim.Tests
         }
 
         [Fact]
+        public void SetImageInformationFromStringTest()
+        {
+            WimgApi.SetImageInformation(TestWimHandle, @"<WIM><TEST>This is a test</TEST></WIM>");
+        }
+
+        [Fact]
         public void SetImageInformationTest()
         {
             XmlDocument xmlDocument = new XmlDocument();
@@ -151,28 +204,29 @@ namespace Microsoft.Wim.Tests
         public void SetImageInformationTest_ThrowsArgumentNullException_imageInfoXml()
         {
             ShouldThrow<ArgumentNullException>("imageInfoXml", () =>
-                WimgApi.SetImageInformation(TestWimHandle, null));
+                WimgApi.SetImageInformation(TestWimHandle, (IXPathNavigable)null));
         }
 
         [Fact]
         public void SetImageInformationTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SetImageInformation(null, null));
+                WimgApi.SetImageInformation(null, (IXPathNavigable)null));
         }
 
-        private XPathNavigator VerifyXmlNode(XPathNavigator parentNode, string xpath)
+        private T VerifyXmlNode<T>(XmlNode parentNode, string xpath)
+            where T : XmlNode
         {
-            XPathNavigator node = parentNode.SelectSingleNode(xpath);
+            XmlNode node = parentNode.SelectSingleNode(xpath);
 
             node.ShouldNotBeNull($"Could not find node '{xpath}'");
 
-            return node;
+            return node as T;
         }
 
-        private void VerifyXmlNodeText(XPathNavigator parentNode, string xpath)
+        private void VerifyXmlNodeText(XmlNode parentNode, string xpath)
         {
-            XPathNavigator node = VerifyXmlNode(parentNode, xpath);
+            XmlText node = VerifyXmlNode<XmlText>(parentNode, xpath);
 
             node.Value.ShouldNotBeNullOrEmpty($"Node value '{xpath}' should not be empty");
         }

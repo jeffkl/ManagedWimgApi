@@ -7,6 +7,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <LangVersion>Latest</LangVersion>
+    <NoWarn>NU5125</NoWarn>
   </PropertyGroup>
   
   <PropertyGroup Label="Package properties">
