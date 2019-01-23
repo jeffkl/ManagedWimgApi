@@ -49,8 +49,7 @@ namespace Microsoft.Wim.Tests
         {
             string imageInformation = WimgApi.GetImageInformationAsString(TestWimHandle);
 
-            imageInformation.ShouldStartWith(@"<WIM>
-  <TOTALBYTES>");
+            imageInformation.ShouldStartWith("<WIM>");
         }
 
         [Fact]
