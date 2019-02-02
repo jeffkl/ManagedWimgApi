@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 using DWORD = System.UInt32;
 
@@ -437,13 +438,35 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Gets an <see cref="XmlDocument"/> that contains information about an image within the .wim (Windows image) file.
+        /// Gets information about an image within the .wim (Windows image) file.
         /// </summary>
         /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
         /// <returns>An <see cref="IXPathNavigable"/> object containing XML information about the volume image.</returns>
         /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static IXPathNavigable GetImageInformation(WimHandle wimHandle)
+        {
+            string xml = GetImageInformationAsString(wimHandle);
+
+            if (xml == null)
+            {
+                return null;
+            }
+
+            using (StringReader stringReader = new StringReader(xml))
+            {
+                return new XPathDocument(stringReader);
+            }
+        }
+
+        /// <summary>
+        /// Gets information about an image within the .wim (Windows image) file.
+        /// </summary>
+        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
+        /// <returns>A <see cref="String"/> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
+        public static string GetImageInformationAsString(WimHandle wimHandle)
         {
             // See if wimHandle is null
             //
@@ -452,7 +475,7 @@ namespace Microsoft.Wim
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
-            // Stores the native pointer to the Unicode Xml
+            // Stores the native pointer to the Unicode xml
             //
             IntPtr imageInfoPtr = IntPtr.Zero;
 
@@ -460,28 +483,16 @@ namespace Microsoft.Wim
             {
                 // Call the native function
                 //
-                if (!NativeMethods.WIMGetImageInformation(wimHandle, out imageInfoPtr, out _))
+                if (!NativeMethods.WIMGetImageInformation(wimHandle, out imageInfoPtr, out DWORD _))
                 {
                     // Throw a Win32Exception based on the last error code
                     //
                     throw new Win32Exception();
                 }
 
-                // Marshal the buffer as a Unicode string, remove the Unicode file marker, and load it into a StringReader
+                // Marshal the buffer as a Unicode string and remove the Unicode file marker
                 //
-                string str = Marshal.PtrToStringUni(imageInfoPtr);
-
-                if (str != null)
-                {
-                    using (StringReader stringReader = new StringReader(str.Substring(1)))
-                    {
-                        // Return the string as an XPathDocument
-                        //
-                        return new XPathDocument(stringReader);
-                    }
-                }
-
-                return null;
+                return Marshal.PtrToStringUni(imageInfoPtr)?.Substring(1);
             }
             finally
             {
@@ -489,6 +500,43 @@ namespace Microsoft.Wim
                 //
                 Marshal.FreeHGlobal(imageInfoPtr);
             }
+        }
+
+        /// <summary>
+        /// Gets information about an image within the .wim (Windows image) file.
+        /// </summary>
+        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
+        /// <returns>AN <see cref="XDocument"/> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
+        public static XDocument GetImageInformationAsXDocument(WimHandle wimHandle)
+        {
+            string xml = GetImageInformationAsString(wimHandle);
+
+            return xml == null ? null : XDocument.Parse(xml);
+        }
+
+        /// <summary>
+        /// Gets information about an image within the .wim (Windows image) file.
+        /// </summary>
+        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
+        /// <returns>AN <see cref="XDocument"/> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
+        public static XmlDocument GetImageInformationAsXmlDocument(WimHandle wimHandle)
+        {
+            string xml = GetImageInformationAsString(wimHandle);
+
+            if (xml == null)
+            {
+                return null;
+            }
+
+            XmlDocument xmlDocument = new XmlDocument();
+
+            xmlDocument.LoadXml(xml);
+
+            return xmlDocument;
         }
 
         /// <summary>
@@ -1086,10 +1134,33 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="wimHandle">A <see cref="WimHandle"/> of an image returned by the <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/> methods.</param>
         /// <param name="imageInfoXml">An <see cref="IXPathNavigable"/> object that contains information about the volume image.</param>
-        /// <exception cref="ArgumentNullException">wimHandle or imageInfoXml is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle"/> or <paramref name="imageInfoXml"/> is null.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         /// <remarks>If the wimHandle parameter is from the <see cref="CreateFile"/> method, then the XML data must be enclosed by &lt;WIM&gt;&lt;/WIM&gt; tags. If the input handle is from the <see cref="LoadImage"/> or <see cref="CaptureImage"/> methods, then the XML data must be enclosed by &lt;IMAGE&gt;&lt;/IMAGE&gt; tags.</remarks>
         public static void SetImageInformation(WimHandle wimHandle, IXPathNavigable imageInfoXml)
+        {
+            if (wimHandle == null)
+            {
+                throw new ArgumentNullException(nameof(wimHandle));
+            }
+
+            if (imageInfoXml == null)
+            {
+                throw new ArgumentNullException(nameof(imageInfoXml));
+            }
+
+            SetImageInformation(wimHandle, imageInfoXml.CreateNavigator()?.OuterXml);
+        }
+
+        /// <summary>
+        /// Stores information about an image in the Windows® image (.wim) file.
+        /// </summary>
+        /// <param name="wimHandle">A <see cref="WimHandle"/> of an image returned by the <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/> methods.</param>
+        /// <param name="imageInfoXml">A <see cref="String"/> object that contains information about the volume image.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle"/> or <paramref name="imageInfoXml"/> is null.</exception>
+        /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
+        /// <remarks>If the wimHandle parameter is from the <see cref="CreateFile"/> method, then the XML data must be enclosed by &lt;WIM&gt;&lt;/WIM&gt; tags. If the input handle is from the <see cref="LoadImage"/> or <see cref="CaptureImage"/> methods, then the XML data must be enclosed by &lt;IMAGE&gt;&lt;/IMAGE&gt; tags.</remarks>
+        public static void SetImageInformation(WimHandle wimHandle, string imageInfoXml)
         {
             // See if wimHandle is null
             //
@@ -1107,7 +1178,7 @@ namespace Microsoft.Wim
 
             // Append a unicode file marker to the xml as a string
             //
-            string imageInfo = $"\uFEFF{imageInfoXml.CreateNavigator()?.OuterXml}";
+            string imageInfo = $"\uFEFF{imageInfoXml}";
 
             // Allocate enough memory for the info
             //

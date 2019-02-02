@@ -55,8 +55,6 @@ namespace Microsoft.Wim.Tests
                 throw new DirectoryNotFoundException(String.Format(CultureInfo.CurrentCulture, "Could not find part of the path '{0}'", capturePath));
             }
 
-            XmlDocument xmlDocument = new XmlDocument();
-
             using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Write, WimCreationDisposition.CreateNew, WimCreateFileOptions.None, WimCompressionType.Lzx))
             {
                 WimgApi.SetTemporaryPath(wimHandle, _testWimTempPath);
@@ -69,12 +67,7 @@ namespace Microsoft.Wim.Tests
                     }
                 }
 
-                XPathNavigator xml = WimgApi.GetImageInformation(wimHandle).CreateNavigator();
-
-                xml.ShouldNotBeNull();
-
-                // ReSharper disable once PossibleNullReferenceException
-                xmlDocument.LoadXml(xml.OuterXml);
+                XmlDocument xmlDocument = WimgApi.GetImageInformationAsXmlDocument(wimHandle);
 
                 XmlNodeList imageNodes = xmlDocument.SelectNodes("//WIM/IMAGE");
 
