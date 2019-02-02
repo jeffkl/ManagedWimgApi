@@ -242,33 +242,7 @@ namespace Microsoft.Wim
         OpenedExisting = 1
     }
 
-    /// <summary>
-    /// Specifies options when exporting an image.
-    /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    [Flags]
-    public enum WimExportImageOptions : uint
-    {
-        /// <summary>
-        /// The image will be exported to the destination .wim file even if it is already stored in that .wim file.
-        /// </summary>
-        AllowDuplicates = WimgApi.WIM_EXPORT_ALLOW_DUPLICATES,
-
-        /// <summary>
-        /// Image resources and XML information are exported to the destination .wim file and no supporting file resources are included.
-        /// </summary>
-        MetadataOnly = WimgApi.WIM_EXPORT_ONLY_METADATA,
-
-        /// <summary>
-        /// No options are set.
-        /// </summary>
-        None = 0,
-
-        /// <summary>
-        /// File resources will be exported to the destination .wim file and no image resources or XML information will be included.
-        /// </summary>
-        ResourcesOnly = WimgApi.WIM_EXPORT_ONLY_RESOURCES,
-    }
+    
 
     /// <summary>
     /// Defines constants for read, write, or mount access to a .wim file.
