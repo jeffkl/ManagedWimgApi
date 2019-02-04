@@ -1,9 +1,12 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
-using System.Xml.XPath;
 
 namespace Microsoft.Wim.Tests
 {
@@ -20,7 +23,6 @@ namespace Microsoft.Wim.Tests
         private readonly Lazy<string> _testWimTemplatePathLazy;
 
         private readonly string _testWimTempPath;
-        
 
         public TestWimTemplate()
         {
@@ -31,19 +33,25 @@ namespace Microsoft.Wim.Tests
 
         public string FullPath => _testWimTemplatePathLazy.Value;
 
-        private string CreateTemplateImage()
+        public static void CreateTestFiles(string path, int fileCount, int lineCount)
         {
-            string capturePath = Directory.CreateDirectory(Path.Combine(_testWimTemplateDirectory, "capture")).FullName;
+            for (int i = 0; i < fileCount; i++)
+            {
+                string filePath = Path.Combine(path, $"TestFile{Guid.NewGuid()}.txt");
 
-            CreateTestFiles(capturePath, FileCount, FileLineCount);
-            try
-            {
-                return CaptureTemplateImage(capturePath);
+                using (StreamWriter fs = File.CreateText(filePath))
+                {
+                    for (int x = 0; x < lineCount; x++)
+                    {
+                        fs.WriteLine(Guid.NewGuid().ToString());
+                    }
+                }
             }
-            finally
-            {
-                Directory.Delete(capturePath, recursive: true);
-            }
+        }
+
+        public void Dispose()
+        {
+            Directory.Delete(_testWimTemplateDirectory, recursive: true);
         }
 
         private string CaptureTemplateImage(string capturePath)
@@ -117,24 +125,18 @@ namespace Microsoft.Wim.Tests
             return imagePath;
         }
 
-        public void Dispose()
+        private string CreateTemplateImage()
         {
-            Directory.Delete(_testWimTemplateDirectory, recursive: true);
-        }
+            string capturePath = Directory.CreateDirectory(Path.Combine(_testWimTemplateDirectory, "capture")).FullName;
 
-        public static void CreateTestFiles(string path, int fileCount, int lineCount)
-        {
-            for (int i = 0; i < fileCount; i++)
+            CreateTestFiles(capturePath, FileCount, FileLineCount);
+            try
             {
-                string filePath = Path.Combine(path, $"TestFile{Guid.NewGuid()}.txt");
-
-                using (StreamWriter fs = File.CreateText(filePath))
-                {
-                    for (int x = 0; x < lineCount; x++)
-                    {
-                        fs.WriteLine(Guid.NewGuid().ToString());
-                    }
-                }
+                return CaptureTemplateImage(capturePath);
+            }
+            finally
+            {
+                Directory.Delete(capturePath, recursive: true);
             }
         }
     }

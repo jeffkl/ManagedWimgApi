@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 
 using DWORD = System.UInt32;
 using LARGE_INTEGER = System.UInt64;
@@ -76,7 +80,7 @@ namespace Microsoft.Wim
         private DateTime _timeStarted = DateTime.MinValue;
 
         /// <summary>
-        /// Initializes a new instance of the CopyFileProgress class.
+        /// Initializes a new instance of the <see cref="CopyFileProgress"/> class.
         /// </summary>
         /// <param name="sourceFilePath">The full path to the source file being copied.</param>
         /// <param name="destinationFilePath">The full path to the destination file being copied.</param>
@@ -85,16 +89,13 @@ namespace Microsoft.Wim
         public CopyFileProgress(string sourceFilePath, string destinationFilePath, CopyFileProgressCallback copyProgressCallback, object userData)
         {
             // Save the input parameters (Validation should be done by CopyFileEx since this is an internal constructor)
-            //
             SourceFilePath = sourceFilePath;
             DestinationFilePath = destinationFilePath;
 
             // It is OK for this to be null
-            //
             _progressCallback = copyProgressCallback;
 
             // Save the user's object for later user
-            //
             _userData = userData;
         }
 
@@ -173,68 +174,53 @@ namespace Microsoft.Wim
         public CopyFileProgressAction CopyProgressHandler(LARGE_INTEGER totalFileSize, LARGE_INTEGER totalBytesTransferred, LARGE_INTEGER streamSize, LARGE_INTEGER streamBytesTransferred, DWORD streamNumber, DWORD callbackReason, IntPtr sourceFile, IntPtr destinationFile, IntPtr data)
         {
             // See if a user callback was specified
-            //
             if (_progressCallback == null)
             {
                 // Tell CopyFileEx to stop updating progress
-                //
                 return CopyFileProgressAction.Quiet;
             }
 
             // See if the copy just started
-            //
             if (_timeStarted == DateTime.MinValue)
             {
                 // Save the time the copy started
-                //
                 _timeStarted = DateTime.Now;
 
                 // Set total file size
-                //
                 TotalFileSize = (long)totalFileSize;
             }
-            
+
             // See if copy progress was made and the file has any content
-            //
             if (callbackReason == (DWORD)CopyFileProgressCallbackReason.ChunkFinished)
             {
                 // Default the percent complete to 100
-                //
                 decimal percentComplete = 1.0m;
 
                 // See if the file has any content and that it isn't completely copied
-                //
                 if (totalFileSize > 0 && totalBytesTransferred < totalFileSize)
                 {
                     // Calculate the percent complete rounded to the nearest tenth
-                    //
-                    percentComplete = Math.Round((totalBytesTransferred / (decimal)totalFileSize), 2);
+                    percentComplete = Math.Round(totalBytesTransferred / (decimal)totalFileSize, 2);
                 }
 
                 // See if progress was made percent-wise
-                //
                 if (percentComplete != PercentComplete)
                 {
                     // Set transferred bytes
-                    //
                     TransferredBytes = (long)totalBytesTransferred;
 
                     // Set percent complete
-                    //
                     PercentComplete = percentComplete;
 
                     // Calculate the estimated time remaining in seconds
-                    //
-                    EstimatedTimeRemaining = TimeSpan.FromSeconds((((DateTime.Now - _timeStarted).TotalSeconds / totalBytesTransferred) * (totalFileSize - totalBytesTransferred)));
+                    EstimatedTimeRemaining = TimeSpan.FromSeconds(((DateTime.Now - _timeStarted).TotalSeconds / totalBytesTransferred) * (totalFileSize - totalBytesTransferred));
 
                     // Execute the user's callback method
-                    //
                     return _progressCallback(this, _userData);
                 }
             }
 
             // Return PROGRESS_CONTINUE to allow progress to continue
-            //
             return CopyFileProgressAction.Continue;
         }
     }

@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -280,21 +284,21 @@ namespace Microsoft.Wim.Tests
         public void UnmountImageTest_ThrowsArgumentNullException_imagePath()
         {
             ShouldThrow<ArgumentNullException>("imagePath", () =>
-                WimgApi.UnmountImage("", null, 1, false));
+                WimgApi.UnmountImage(string.Empty, null, 1, false));
         }
 
         [Fact]
         public void UnmountImageTest_ThrowsArgumentNullException_mountPath()
         {
             ShouldThrow<ArgumentNullException>("mountPath", () =>
-                WimgApi.UnmountImage(null, "", 1, false));
+                WimgApi.UnmountImage(null, string.Empty, 1, false));
         }
 
         [Fact]
         public void UnmountImageTest_ThrowsDirectoryNotFoundException_mountPathDoesNotExist()
         {
             Should.Throw<DirectoryNotFoundException>(() =>
-                WimgApi.UnmountImage(Path.Combine(TestDirectory, Guid.NewGuid().ToString()), "", 1, false));
+                WimgApi.UnmountImage(Path.Combine(TestDirectory, Guid.NewGuid().ToString()), string.Empty, 1, false));
         }
 
         [Fact]
@@ -308,14 +312,14 @@ namespace Microsoft.Wim.Tests
         public void UnmountImageTest_ThrowsIndexOutOfRangeException_imageIndex_0()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.UnmountImage("", "", 0, false));
+                WimgApi.UnmountImage(string.Empty, string.Empty, 0, false));
         }
 
         [Fact]
         public void UnmountImageTest_ThrowsIndexOutOfRangeException_imageIndex_minusOne()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.UnmountImage("", "", -1, false));
+                WimgApi.UnmountImage(string.Empty, string.Empty, -1, false));
         }
 
         internal static void ExecuteAgainstMountedImage(string imagePath, string mountPath, string tempPath, Action<WimHandle, WimHandle> action)

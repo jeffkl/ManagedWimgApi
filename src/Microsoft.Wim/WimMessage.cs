@@ -1,65 +1,68 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
 
-// ReSharper disable InconsistentNaming
+using System;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Wim
 {
     /// <summary>
+    /// Specifies what the count represents for a <see cref="WimMessageScanning"/> object.
+    /// </summary>
+    public enum WimMessageScanningType
+    {
+        /// <summary>
+        /// The count is the number of files scanned.
+        /// </summary>
+        Files = 0,
+
+        /// <summary>
+        /// The count is the number of directories scanned.
+        /// </summary>
+        Directories = 1
+    }
+
+    /// <summary>
     /// Represents a base class for messages sent by the WIMGAPI.
     /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "L")]
-    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "W")]
-    [SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "W and L correspond to the w and l in the native space")]
+    /// <typeparam name="W">The first type of the message.</typeparam>
+    /// <typeparam name="L">The second type of the message.</typeparam>
     public abstract class WimMessage<W, L>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessage class.
+        /// Initializes a new instance of the <see cref="WimMessage{W, L}"/> class.
         /// </summary>
-        /// <param name="wParam">An IntPtr object from the native callback function.</param>
-        /// <param name="lParam">An IntPtr object from the native callback function.</param>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "l")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "w")]
+        /// <param name="wParam">The first IntPtr object from the native callback function.</param>
+        /// <param name="lParam">The second IntPtr object from the native callback function.</param>
         protected WimMessage(IntPtr wParam, IntPtr lParam)
         {
             // Store the wParam
-            //
-            this.wParam = wParam;
+            WParam = wParam;
 
             // Store the lParam
-            //
-            this.lParam = lParam;
+            LParam = lParam;
         }
 
         /// <summary>
-        /// The lParam object from the native callback function.
+        /// Gets the lParam object from the native callback function.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "l")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param")]
-        protected IntPtr lParam { get; }
+        protected IntPtr LParam { get; }
 
         /// <summary>
-        /// The marshaled value of wParam.
+        /// Gets or sets the marshaled value of wParam.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "param")]
         protected W Param1 { get; set; }
 
         /// <summary>
-        /// The marshaled value of lParam.
+        /// Gets or sets the marshaled value of lParam.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "param")]
         protected L Param2 { get; set; }
 
         /// <summary>
-        /// The wParam object from the native callback function.
+        /// Gets the wParam object from the native callback function.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "w")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param")]
-        protected IntPtr wParam { get; }
+        protected IntPtr WParam { get; }
     }
 
     /// <summary>
@@ -68,7 +71,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageAlignment : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageAlignment class.
+        /// Initializes a new instance of the <see cref="WimMessageAlignment"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -76,11 +79,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Default align to false
-            //
             Param2 = 0;
         }
 
@@ -95,8 +96,7 @@ namespace Microsoft.Wim
                 Param2 = value;
 
                 // Write the alignment boundary to the pointer
-                //
-                Marshal.WriteInt32(lParam, value);
+                Marshal.WriteInt32(LParam, value);
             }
         }
 
@@ -112,7 +112,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageCleanupScanningDrive : WimMessage<char, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageCleanupScanningDrive class.
+        /// Initializes a new instance of the <see cref="WimMessageCleanupScanningDrive"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -120,11 +120,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the drive letter
-            //
             Param1 = (char)wParam;
 
             // This not used and is always zero
-            //
             Param2 = 0;
         }
 
@@ -137,11 +135,10 @@ namespace Microsoft.Wim
     /// <summary>
     /// Represents a message that indicates an image is being unmounted as part of the cleanup process.
     /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unmounting")]
     public sealed class WimMessageCleanupUnmountingImage : WimMessage<string, bool>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageCleanupUnmountingImage class.
+        /// Initializes a new instance of the <see cref="WimMessageCleanupUnmountingImage"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -149,16 +146,14 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the mount path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // This not used and is always zero
-            //
             Param2 = (int)lParam != 0;
         }
 
         /// <summary>
-        /// Gets a boolean value that indicates whether the operation has completed.
+        /// Gets a value indicating whether gets a boolean value that indicates whether the operation has completed.
         /// </summary>
         public bool IsComplete => Param2;
 
@@ -174,7 +169,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageCompress : WimMessage<string, bool>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageCompress class.
+        /// Initializes a new instance of the <see cref="WimMessageCompress"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -182,16 +177,14 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Default to true
-            //
             Param2 = true;
         }
 
         /// <summary>
-        /// Gets or sets a boolean indicating whether the file should be compressed.
+        /// Gets or sets a value indicating whether gets or sets a boolean indicating whether the file should be compressed.
         /// </summary>
         public bool Compress
         {
@@ -201,8 +194,7 @@ namespace Microsoft.Wim
                 Param2 = value;
 
                 // Write a non-zero integer if the value is true
-                //
-                Marshal.WriteInt32(lParam, value ? 1 : 0);
+                Marshal.WriteInt32(LParam, value ? 1 : 0);
             }
         }
 
@@ -218,7 +210,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageError : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageError class.
+        /// Initializes a new instance of the <see cref="WimMessageError"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -226,11 +218,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Default to true
-            //
             Param2 = (int)lParam;
         }
 
@@ -251,7 +241,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageFileInfo : WimMessage<string, WimFileInfo>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageFileInfo class.
+        /// Initializes a new instance of the <see cref="WimMessageFileInfo"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -259,20 +249,16 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // See if the last character is the path separator
-            //
             if (Param1 != null && Param1[Param1.Length - 1] == System.IO.Path.DirectorySeparatorChar)
             {
                 // Remove the last character
-                //
                 Param1 = Param1.Remove(Param1.Length - 1);
             }
 
             // Marshal the struct and cast it as a WimFileInfo object
-            //
             Param2 = new WimFileInfo(Param1, lParam);
         }
 
@@ -293,7 +279,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageImageAlreadyMounted : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageImageAlreadyMounted class.
+        /// Initializes a new instance of the <see cref="WimMessageImageAlreadyMounted"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -301,7 +287,6 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
         }
 
@@ -317,7 +302,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageInformation : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageInformation class.
+        /// Initializes a new instance of the <see cref="WimMessageInformation"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -325,11 +310,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Default to true
-            //
             Param2 = (int)lParam;
         }
 
@@ -350,7 +333,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageMountCleanupProgress : WimMessage<int, TimeSpan>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageMountCleanupProgress class.
+        /// Initializes a new instance of the <see cref="WimMessageMountCleanupProgress"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -358,11 +341,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the percent complete
-            //
             Param1 = (int)wParam;
 
             // Marshal the estimated number of milliseconds until the cleanup operation is complete
-            //
             Param2 = TimeSpan.FromMilliseconds((uint)lParam);
         }
 
@@ -383,7 +364,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageProcess : WimMessage<string, bool>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageProcess class.
+        /// Initializes a new instance of the <see cref="WimMessageProcess"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -391,11 +372,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Default to true
-            //
             Param2 = true;
         }
 
@@ -405,7 +384,7 @@ namespace Microsoft.Wim
         public string Path => Param1;
 
         /// <summary>
-        /// Gets or sets a boolean indicating whether the file or the directory must be captured or applied.
+        /// Gets or sets a value indicating whether gets or sets a boolean indicating whether the file or the directory must be captured or applied.
         /// </summary>
         public bool Process
         {
@@ -415,8 +394,7 @@ namespace Microsoft.Wim
                 Param2 = value;
 
                 // Write a non-zero integer if the value is true
-                //
-                Marshal.WriteInt32(lParam, value ? 1 : 0);
+                Marshal.WriteInt32(LParam, value ? 1 : 0);
             }
         }
     }
@@ -427,7 +405,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageProgress : WimMessage<int, TimeSpan>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageProgress class.
+        /// Initializes a new instance of the <see cref="WimMessageProgress"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -435,11 +413,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the percent complete
-            //
             Param1 = (int)wParam;
 
             // Marshal the ETA
-            //
             Param2 = TimeSpan.FromMilliseconds((int)lParam);
         }
 
@@ -460,7 +436,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageRetry : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageRetry class.
+        /// Initializes a new instance of the <see cref="WimMessageRetry"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -468,11 +444,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Marshal the error code
-            //
             Param2 = (int)lParam;
         }
 
@@ -493,7 +467,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageScanning : WimMessage<int, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageScanning class.
+        /// Initializes a new instance of the <see cref="WimMessageScanning"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -502,11 +476,9 @@ namespace Microsoft.Wim
         {
             // If wParam is 0, lParam is a file count
             // If wParam is 1, lParam is a directory count
-            //
             Param1 = (int)wParam;
 
             // Marshal to file or directory count
-            //
             Param2 = (int)lParam;
         }
 
@@ -527,7 +499,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageSetPosition : WimMessage<int, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageScanning class.
+        /// Initializes a new instance of the <see cref="WimMessageSetPosition"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -535,11 +507,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Not used, always zero
-            //
             Param1 = 0;
 
             // Marshal to file count
-            //
             Param2 = (int)lParam;
         }
 
@@ -555,7 +525,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageSetRange : WimMessage<int, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageScanning class.
+        /// Initializes a new instance of the <see cref="WimMessageSetRange"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -563,11 +533,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Not used, always zero
-            //
             Param1 = 0;
 
             // Marshal to file count
-            //
             Param2 = (int)lParam;
         }
 
@@ -588,7 +556,7 @@ namespace Microsoft.Wim
         private bool isPathModified;
 
         /// <summary>
-        /// Initializes a new instance of the WimMessageSplit class.
+        /// Initializes a new instance of the <see cref="WimMessageSplit"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -596,11 +564,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the part path (A pointer to a pointer to a string)
-            //
             Param1 = Marshal.PtrToStringUni(Marshal.ReadIntPtr(wParam));
 
             // Marshal to file count
-            //
             Param2 = Marshal.ReadInt64(lParam);
         }
 
@@ -616,18 +582,15 @@ namespace Microsoft.Wim
 
                 // Free the previous buffer
                 // We don't want to free the memory allocated by the native API, only the memory we have allocated.
-                //
                 if (isPathModified)
                 {
-                    Marshal.FreeHGlobal(Marshal.ReadIntPtr(wParam));
+                    Marshal.FreeHGlobal(Marshal.ReadIntPtr(WParam));
                 }
 
                 // Write the string back to a pointer for the native API
-                //
-                Marshal.WriteIntPtr(wParam, Marshal.StringToHGlobalUni(value));
+                Marshal.WriteIntPtr(WParam, Marshal.StringToHGlobalUni(value));
 
                 // Set the modified flag to indicate that the allocated memory should be freed next time this changes.
-                //
                 isPathModified = true;
             }
         }
@@ -643,8 +606,7 @@ namespace Microsoft.Wim
                 Param2 = value;
 
                 // Write the value to the pointer
-                //
-                Marshal.WriteInt64(lParam, value);
+                Marshal.WriteInt64(LParam, value);
             }
         }
     }
@@ -655,7 +617,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageStaleMountDirectory : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageStaleMountDirectory class.
+        /// Initializes a new instance of the <see cref="WimMessageStaleMountDirectory"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -663,7 +625,6 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
         }
 
@@ -679,7 +640,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageStaleMountFile : WimMessage<long, char>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageStaleMountFile class.
+        /// Initializes a new instance of the <see cref="WimMessageStaleMountFile"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -687,11 +648,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the files deleted
-            //
             Param1 = (long)wParam;
 
             // Marshal the drive letter
-            //
             Param2 = (char)lParam;
         }
 
@@ -713,7 +672,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageText : WimMessage<int, string>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageText class.
+        /// Initializes a new instance of the <see cref="WimMessageText"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -721,11 +680,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Not used, always zero.
-            //
             Param1 = 0;
 
             // Marshal the text
-            //
             Param2 = Marshal.PtrToStringUni(lParam);
         }
 
@@ -741,7 +698,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageWarning : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageWarning class.
+        /// Initializes a new instance of the <see cref="WimMessageWarning"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -749,11 +706,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Marshal the error code
-            //
             Param2 = (int)lParam;
         }
 
@@ -774,7 +729,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageWarningObjectId : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the WimMessageWarningObjectId class.
+        /// Initializes a new instance of the <see cref="WimMessageWarningObjectId"/> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -782,11 +737,9 @@ namespace Microsoft.Wim
             : base(wParam, lParam)
         {
             // Marshal the path
-            //
             Param1 = Marshal.PtrToStringUni(wParam);
 
             // Marshal the error code
-            //
             Param2 = (int)lParam;
         }
 

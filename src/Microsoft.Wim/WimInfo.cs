@@ -1,8 +1,54 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Wim
 {
+    /// <summary>
+    /// Specifies how a .wim file is treated and what features will be used.
+    /// </summary>
+    [Flags]
+    public enum WimInfoAttributes : uint
+    {
+        /// <summary>
+        /// The .wim file only contains image resources and XML information.
+        /// </summary>
+        MetadataOnly = WimgApi.WIM_ATTRIBUTE_METADATA_ONLY,
+
+        /// <summary>
+        /// The .wim file does not have any other attributes set.
+        /// </summary>
+        Normal = WimgApi.WIM_ATTRIBUTE_NORMAL,
+
+        /// <summary>
+        /// The .wim file is locked and cannot be modified.
+        /// </summary>
+        ReadOnly = WimgApi.WIM_ATTRIBUTE_READONLY,
+
+        /// <summary>
+        /// The .wim file only contains file resources and no images or metadata.
+        /// </summary>
+        ResourceOnly = WimgApi.WIM_ATTRIBUTE_RESOURCE_ONLY,
+
+        /// <summary>
+        /// The .wim file contains one or more images where symbolic link or junction path fix-up is enabled.
+        /// </summary>
+        RPFix = WimgApi.WIM_ATTRIBUTE_RP_FIX,
+
+        /// <summary>
+        /// The .wim file has been split into multiple pieces by the <see cref="WimgApi.SplitFile(WimHandle, string, long)"/> method.
+        /// </summary>
+        Spanned = WimgApi.WIM_ATTRIBUTE_SPANNED,
+
+        /// <summary>
+        /// The .wim file contains integrity data that can be used by the <see cref="WimgApi.CopyFile(string, string, WimCopyFileOptions)"/> or <see cref="WimgApi.CreateFile"/> method.
+        /// </summary>
+        VerifyData = WimgApi.WIM_ATTRIBUTE_VERIFY_DATA,
+    }
+
     /// <summary>
     /// Represents information about a Windows® image (.wim).
     /// </summary>
@@ -14,7 +60,7 @@ namespace Microsoft.Wim
         private readonly WimgApi.WIM_INFO _wimInfo;
 
         /// <summary>
-        /// Initializes a new instance of the WimInfo class.
+        /// Initializes a new instance of the <see cref="WimInfo"/> class.
         /// </summary>
         /// <param name="wimInfoPtr">A pointer to a native <see cref="WimgApi.WIM_INFO" /> struct.</param>
         internal WimInfo(IntPtr wimInfoPtr)
@@ -23,13 +69,12 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Initializes a new instance of the WimInfo class.
+        /// Initializes a new instance of the <see cref="WimInfo"/> class.
         /// </summary>
         /// <param name="wimInfo">A <see cref="WimgApi.WIM_INFO" /> that contains information about the .wim file.</param>
         internal WimInfo(WimgApi.WIM_INFO wimInfo)
         {
             // Store the WIM_INFO struct
-            //
             _wimInfo = wimInfo;
         }
 

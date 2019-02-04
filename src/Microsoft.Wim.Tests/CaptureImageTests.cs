@@ -1,9 +1,11 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.IO;
 using Xunit;
-
-// ReSharper disable UnusedVariable
 
 namespace Microsoft.Wim.Tests
 {
@@ -75,6 +77,7 @@ namespace Microsoft.Wim.Tests
                     WimgApi.UnregisterMessageCallback(wimHandle, CaptureImageWithCallbackTestCallback);
                 }
             }
+
             _captureWithCallbackCalled.ShouldBe(true, "The callback should have been called");
 
             userData.WasCalled.ShouldBe(true, "The callback should have set user data");
