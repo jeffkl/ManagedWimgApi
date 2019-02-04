@@ -6,7 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <!--<RunCodeAnalysis>true</RunCodeAnalysis>-->
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <LangVersion>Latest</LangVersion>
     <NoWarn>NU5125</NoWarn>
   </PropertyGroup>
