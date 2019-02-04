@@ -49,8 +49,48 @@ namespace Microsoft.Wim
         /// <summary>
         /// Contains declarations for external native functions.
         /// </summary>
-        private static partial class NativeMethods
+        private static class NativeMethods
         {
+            /// <summary>
+            /// Applies an image to a directory path from a Windows® image (.wim) file.
+            /// </summary>
+            /// <param name="hImage">A handle to a volume image returned by the WIMLoadImage or WIMCaptureImage functions.</param>
+            /// <param name="pszPath">
+            /// A pointer to a null-terminated string containing the root drive or the directory path where the
+            /// image data will be applied.
+            /// </param>
+            /// <param name="dwApplyFlags">Specifies how the file is to be treated and what features are to be used.</param>
+            /// <returns>
+            /// If the function succeeds, the return value is an open handle to the specified image file.
+            /// If the function fails, the return value is NULL. To obtain extended error information, call the GetLastError function.
+            /// </returns>
+            /// <remarks>
+            /// To obtain more information during an image apply, see the WIMRegisterMessageCallback function.
+            /// To obtain the list of files in an image without actually applying the image, specify the WIM_FLAG_NO_APPLY flag and
+            /// register a callback that handles the WIM_MSG_PROCESS message. To obtain additional file information from the
+            /// WIM_MSG_FILEINFO message, specify the WIM_FLAG_FILEINFO.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMApplyImage(WimHandle hImage, string pszPath, DWORD dwApplyFlags);
+
+            /// <summary>
+            /// Captures an image from a directory path and stores it in an image file.
+            /// </summary>
+            /// <param name="hWim">The handle to a .wim file returned by WIMCreateFile.</param>
+            /// <param name="pszPath">
+            /// A pointer to a null-terminated string containing the root drive or directory path from where the
+            /// image data is captured.
+            /// </param>
+            /// <param name="dwCaptureFlags">Specifies the features to use during the capture.</param>
+            /// <returns>
+            /// If the function succeeds, the return value is an open handle to the specified image file.
+            /// If the function fails, the return value is NULL. To obtain extended error information, call the GetLastError function.
+            /// </returns>
+            /// <remarks>To obtain information during an image capture, see the WIMRegisterMessageCallback function.</remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            public static extern WimHandle WIMCaptureImage(WimHandle hWim, string pszPath, DWORD dwCaptureFlags);
+
             /// <summary>
             /// Closes an open Windows® imaging (.wim) file or image handle.
             /// <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd851955.aspx">WIMCloseHandle</a>
@@ -71,8 +111,367 @@ namespace Microsoft.Wim
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool WIMCloseHandle(IntPtr hObject);
-            
-            
+
+            /// <summary>
+            /// Saves the changes from a mounted image back to the .wim file.
+            /// </summary>
+            /// <param name="hImage">
+            /// A handle to an image opened by the WIMLoadImage function. The .wim file must have been opened with
+            /// a WIM_GENERIC_MOUNT flag in call to WIMCreateFile.
+            /// </param>
+            /// <param name="dwCommitFlags">Specifies the features to use during the capture.</param>
+            /// <param name="phNewImageHandle">
+            /// Pointer to receive the new image handle if the WIM_COMMIT_FLAG_APPEND flag is specified.
+            /// If this parameter is NULL, the new image will be closed automatically.
+            /// </param>
+            /// <returns>
+            /// Returns TRUE and sets the LastError to ERROR_SUCCESS on the successful completion of this function. Returns
+            /// FALSE in case of a failure and sets the LastError to the appropriate Win32® error value.
+            /// </returns>
+            /// <remarks>
+            /// The WIMCommitImageHandle function updates the contents of the given image in a .wim file to reflect the
+            /// contents of the specified mount directory. After the successful completion of this operation, users or applications can
+            /// still access the contents of the image mapped under the mount directory. Use the WIMUnmountImageHandle function to
+            /// unmount the image from the mount directory using an image handle.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMCommitImageHandle(WimHandle hImage, DWORD dwCommitFlags, out WimHandle phNewImageHandle);
+
+            /// <summary>
+            /// Copies an existing file to a new file. Notifies the application of its progress through a callback function. If the
+            /// source file has verification data, the contents of the file are verified during the copy operation.
+            /// </summary>
+            /// <param name="pszExistingFileName">
+            /// A pointer to a null-terminated string that specifies the name of an existing .wim
+            /// file.
+            /// </param>
+            /// <param name="pszNewFileName">A pointer to a null-terminated string that specifies the name of the new file.</param>
+            /// <param name="pProgressRoutine">
+            /// The address of a callback function of type LPPROGRESS_ROUTINE that is called each time
+            /// another portion of the file has been copied. This parameter can be NULL.
+            /// </param>
+            /// <param name="pvData">An argument to be passed to the callback function. This parameter can be NULL.</param>
+            /// <param name="pbCancel">
+            /// If this flag is set to TRUE during the copy operation, the operation is canceled. Otherwise, the
+            /// copy operation continues to completion.
+            /// </param>
+            /// <param name="dwCopyFlags">A flag that specifies how the file is to be copied.</param>
+            /// <returns>
+            /// If the function succeeds, the return value is nonzero.
+            /// If the function fails, the return value is zero. To obtain extended error information, call the GetLastError function.
+            /// If pProgressRoutine returns PROGRESS_CANCEL because the user cancels the operation, the WIMCopyFile function will
+            /// return zero and set the LastError to ERROR_REQUEST_ABORTED. In this case, the partially copied destination file is
+            /// deleted.
+            /// If pProgressRoutine returns PROGRESS_STOP because the user stops the operation, WIMCopyFile will return zero and set
+            /// the LastError to ERROR_REQUEST_ABORTED. In this case, the partially copied destination file is left intact.
+            /// If the source file contains verification information, an integrity check is performed on each block as it is copied. If
+            /// the integrity check fails, the WIMCopyFile function will return zero and set the LastError to ERROR_FILE_CORRUPT.
+            /// </returns>
+            /// <remarks>
+            /// This function does not preserve extended attributes, security attributes, OLE-structured storage, NTFS file system
+            /// alternate data streams, or file attributes.
+            /// The WIMCopyFile function copies only the default stream of the source file, so the StreamSize and
+            /// StreamBytesTransferred parameters to the CopyProgressRoutine function will always match TotalFileSize and
+            /// TotalBytesTransferred, respectively. The value of the dwStreamNumber parameter will always be 1 and the value of the
+            /// dwCallBackReason parameter will always be CALLBACK_CHUNK_FINISHED.
+            /// If the destination file already exists and has the FILE_ATTRIBUTE_HIDDEN or FILE_ATTRIBUTE_READONLY attribute set, this
+            /// function fails with ERROR_ACCESS_DENIED.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMCopyFile(string pszExistingFileName, string pszNewFileName, CopyProgressRoutine pProgressRoutine, IntPtr pvData, [MarshalAs(UnmanagedType.Bool)] ref bool pbCancel, DWORD dwCopyFlags);
+
+            /// <summary>
+            /// Makes a new image file or opens an existing image file.
+            /// </summary>
+            /// <param name="pszWimPath">
+            /// A pointer to a null-terminated string that specifies the name of the file to create or to
+            /// open.
+            /// </param>
+            /// <param name="dwDesiredAccess">
+            /// Specifies the type of access to the object. An application can obtain read access, write
+            /// access, read/write access, or device query access.
+            /// </param>
+            /// <param name="dwCreationDisposition">
+            /// Specifies which action to take on files that exist, and which action to take when
+            /// files do not exist.
+            /// </param>
+            /// <param name="dwFlagsAndAttributes">Specifies special actions to be taken for the specified file.</param>
+            /// <param name="dwCompressionType">
+            /// Specifies the compression mode to be used for a newly created image file. If the file
+            /// already exists, then this value is ignored.
+            /// </param>
+            /// <param name="pdwCreationResult">
+            /// A pointer to a variable that receives one of the following creation-result values. If
+            /// this information is not required, specify NULL.
+            /// </param>
+            /// <returns>
+            /// If the function succeeds, the return value is an open handle to the specified image file.
+            /// If the function fails, the return value is NULL. To obtain extended error information, call the GetLastError function.
+            /// </returns>
+            /// <remarks>Use the WIMCloseHandle function to close the handle returned by the WIMCreateFile function.</remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            public static extern WimHandle WIMCreateFile(string pszWimPath, DWORD dwDesiredAccess, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, DWORD dwCompressionType, out WimCreationResult pdwCreationResult);
+
+            /// <summary>
+            /// Removes an image from within a .wim (Windows image) file so it cannot be accessed. However, the file resources are
+            /// still available for use by the WIMSetReferenceFile function.
+            /// </summary>
+            /// <param name="hWim">
+            /// The handle to a .wim file returned by the WIMCreateFile function. This handle must have
+            /// WIM_GENERIC_WRITE access to delete the image. Split .wim files are not supported and the .wim file cannot have any open
+            /// images.
+            /// </param>
+            /// <param name="dwImageIndex">
+            /// Specifies the one-based index of the image to delete. A .wim file might have multiple images
+            /// stored within it.
+            /// </param>
+            /// <returns>
+            /// If the function succeeds, then the return value is nonzero.
+            /// If the function fails, then the return value is zero. To obtain extended error information, call GetLastError.
+            /// If there is only one image in the specified .wim file, then the WIMDeleteImage function will fail and set the LastError
+            /// to ERROR_ACCESS_DENIED.
+            /// </returns>
+            /// <remarks>
+            /// You must call the WIMSetTemporaryPath function before calling the WIMDeleteImage function so the image
+            /// metadata for the image can be extracted and processed from the temporary location.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMDeleteImage(WimHandle hWim, DWORD dwImageIndex);
+
+            /// <summary>
+            /// Removes images from all directories where they have been previously mounted.
+            /// </summary>
+            /// <param name="dwDeleteFlags">Specifies which types of images are to be removed.</param>
+            /// <returns>
+            /// If the function succeeds, the return value is nonzero.
+            /// If the function fails, the return value is zero. To obtain extended error information, call the GetLastError function.
+            /// </returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMDeleteImageMounts(DWORD dwDeleteFlags);
+
+            /// <summary>
+            /// Transfers the data of an image from one Windows® image (.wim) file to another.
+            /// </summary>
+            /// <param name="hImage">A handle to an image opened by the WIMLoadImage function.</param>
+            /// <param name="hWim">
+            /// A handle to a .wim file returned by the WIMCreateFile function. This handle must have
+            /// WIM_GENERIC_WRITE access to accept the exported image. Split .wim files are not supported.
+            /// </param>
+            /// <param name="dwFlags">Specifies how the image will be exported to the destination .wim file.</param>
+            /// <returns>
+            /// If the function succeeds, the return value is nonzero.
+            /// If the function fails, the return value is zero. To obtain extended error information, call the GetLastError function.
+            /// </returns>
+            /// <remarks>
+            /// You must call the WIMSetTemporaryPath function for both the source and the destination .wim files before calling the
+            /// WIMExportImage function.
+            /// If zero is passed in for the dwFlags parameter and the image is already stored in the destination, the function will
+            /// return FALSE and set the LastError to ERROR_ALREADY_EXISTS.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMExportImage(WimHandle hImage, WimHandle hWim, DWORD dwFlags);
+
+            /// <summary>
+            /// Extracts a file from within a Windows® image (.wim) file to a specified location.
+            /// </summary>
+            /// <param name="hImage">A handle to an image opened by the WIMLoadImage function.</param>
+            /// <param name="pszImagePath">A pointer to a file path inside the image.</param>
+            /// <param name="pszDestinationPath">
+            /// A pointer to the full file path of the directory where the image path is to be
+            /// extracted.
+            /// </param>
+            /// <param name="dwExtractFlags">Reserved. Must be zero.</param>
+            /// <returns>
+            /// If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. To
+            /// obtain extended error information, call the GetLastError function.
+            /// </returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMExtractImagePath(WimHandle hImage, string pszImagePath, string pszDestinationPath, DWORD dwExtractFlags);
+
+            /// <summary>
+            /// Returns the number of volume images stored in an image file.
+            /// </summary>
+            /// <param name="hWim">The handle to a .wim file returned by WIMCreateFile.</param>
+            /// <param name="pWimInfo">A pointer to a WIM_INFO structure that is returned with information about the .wim file.</param>
+            /// <param name="cbWimInfo">A DWORD value indicating the size of the pWimInfo buffer in which it passes.</param>
+            /// <returns>
+            /// If the function succeeds, then the return value is non-zero.
+            /// If the function fails, then the return value is zero. To obtain extended error information, call GetLastError.
+            /// </returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMGetAttributes(WimHandle hWim, IntPtr pWimInfo, DWORD cbWimInfo);
+
+            /// <summary>
+            /// Returns the number of volume images stored in a Windows® image (.wim) file.
+            /// </summary>
+            /// <param name="hWim">A handle to a .wim file returned by the WIMCreateFile function.</param>
+            /// <returns>
+            /// The return value is the number of images in the .wim file. If this value is zero, then the image file is
+            /// invalid or does not contain any images that can be applied.
+            /// </returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            public static extern DWORD WIMGetImageCount(WimHandle hWim);
+
+            /// <summary>
+            /// Returns information about an image within the .wim (Windows image) file.
+            /// </summary>
+            /// <param name="hImage">A handle returned by the WIMCreateFile, WIMLoadImage, or WIMCaptureImage function.</param>
+            /// <param name="ppvImageInfo">
+            /// A pointer to a buffer that receives the address of the XML information about the volume
+            /// image. When the function returns, this value contains the address of an allocated buffer, containing XML information
+            /// about the volume image.
+            /// </param>
+            /// <param name="pcbImageInfo">
+            /// A pointer to a variable that specifies the size, in bytes, of the buffer pointed to by the
+            /// value of the ppvImageInfo parameter.
+            /// </param>
+            /// <returns></returns>
+            /// <remarks>
+            /// When the function succeeds, then the data describing the image is in Unicode XML format. Use the LocalFree
+            /// function to free the memory pointed to by the ppvImageInfo parameter when no longer needed.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMGetImageInformation(WimHandle hImage, out IntPtr ppvImageInfo, out DWORD pcbImageInfo);
+
+            /// <summary>
+            /// Returns the count of callback routines currently registered by the imaging library.
+            /// </summary>
+            /// <param name="hWim">The handle to a .wim file returned by WIMCreateFile.</param>
+            /// <returns>The return value is the number of message callback functions currently registered.</returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            public static extern DWORD WIMGetMessageCallbackCount(WimHandle hWim);
+
+            /// <summary>
+            /// Returns a WIM handle and an image handle corresponding to a mounted image directory.
+            /// </summary>
+            /// <param name="pszMountPath">
+            /// A pointer to the full file path of the directory to which the .wim file has been mounted.
+            /// This parameter is required and cannot be NULL.
+            /// </param>
+            /// <param name="dwFlags">Specifies how the file is to be treated and what features are to be used.</param>
+            /// <param name="phWimHandle">
+            /// Pointer to receive a WIM handle corresponding to the image mounted at the specified path.
+            /// This parameter is required and cannot be NULL.
+            /// </param>
+            /// <param name="phImageHandle">
+            /// Pointer to receive an WIM handle corresponding to the image mounted at the specified path.
+            /// This parameter is required and cannot be NULL.
+            /// </param>
+            /// <returns>
+            /// Returns TRUE and sets the LastError to ERROR_SUCCESS on the successful completion of this function. Returns
+            /// FALSE in case of a failure and sets the LastError to the appropriate Win32® error value.
+            /// </returns>
+            /// <remarks>Use the WIMUnmountImageHandle function to unmount the image from the mount directory.</remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMGetMountedImageHandle(string pszMountPath, DWORD dwFlags, out WimHandle phWimHandle, out WimHandle phImageHandle);
+
+            /// <summary>
+            /// Returns a list of images that are currently mounted.
+            /// </summary>
+            /// <param name="fInfoLevelId">A class of attribute information to retrieve.</param>
+            /// <param name="pdwImageCount">A pointer to a DWORD that receives the number of mounted images.</param>
+            /// <param name="pMountInfo">
+            /// Pointer to a variable that receives the array of mounted image structures. The size of the
+            /// information written varies depending on the type of structured defined by the fInfoLevelId parameter.
+            /// </param>
+            /// <param name="cbMountInfoLength">The size of the buffer pointed to by the pMountInfo parameter, in bytes.</param>
+            /// <param name="pcbReturnLength">
+            /// A pointer to a variable in which the function returns the size of the requested
+            /// information. If the function was successful, this is the size of the information written to the buffer pointed to by
+            /// the pMountInfo parameter, but if the buffer was too small; this is the minimum size of buffer needed to receive the
+            /// information successfully.
+            /// </param>
+            /// <returns>
+            /// If the function succeeds, then the return value is nonzero. If the function fails, then the return value is
+            /// zero. To obtain extended error information, call the GetLastError function. If the buffer specified by the
+            /// cbMountInfoLength parameter is not large enough to hold the data, the function set LastError to
+            /// ERROR_INSUFFICIENT_BUFFER and stores the required buffer size in the variable pointed to by pcbReturnLength.
+            /// </returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMGetMountedImageInfo(WimMountedImageInfoLevels fInfoLevelId, out DWORD pdwImageCount, [Out] [Optional] IntPtr pMountInfo, DWORD cbMountInfoLength, out DWORD pcbReturnLength);
+
+            /// <summary>
+            /// Queries the state of a mounted image handle.
+            /// </summary>
+            /// <param name="hImage">A handle to an image that has been mounted</param>
+            /// <param name="fInfoLevelId">A class of attribute information to retrieve.</param>
+            /// <param name="pMountInfo">
+            /// Pointer to a variable that receives mounted image structures. The size of the information
+            /// written varies depending on the type of structured defined by the fInfoLevelId.
+            /// </param>
+            /// <param name="cbMountInfoLength">The size of the buffer pointed to by the pMountInfo parameter, in bytes</param>
+            /// <param name="pcbReturnLength">
+            /// A pointer to a variable which contains the result of a function call that returns the
+            /// size of the requested information. If the function was successful, this is the size of the information written to the
+            /// buffer pointed to by the pMountInfo parameter; if the buffer was too small, then this is the minimum size of buffer
+            /// needed to receive the information successfully.
+            /// </param>
+            /// <returns>
+            /// If the function succeeds, then the return value is nonzero. If the function fails, then the return value is
+            /// zero. To obtain extended error information, call the GetLastError function. If the buffer specified by the
+            /// cbMountInfoLength parameter is not large enough to hold the data, the function sets the value of LastError to
+            /// ERROR_INSUFFICIENT_BUFFER and stores the required buffer size in the variable pointed to by pcbReturnLength.
+            /// </returns>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMGetMountedImageInfoFromHandle(WimHandle hImage, WimMountedImageInfoLevels fInfoLevelId, IntPtr pMountInfo, DWORD cbMountInfoLength, out DWORD pcbReturnLength);
+
+            /// <summary>
+            /// Loads a volume image from a Windows® image (.wim) file.
+            /// </summary>
+            /// <param name="hWim">A handle to a .wim file returned by the WIMCreateFile function.</param>
+            /// <param name="dwImageIndex">Specifies the one-based index of the image to load. An image file may store multiple images.</param>
+            /// <returns>
+            /// If the function succeeds, then the return value is a handle to an object representing the volume image. If the
+            /// function fails, then the return value is NULL. To obtain extended error information, call the GetLastError function.
+            /// </returns>
+            /// <remarks>
+            /// You must call the WIMSetTemporaryPath function before calling the WIMLoadImage function so the image metadata can be
+            /// extracted and processed from the temporary location.
+            /// Use the WIMCloseHandle function to unload the volume image.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            public static extern WimHandle WIMLoadImage(WimHandle hWim, DWORD dwImageIndex);
+
+            /// <summary>
+            /// Mounts an image in a Windows® image (.wim) file to the specified directory.
+            /// </summary>
+            /// <param name="pszMountPath">
+            /// A pointer to the full file path of the directory to which the .wim file has to be mounted.
+            /// This parameter is required and cannot be NULL. The specified path must not exceed MAX_PATH characters in length.
+            /// </param>
+            /// <param name="pszWimFileName">
+            /// A pointer to the full file name of the .wim file that has to be mounted. This parameter is
+            /// required and cannot be NULL.
+            /// </param>
+            /// <param name="dwImageIndex">An index of the image in the .wim file that has to be mounted.</param>
+            /// <param name="pszTempPath">
+            /// A pointer to the full file path to the temporary directory in which changes to the .wim file
+            /// can be tracked. If this parameter is NULL, the image will not be mounted for edits.
+            /// </param>
+            /// <returns>
+            /// Returns TRUE and sets the LastError to ERROR_SUCCESS on the successful completion of this function. Returns
+            /// FALSE in case of a failure and sets the LastError to the appropriate Win32® error value.
+            /// </returns>
+            /// <remarks>
+            /// The WIMMountImage function maps the contents of the given image in a .wim file to the specified mount directory. After
+            /// the successful completion of this operation, users or applications can access the contents of the image mapped under
+            /// the mount directory.
+            /// Use the WIMUnmountImage function to unmount the image from the mount directory.
+            /// </remarks>
+            [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool WIMMountImage(string pszMountPath, string pszWimFileName, DWORD dwImageIndex, [Optional] string pszTempPath);
 
             /// <summary>
             /// Mounts an image in a Windows® image (.wim) file to the specified directory.
