@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
 
@@ -25,18 +29,16 @@ namespace Microsoft.Wim
         public static int GetMessageCallbackCount(WimHandle wimHandle)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // Return the value from the native function
-            //
             return (int)WimgApi.NativeMethods.WIMGetMessageCallbackCount(wimHandle);
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Returns the count of callback routines currently registered by the imaging library.

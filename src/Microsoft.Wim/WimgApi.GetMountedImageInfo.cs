@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -7,6 +11,27 @@ using DWORD = System.UInt32;
 
 namespace Microsoft.Wim
 {
+    /// <summary>
+    /// The mounted image info level.
+    /// </summary>
+    internal enum WimMountedImageInfoLevels : uint
+    {
+        /// <summary>
+        /// Level zero
+        /// </summary>
+        Level0,
+
+        /// <summary>
+        /// Level one
+        /// </summary>
+        Level1,
+
+        /// <summary>
+        /// Invalid
+        /// </summary>
+        Invalid,
+    }
+
     public static partial class WimgApi
     {
         /// <summary>
@@ -14,11 +39,9 @@ namespace Microsoft.Wim
         /// </summary>
         /// <returns>A <see cref="WimMountInfoCollection"/> containing <see cref="WimMountInfo"/> objects.</returns>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public static WimMountInfoCollection GetMountedImageInfo()
         {
             // Call the native function first to get the necessary buffer size
-            //
             WimgApi.NativeMethods.WIMGetMountedImageInfo(WimMountInfo.MountInfoLevel, out DWORD imageCount, IntPtr.Zero, 0, out DWORD returnLength);
 
             switch (Marshal.GetLastWin32Error())
@@ -26,67 +49,55 @@ namespace Microsoft.Wim
                 case 0:
 
                     // Return an empty list because there are no images
-                    //
                     return new WimMountInfoCollection(new List<WimMountInfo>());
 
                 case WimgApi.ERROR_INSUFFICIENT_BUFFER:
 
                     // Continue on because we now know how much memory is needed
-                    //
                     break;
 
                 default:
 
                     // Throw a Win32Exception based on the last error code
-                    //
                     throw new Win32Exception();
             }
 
             // Create a collection of WimMountInfo objects
-            //
             List<WimMountInfo> wimMountInfos = new List<WimMountInfo>();
 
             // Allocate enough memory for the return array
-            //
             IntPtr mountInfoPtr = Marshal.AllocHGlobal((int)returnLength);
 
             try
             {
                 // Call the native function a second time so it can fill the array of pointers
-                //
                 if (!WimgApi.NativeMethods.WIMGetMountedImageInfo(WimMountInfo.MountInfoLevel, out imageCount, mountInfoPtr, returnLength, out returnLength))
                 {
                     // Throw a Win32Exception based on the last error code
-                    //
                     throw new Win32Exception();
                 }
 
                 // Loop through each image
-                //
                 for (int i = 0; i < imageCount; i++)
                 {
                     // Get the current pointer based on the index
-                    //
                     IntPtr currentImageInfoPtr = new IntPtr(mountInfoPtr.ToInt64() + (i * (returnLength / imageCount)));
 
                     // Read a pointer and add a new WimMountInfo object to the collection
-                    //
                     wimMountInfos.Add(new WimMountInfo(currentImageInfoPtr));
                 }
             }
             finally
             {
                 // Free the native array
-                //
                 Marshal.FreeHGlobal(mountInfoPtr);
             }
 
             // Return the WimMountInfo list as a read-only collection
-            //
             return new WimMountInfoCollection(wimMountInfos);
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Returns a list of images that are currently mounted.

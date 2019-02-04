@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
@@ -17,44 +21,37 @@ namespace Microsoft.Wim
         public static WimInfo GetAttributes(WimHandle wimHandle)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // Calculate the size of the buffer needed
-            //
             uint wimInfoSize = (DWORD)Marshal.SizeOf(typeof(WimgApi.WIM_INFO));
 
             // Allocate a buffer to receive the native struct
-            //
             IntPtr wimInfoPtr = Marshal.AllocHGlobal((int)wimInfoSize);
 
             try
             {
                 // Call the native function
-                //
                 if (!WimgApi.NativeMethods.WIMGetAttributes(wimHandle, wimInfoPtr, wimInfoSize))
                 {
                     // Throw a Win32Exception based on the last error code
-                    //
                     throw new Win32Exception();
                 }
 
                 // Return a new instance of a WimInfo class which will marshal the struct
-                //
                 return new WimInfo(wimInfoPtr);
             }
             finally
             {
                 // Free memory
-                //
                 Marshal.FreeHGlobal(wimInfoPtr);
             }
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Returns the number of volume images stored in an image file.

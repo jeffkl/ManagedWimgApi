@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.IO;
 using Xunit;
@@ -8,7 +12,7 @@ namespace Microsoft.Wim.Tests
     [Collection(nameof(TestWimTemplate))]
     public abstract class TestBase : IDisposable
     {
-        public readonly string TestDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
+        private readonly string _testDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
         private string _capturePath;
         private WimHandle _testWimHandle;
         private string _testWimPath;
@@ -16,11 +20,11 @@ namespace Microsoft.Wim.Tests
         protected TestBase(TestWimTemplate template)
         {
             Template = template;
-            TempPath = Directory.CreateDirectory(Path.Combine(TestDirectory, "temp")).FullName;
-            ApplyPath = Directory.CreateDirectory(Path.Combine(TestDirectory, "apply")).FullName;
-            MountPath = Directory.CreateDirectory(Path.Combine(TestDirectory, "mount")).FullName;
+            TempPath = Directory.CreateDirectory(Path.Combine(_testDirectory, "temp")).FullName;
+            ApplyPath = Directory.CreateDirectory(Path.Combine(_testDirectory, "apply")).FullName;
+            MountPath = Directory.CreateDirectory(Path.Combine(_testDirectory, "mount")).FullName;
 
-            CaptureWimPath = Path.Combine(TestDirectory, "capture.wim");
+            CaptureWimPath = Path.Combine(_testDirectory, "capture.wim");
         }
 
         protected string ApplyPath { get; }
@@ -31,7 +35,7 @@ namespace Microsoft.Wim.Tests
             {
                 if (_capturePath == null)
                 {
-                    _capturePath = Directory.CreateDirectory(Path.Combine(TestDirectory, "capture")).FullName;
+                    _capturePath = Directory.CreateDirectory(Path.Combine(_testDirectory, "capture")).FullName;
 
                     TestWimTemplate.CreateTestFiles(_capturePath, TestWimTemplate.FileCount, TestWimTemplate.FileLineCount);
                 }
@@ -47,6 +51,8 @@ namespace Microsoft.Wim.Tests
         protected TestWimTemplate Template { get; }
 
         protected string TempPath { get; }
+
+        protected string TestDirectory => _testDirectory;
 
         protected WimHandle TestWimHandle
         {
@@ -69,7 +75,7 @@ namespace Microsoft.Wim.Tests
             {
                 if (_testWimPath == null)
                 {
-                    _testWimPath = Path.Combine(TestDirectory, "test.wim");
+                    _testWimPath = Path.Combine(_testDirectory, "test.wim");
 
                     File.Copy(Template.FullPath, _testWimPath);
                 }
@@ -82,7 +88,7 @@ namespace Microsoft.Wim.Tests
         {
             _testWimHandle?.Dispose();
 
-            Directory.Delete(TestDirectory, recursive: true);
+            Directory.Delete(_testDirectory, recursive: true);
         }
 
         protected Exception ShouldThrow<T>(string paramName, Action action)

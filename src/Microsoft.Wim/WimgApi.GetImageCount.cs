@@ -1,4 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
 
 namespace Microsoft.Wim
@@ -13,11 +17,10 @@ namespace Microsoft.Wim
         public static int GetImageCount(WimHandle wimHandle)
         {
             // Return the value from the native function
-            //
             return (int)WimgApi.NativeMethods.WIMGetImageCount(wimHandle);
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Returns the number of volume images stored in a Windows® image (.wim) file.

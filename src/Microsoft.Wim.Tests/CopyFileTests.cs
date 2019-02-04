@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -10,8 +14,8 @@ namespace Microsoft.Wim.Tests
     public class CopyFileTests : TestBase
     {
         private const string CallbackText = "The callback user data was set correctly.";
-        private bool _callbackCalled;
         private readonly string _destinationPath;
+        private bool _callbackCalled;
 
         public CopyFileTests(TestWimTemplate template)
             : base(template)
@@ -36,14 +40,14 @@ namespace Microsoft.Wim.Tests
         public void CopyFileTest_ThrowsArgumentNullException_destinationFile()
         {
             ShouldThrow<ArgumentNullException>("destinationFile", () =>
-                WimgApi.CopyFile("", null, WimCopyFileOptions.None));
+                WimgApi.CopyFile(string.Empty, null, WimCopyFileOptions.None));
         }
 
         [Fact]
         public void CopyFileTest_ThrowsArgumentNullException_sourceFile()
         {
             ShouldThrow<ArgumentNullException>("sourceFile", () =>
-                WimgApi.CopyFile(null, "", WimCopyFileOptions.None));
+                WimgApi.CopyFile(null, string.Empty, WimCopyFileOptions.None));
         }
 
         [Fact]

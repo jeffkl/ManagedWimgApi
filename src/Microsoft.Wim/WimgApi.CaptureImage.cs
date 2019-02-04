@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -6,6 +10,38 @@ using DWORD = System.UInt32;
 
 namespace Microsoft.Wim
 {
+    /// <summary>
+    /// Specifies options when capturing an image.
+    /// </summary>
+    [Flags]
+    public enum WimCaptureImageOptions : uint
+    {
+        /// <summary>
+        /// Disables capturing security information for directories.
+        /// </summary>
+        DisableDirectoryAcl = WimgApi.WIM_FLAG_NO_DIRACL,
+
+        /// <summary>
+        /// Disables capturing security information for files.
+        /// </summary>
+        DisableFileAcl = WimgApi.WIM_FLAG_NO_FILEACL,
+
+        /// <summary>
+        /// Disables automatic path fix-ups for junctions and symbolic links.
+        /// </summary>
+        DisableRPFix = WimgApi.WIM_FLAG_NO_RP_FIX,
+
+        /// <summary>
+        /// No options are set.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Capture verifies single-instance files byte by byte.
+        /// </summary>
+        Verify = WimgApi.WIM_FLAG_VERIFY,
+    }
+
     public static partial class WimgApi
     {
         /// <summary>
@@ -23,14 +59,12 @@ namespace Microsoft.Wim
         public static WimHandle CaptureImage(WimHandle wimHandle, string path, WimCaptureImageOptions options)
         {
             // See if the handle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // See if path is null
-            //
             if (path == null)
             {
                 throw new ArgumentNullException(nameof(path));
@@ -43,24 +77,20 @@ namespace Microsoft.Wim
             }
 
             // Call the native function
-            //
             WimHandle imageHandle = WimgApi.NativeMethods.WIMCaptureImage(wimHandle, path, (DWORD)options);
 
             // See if the handle returned is valid
-            //
             if (imageHandle == null || imageHandle.IsInvalid)
             {
                 // Throw a Win32Exception which will call GetLastError
-                //
                 throw new Win32Exception();
             }
 
             // Return the handle to the image
-            //
             return imageHandle;
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Captures an image from a directory path and stores it in an image file.

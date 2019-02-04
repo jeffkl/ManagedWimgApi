@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -27,9 +31,17 @@ namespace Microsoft.Wim
                 return null;
             }
 
+            XmlReaderSettings xmlReaderSettings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit
+            };
+
             using (StringReader stringReader = new StringReader(xml))
             {
-                return new XPathDocument(stringReader);
+                using (XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings))
+                {
+                    return new XPathDocument(xmlReader);
+                }
             }
         }
 
@@ -43,35 +55,29 @@ namespace Microsoft.Wim
         public static string GetImageInformationAsString(WimHandle wimHandle)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // Stores the native pointer to the Unicode xml
-            //
             IntPtr imageInfoPtr = IntPtr.Zero;
 
             try
             {
                 // Call the native function
-                //
                 if (!NativeMethods.WIMGetImageInformation(wimHandle, out imageInfoPtr, out DWORD _))
                 {
                     // Throw a Win32Exception based on the last error code
-                    //
                     throw new Win32Exception();
                 }
 
                 // Marshal the buffer as a Unicode string and remove the Unicode file marker
-                //
                 return Marshal.PtrToStringUni(imageInfoPtr)?.Substring(1);
             }
             finally
             {
                 // Free the native pointer
-                //
                 Marshal.FreeHGlobal(imageInfoPtr);
             }
         }
@@ -106,14 +112,26 @@ namespace Microsoft.Wim
                 return null;
             }
 
-            XmlDocument xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument
+            {
+                XmlResolver = null
+            };
 
-            xmlDocument.LoadXml(xml);
+            using (StringReader stringReader = new StringReader(xml))
+            {
+                using (XmlReader xmlReader = new XmlTextReader(stringReader)
+                {
+                    DtdProcessing = DtdProcessing.Prohibit
+                })
+                {
+                    xmlDocument.Load(xmlReader);
+                }
+            }
 
             return xmlDocument;
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Returns information about an image within the .wim (Windows image) file.
@@ -128,7 +146,7 @@ namespace Microsoft.Wim
             /// A pointer to a variable that specifies the size, in bytes, of the buffer pointed to by the
             /// value of the ppvImageInfo parameter.
             /// </param>
-            /// <returns></returns>
+            /// <returns><code>true</code> if the function succeeded, otherwise <code>false</code>.</returns>
             /// <remarks>
             /// When the function succeeds, then the data describing the image is in Unicode XML format. Use the LocalFree
             /// function to free the memory pointed to by the ppvImageInfo parameter when no longer needed.

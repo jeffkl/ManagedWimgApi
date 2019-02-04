@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.Linq;
 using System.Xml;
@@ -188,7 +192,10 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void SetImageInformationTest()
         {
-            XmlDocument xmlDocument = new XmlDocument();
+            XmlDocument xmlDocument = new XmlDocument()
+            {
+                XmlResolver = null
+            };
 
             XmlDocumentFragment fragment = xmlDocument.CreateDocumentFragment();
 

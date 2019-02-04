@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -17,31 +21,26 @@ namespace Microsoft.Wim
         /// <returns>A <see cref="WimHandle"/>corresponding to the .wim file mounted at the specified path.</returns>
         /// <exception cref="ArgumentNullException">mountPath is null.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#")]
         public static WimHandle GetMountedImageHandle(string mountPath, bool readOnly, out WimHandle imageHandle)
         {
             // See if mountPath is null
-            //
             if (mountPath == null)
             {
                 throw new ArgumentNullException(nameof(mountPath));
             }
 
             // Call the native function
-            //
             if (!WimgApi.NativeMethods.WIMGetMountedImageHandle(mountPath, readOnly ? WimgApi.WIM_FLAG_MOUNT_READONLY : 0, out WimHandle wimHandle, out imageHandle))
             {
                 // Throw a Win32Exception based on the last error code
-                //
                 throw new Win32Exception();
             }
 
             // Return the WIM handle
-            //
             return wimHandle;
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Returns a WIM handle and an image handle corresponding to a mounted image directory.

@@ -1,4 +1,8 @@
-﻿using Xunit;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Xunit;
 
 namespace Microsoft.Wim.Tests
 {

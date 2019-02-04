@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -6,6 +10,38 @@ using DWORD = System.UInt32;
 
 namespace Microsoft.Wim
 {
+    /// <summary>
+    /// Specifies options when committing an image.
+    /// </summary>
+    [Flags]
+    public enum WimCommitImageOptions : uint
+    {
+        /// <summary>
+        /// Disables capturing security information for directories.
+        /// </summary>
+        DisableDirectoryAcl = WimgApi.WIM_FLAG_NO_DIRACL,
+
+        /// <summary>
+        /// Disables capturing security information for files.
+        /// </summary>
+        DisableFileAcl = WimgApi.WIM_FLAG_NO_FILEACL,
+
+        /// <summary>
+        /// Disables automatic path repairs for junctions and symbolic links.
+        /// </summary>
+        DisableRPFix = WimgApi.WIM_FLAG_NO_RP_FIX,
+
+        /// <summary>
+        /// No options are set.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Capture verifies single-instance files byte by byte.
+        /// </summary>
+        Verify = WimgApi.WIM_FLAG_VERIFY,
+    }
+
     public static partial class WimgApi
     {
         /// <summary>
@@ -17,31 +53,26 @@ namespace Microsoft.Wim
         /// <returns>If append is <c>true</c>, a <see cref="WimHandle"/> of the new image, otherwise a null handle.</returns>
         /// <exception cref="ArgumentNullException">imageHandle is null.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static WimHandle CommitImageHandle(WimHandle imageHandle, bool append, WimCommitImageOptions options)
         {
             // See if the handle is null
-            //
             if (imageHandle == null)
             {
                 throw new ArgumentNullException(nameof(imageHandle));
             }
 
             // Call the native function, add the append flag if needed
-            //
             if (!WimgApi.NativeMethods.WIMCommitImageHandle(imageHandle, append ? WimgApi.WIM_COMMIT_FLAG_APPEND : 0 | (DWORD)options, out WimHandle newImageHandle))
             {
                 // Throw a Win32Exception based on the last error code
-                //
                 throw new Win32Exception();
             }
 
             // Return the new image handle which may or may not contain a handle
-            //
             return newImageHandle;
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Saves the changes from a mounted image back to the .wim file.

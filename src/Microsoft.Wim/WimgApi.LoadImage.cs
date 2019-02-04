@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
@@ -22,36 +26,31 @@ namespace Microsoft.Wim
         public static WimHandle LoadImage(WimHandle wimHandle, int index)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // See if the specified index is valid
-            //
             if (index < 1 || index > WimgApi.GetImageCount(wimHandle))
             {
                 throw new IndexOutOfRangeException($"There is no image at index {index}.");
             }
 
             // Call the native function
-            //
             WimHandle imageHandle = WimgApi.NativeMethods.WIMLoadImage(wimHandle, (DWORD)index);
 
             if (imageHandle == null || imageHandle.IsInvalid)
             {
                 // Throw a Win32Exception based on the last error code
-                //
                 throw new Win32Exception();
             }
 
             // Return the image handle
-            //
             return imageHandle;
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Loads a volume image from a Windows® image (.wim) file.

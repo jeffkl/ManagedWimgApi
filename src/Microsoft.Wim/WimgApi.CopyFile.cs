@@ -1,10 +1,37 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
+using LARGE_INTEGER = System.UInt64;
 
 namespace Microsoft.Wim
 {
+    /// <summary>
+    /// Specifies options when copying a file from an image.
+    /// </summary>
+    [Flags]
+    public enum WimCopyFileOptions : uint
+    {
+        /// <summary>
+        /// The copy operation fails immediately if the target file already exists.
+        /// </summary>
+        FailIfExists = 0x00000001,
+
+        /// <summary>
+        /// No options are set.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Automatically retries copy operations in event of failures.
+        /// </summary>
+        Retry = WimgApi.WIM_COPY_FILE_RETRY,
+    }
+
     public static partial class WimgApi
     {
         /// <summary>
@@ -18,7 +45,6 @@ namespace Microsoft.Wim
         public static void CopyFile(string sourceFile, string destinationFile, WimCopyFileOptions options)
         {
             // Call an override
-            //
             WimgApi.CopyFile(sourceFile, destinationFile, options, null, null);
         }
 
@@ -35,39 +61,54 @@ namespace Microsoft.Wim
         public static void CopyFile(string sourceFile, string destinationFile, WimCopyFileOptions options, CopyFileProgressCallback copyFileProgressCallback, object userData)
         {
             // See if sourceFile is null
-            //
             if (sourceFile == null)
             {
                 throw new ArgumentNullException(nameof(sourceFile));
             }
 
             // See if destinationFile is null
-            //
             if (destinationFile == null)
             {
                 throw new ArgumentNullException(nameof(destinationFile));
             }
 
             // Create a CopyFileProgress object
-            //
             CopyFileProgress fileInfoCopyProgress = new CopyFileProgress(sourceFile, destinationFile, copyFileProgressCallback, userData);
 
             // Cancel flag is always false
-            //
             bool cancel = false;
 
             // Call the native function
-            //
             if (!WimgApi.NativeMethods.WIMCopyFile(sourceFile, destinationFile, fileInfoCopyProgress.CopyProgressHandler, IntPtr.Zero, ref cancel, (DWORD)options))
             {
                 // Throw a Win32Exception based on the last error code
-                //
                 throw new Win32Exception();
             }
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
+            /// <summary>
+            /// An application-defined callback function used with the CopyFileEx, MoveFileTransacted, and MoveFileWithProgress functions. It is called when a portion of a copy or move operation is completed. The LPPROGRESS_ROUTINE type defines a pointer to this callback function. CopyProgressRoutine is a placeholder for the application-defined function name.
+            /// </summary>
+            /// <param name="TotalFileSize">The total size of the file, in bytes.</param>
+            /// <param name="TotalBytesTransferred">The total number of bytes transferred from the source file to the destination file since the copy operation began.</param>
+            /// <param name="StreamSize">The total size of the current file stream, in bytes.</param>
+            /// <param name="StreamBytesTransferred">The total number of bytes in the current stream that have been transferred from the source file to the destination file since the copy operation began.</param>
+            /// <param name="dwStreamNumber">A handle to the current stream. The first time CopyProgressRoutine is called, the stream number is 1.</param>
+            /// <param name="dwCallbackReason">The reason that CopyProgressRoutine was called.</param>
+            /// <param name="hSourceFile">A handle to the source file.</param>
+            /// <param name="hDestinationFile">A handle to the destination file.</param>
+            /// <param name="lpData">Argument passed to CopyProgressRoutine by CopyFileEx, MoveFileTransacted, or MoveFileWithProgress.</param>
+            /// <returns>The CopyProgressRoutine function should return one of the following values.
+            /// PROGRESS_CANCEL - Cancel the copy operation and delete the destination file.
+            /// PROGRESS_CONTINUE - Continue the copy operation.
+            /// PROGRESS_QUIET - Continue the copy operation, but stop invoking CopyProgressRoutine to report progress.
+            /// PROGRESS_STOP - Stop the copy operation. It can be restarted at a later time.
+            /// </returns>
+            /// http://msdn.microsoft.com/en-us/library/windows/desktop/aa363854(v=vs.85).aspx
+            public delegate CopyFileProgressAction CopyProgressRoutine(LARGE_INTEGER TotalFileSize, LARGE_INTEGER TotalBytesTransferred, LARGE_INTEGER StreamSize, LARGE_INTEGER StreamBytesTransferred, DWORD dwStreamNumber, DWORD dwCallbackReason, IntPtr hSourceFile, IntPtr hDestinationFile, IntPtr lpData);
+
             /// <summary>
             /// Copies an existing file to a new file. Notifies the application of its progress through a callback function. If the
             /// source file has verification data, the contents of the file are verified during the copy operation.

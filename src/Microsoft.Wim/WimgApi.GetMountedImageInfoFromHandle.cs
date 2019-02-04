@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
@@ -17,60 +21,50 @@ namespace Microsoft.Wim
         public static WimMountInfo GetMountedImageInfoFromHandle(WimHandle imageHandle)
         {
             // See if imageHandle is null
-            //
             if (imageHandle == null)
             {
                 throw new ArgumentNullException(nameof(imageHandle));
             }
 
             // Calculate the size of the buffer needed
-            //
             int mountInfoSize = Marshal.SizeOf(typeof(WimgApi.WIM_MOUNT_INFO_LEVEL1));
 
             // Allocate a buffer for the native function
-            //
             IntPtr mountInfoPtr = Marshal.AllocHGlobal(mountInfoSize);
 
             try
             {
                 // Call the native function (the buffer may be too small)
-                //
                 if (!WimgApi.NativeMethods.WIMGetMountedImageInfoFromHandle(imageHandle, WimMountInfo.MountInfoLevel, mountInfoPtr, (DWORD)mountInfoSize, out DWORD returnLength))
                 {
                     // See if the return value isn't ERROR_INSUFFICIENT_BUFFER
-                    //
                     if (Marshal.GetLastWin32Error() != 122)
                     {
                         throw new Win32Exception();
                     }
 
                     // Re-allocate the buffer to the correct size
-                    //
                     Marshal.ReAllocHGlobal(mountInfoPtr, (IntPtr)returnLength);
 
                     // Call the native function a second time so it can fill buffer with a struct
-                    //
                     if (!WimgApi.NativeMethods.WIMGetMountedImageInfoFromHandle(imageHandle, WimMountInfo.MountInfoLevel, mountInfoPtr, returnLength, out returnLength))
                     {
                         // Throw a Win32Exception based on the last error code
-                        //
                         throw new Win32Exception();
                     }
                 }
 
                 // Return a WimMountInfo object which will marshal the pointer to a struct
-                //
                 return new WimMountInfo(mountInfoPtr);
             }
             finally
             {
                 // Free the native memory
-                //
                 Marshal.FreeHGlobal(mountInfoPtr);
             }
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Queries the state of a mounted image handle.

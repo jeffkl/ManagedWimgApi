@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
@@ -18,37 +22,32 @@ namespace Microsoft.Wim
         public static void ExtractImagePath(WimHandle imageHandle, string sourceFile, string destinationFile)
         {
             // See if imageHandle is null
-            //
             if (imageHandle == null)
             {
                 throw new ArgumentNullException(nameof(imageHandle));
             }
 
             // See if sourceFile is null
-            //
             if (sourceFile == null)
             {
                 throw new ArgumentNullException(nameof(sourceFile));
             }
 
             // See if destinationFile is null
-            //
             if (destinationFile == null)
             {
                 throw new ArgumentNullException(nameof(destinationFile));
             }
 
             // Call the native function
-            //
             if (!WimgApi.NativeMethods.WIMExtractImagePath(imageHandle, sourceFile, destinationFile, 0))
             {
                 // Throw a Win32Exception based on the last error code
-                //
                 throw new Win32Exception();
             }
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Extracts a file from within a Windows® image (.wim) file to a specified location.

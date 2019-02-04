@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,7 +48,7 @@ namespace Microsoft.Wim.Tests
                 WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("destinationFile", () =>
-                    WimgApi.ExtractImagePath(imageHandleCopy, "", null));
+                    WimgApi.ExtractImagePath(imageHandleCopy, string.Empty, null));
             }
         }
 
@@ -52,7 +56,7 @@ namespace Microsoft.Wim.Tests
         public void ExtractImagePathTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
-                WimgApi.ExtractImagePath(null, "", ""));
+                WimgApi.ExtractImagePath(null, string.Empty, string.Empty));
         }
 
         [Fact]
@@ -63,7 +67,7 @@ namespace Microsoft.Wim.Tests
                 WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("sourceFile", () =>
-                    WimgApi.ExtractImagePath(imageHandleCopy, null, ""));
+                    WimgApi.ExtractImagePath(imageHandleCopy, null, string.Empty));
             }
         }
 
@@ -79,7 +83,7 @@ namespace Microsoft.Wim.Tests
 
                     if ((messageFileInfo.FileInfo.Attributes | FileAttributes.Directory) != FileAttributes.Directory)
                     {
-                        ((List<String>)userData).Add(messageFileInfo.Path.Replace(ApplyPath, ""));
+                        ((List<String>)userData).Add(messageFileInfo.Path.Replace(ApplyPath, string.Empty));
                     }
                 }
 

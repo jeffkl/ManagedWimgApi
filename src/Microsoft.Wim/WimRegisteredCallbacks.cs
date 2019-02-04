@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Wim
@@ -36,14 +40,12 @@ namespace Microsoft.Wim
         public WimgApi.WIMMessageCallback GetNativeCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
             // Verify the callback is registered for the handle
-            //
             if (!IsCallbackRegistered(wimHandle, messageCallback))
             {
                 throw new InvalidOperationException("Specified callback is not registered.");
             }
 
             // Return the native callback
-            //
             return _registeredCallbacksByHandle[wimHandle][messageCallback].NativeCallback;
         }
 
@@ -57,14 +59,12 @@ namespace Microsoft.Wim
         public WimgApi.WIMMessageCallback GetNativeCallback(WimMessageCallback messageCallback)
         {
             // Verify the callback is registered
-            //
             if (!IsCallbackRegistered(messageCallback))
             {
                 throw new InvalidOperationException("Specified callback is not registered.");
             }
 
             // Return the native callback
-            //
             return _registeredCallbacksGlobal[messageCallback].NativeCallback;
         }
 
@@ -100,37 +100,31 @@ namespace Microsoft.Wim
         public bool RegisterCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object userData)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // See if messageCallback is null
-            //
             if (messageCallback == null)
             {
                 throw new ArgumentNullException(nameof(messageCallback));
             }
 
             // See if the callback is already registered
-            //
             if (IsCallbackRegistered(wimHandle, messageCallback))
             {
                 return false;
             }
 
             // See if the dictionary doesn't contain the wimHandle
-            //
             if (!_registeredCallbacksByHandle.ContainsKey(wimHandle))
             {
                 // Add an item for the wimHandle to the dictionary
-                //
                 _registeredCallbacksByHandle.Add(wimHandle, new Dictionary<WimMessageCallback, WimMessageCallbackWrapper>());
             }
 
             // Create a callback wrapper and add the callback to the list
-            //
             _registeredCallbacksByHandle[wimHandle].Add(messageCallback, new WimMessageCallbackWrapper(messageCallback, userData));
 
             return true;
@@ -146,21 +140,18 @@ namespace Microsoft.Wim
         public bool RegisterCallback(WimMessageCallback messageCallback, object userData)
         {
             // See if messageCallback is null
-            //
             if (messageCallback == null)
             {
                 throw new ArgumentNullException(nameof(messageCallback));
             }
 
             // See if the callback is already registered
-            //
             if (IsCallbackRegistered(messageCallback))
             {
                 return false;
             }
 
             // Create a callback wrapper and add the callback to the list
-            //
             _registeredCallbacksGlobal.Add(messageCallback, new WimMessageCallbackWrapper(messageCallback, userData));
 
             return true;
@@ -176,32 +167,27 @@ namespace Microsoft.Wim
         public bool UnregisterCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // See if messageCallback is null
-            //
             if (messageCallback == null)
             {
                 throw new ArgumentNullException(nameof(messageCallback));
             }
 
             // See if the callback isn't registered
-            //
             if (!IsCallbackRegistered(wimHandle, messageCallback))
             {
                 return false;
             }
 
             // Remove the callback from the list
-            //
             _registeredCallbacksByHandle[wimHandle].Remove(messageCallback);
 
             // See if the dictionary for the wimHandle is now empty
-            //
             if (_registeredCallbacksByHandle[wimHandle].Count == 0)
             {
                 // Remove the wimHandle dictionary item
@@ -220,21 +206,18 @@ namespace Microsoft.Wim
         public bool UnregisterCallback(WimMessageCallback messageCallback)
         {
             // See if messageCallback is null
-            //
             if (messageCallback == null)
             {
                 throw new ArgumentNullException(nameof(messageCallback));
             }
 
             // See if the callback isn't registered
-            //
             if (!IsCallbackRegistered(messageCallback))
             {
                 return false;
             }
 
             // Remove the callback from the list
-            //
             _registeredCallbacksGlobal.Remove(messageCallback);
 
             return true;
@@ -249,21 +232,18 @@ namespace Microsoft.Wim
         public bool UnregisterCallbacks(WimHandle wimHandle)
         {
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // See if the wimHandle doesn't have any registered callbacks
-            //
             if (!_registeredCallbacksByHandle.ContainsKey(wimHandle))
             {
                 return false;
             }
 
             // Remove the wimHandle from the list
-            //
             _registeredCallbacksByHandle.Remove(wimHandle);
 
             return true;
@@ -276,11 +256,9 @@ namespace Microsoft.Wim
         public bool UnregisterCallbacks()
         {
             // Clear the dictionary of handles and callbacks
-            //
             _registeredCallbacksByHandle.Clear();
 
             // Clear the list of globally registered callbacks
-            //
             _registeredCallbacksGlobal.Clear();
 
             return true;

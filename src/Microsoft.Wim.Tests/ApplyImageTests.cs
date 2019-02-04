@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
@@ -102,9 +106,7 @@ namespace Microsoft.Wim.Tests
         public void ApplyImageTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
-                WimgApi.ApplyImage(null, "", WimApplyImageOptions.None));
+                WimgApi.ApplyImage(null, string.Empty, WimApplyImageOptions.None));
         }
     }
-
-    
 }

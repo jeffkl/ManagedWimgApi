@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -8,7 +12,6 @@ namespace Microsoft.Wim
     /// <summary>
     /// Specifies options when exporting an image.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
     [Flags]
     public enum WimExportImageOptions : uint
     {
@@ -47,30 +50,26 @@ namespace Microsoft.Wim
         public static void ExportImage(WimHandle imageHandle, WimHandle wimHandle, WimExportImageOptions options)
         {
             // See if imageHandle is null
-            //
             if (imageHandle == null)
             {
                 throw new ArgumentNullException(nameof(imageHandle));
             }
 
             // See if wimHandle is null
-            //
             if (wimHandle == null)
             {
                 throw new ArgumentNullException(nameof(wimHandle));
             }
 
             // Call the native function
-            //
             if (!WimgApi.NativeMethods.WIMExportImage(imageHandle, wimHandle, (UInt32)options))
             {
                 // Throw a Win32Exception based on the last error code
-                //
                 throw new Win32Exception();
             }
         }
 
-        private static partial class NativeMethods
+        internal static partial class NativeMethods
         {
             /// <summary>
             /// Transfers the data of an image from one Windows® image (.wim) file to another.
