@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net40</TargetFramework>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyOriginatorKeyFile>..\..\key.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
@@ -16,7 +16,7 @@
     <Description>Managed Windows Imaging API (WIMGAPI)</Description>
     <Authors>jeffkl</Authors>
     <Copyright>Copyright © 2014. All rights reserved.</Copyright>
-    <PackageLicenseUrl>https://github.com/jeffkl/ManagedWimgApi/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/jeffkl/ManagedWimgApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jeffkl/ManagedWimgApi.git</RepositoryUrl>
     <PackageTags>Wimgapi</PackageTags>
