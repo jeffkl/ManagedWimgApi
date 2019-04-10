@@ -1,4 +1,6 @@
-﻿// ReSharper disable InconsistentNaming
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
 
 namespace Microsoft.Wim
 {
@@ -160,7 +162,7 @@ namespace Microsoft.Wim
         internal const uint WIM_FLAG_NO_RP_FIX = 0x00000100;
 
         /// <summary>
-        ///
+        /// Reserved for future use.
         /// </summary>
         internal const uint WIM_FLAG_RESERVED = 0x00000001;
 
@@ -190,7 +192,7 @@ namespace Microsoft.Wim
         internal const uint WIM_GENERIC_WRITE = 0x40000000;
 
         /// <summary>
-        ///
+        /// Specifies that the log file should be in UTF8 format.
         /// </summary>
         internal const uint WIM_LOGFILE_UTF8 = 0x00000001;
 

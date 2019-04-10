@@ -1,4 +1,8 @@
-﻿using Shouldly;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using Shouldly;
 using System;
 using System.IO;
 using Xunit;
@@ -9,7 +13,8 @@ namespace Microsoft.Wim.Tests
     {
         private readonly string _logFilePath;
 
-        public LogFileTests(TestWimTemplate template) : base(template)
+        public LogFileTests(TestWimTemplate template)
+            : base(template)
         {
             _logFilePath = Path.Combine(TestDirectory, "test.log");
 

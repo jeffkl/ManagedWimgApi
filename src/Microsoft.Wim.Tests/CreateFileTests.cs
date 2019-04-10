@@ -1,8 +1,10 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
 using System.IO;
 using Xunit;
-
-// ReSharper disable UnusedVariable
 
 namespace Microsoft.Wim.Tests
 {

@@ -1,13 +1,14 @@
-﻿using System;
+﻿// Copyright (c). All rights reserved.
+//
+// Licensed under the MIT license.
+
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using DWORD = System.UInt32;
 using USHORT = System.UInt16;
-
-// ReSharper disable ArrangeStaticMemberQualifier
-// ReSharper disable RedundantNameQualifier
-// ReSharper disable InconsistentNaming
 
 namespace Microsoft.Wim
 {
@@ -22,35 +23,36 @@ namespace Microsoft.Wim
             /// <summary>
             /// The low-order part of the file time.
             /// </summary>
+            [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter", Justification = "Reviewed.")]
             public DWORD dwLowDateTime;
 
             /// <summary>
             /// The high-order part of the file time.
             /// </summary>
+            [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter", Justification = "Reviewed.")]
             public DWORD dwHighDateTime;
 
             /// <summary>
+            /// Initializes a new instance of the <see cref="FILETIME"/> struct.
             /// Creates a new instance of the FILETIME struct.
             /// </summary>
             /// <param name="dateTime">A <see cref="DateTime"/> object to copy data from.</param>
             public FILETIME(DateTime dateTime)
             {
                 // Get the file time as a long in Utc
-                //
                 long fileTime = dateTime.ToFileTimeUtc();
 
                 // Copy the low bits
-                //
                 dwLowDateTime = (DWORD)(fileTime & 0xFFFFFFFF);
 
                 // Copy the high bits
-                //
                 dwHighDateTime = (DWORD)(fileTime >> 32);
             }
 
             /// <summary>
             /// Converts a <see cref="FILETIME"/> to a <see cref="System.DateTime"/>
             /// </summary>
+            /// <param name="fileTime">The <see cref="FILETIME"/> to convert.</param>
             public static implicit operator DateTime(FILETIME fileTime)
             {
                 return fileTime.ToDateTime();
@@ -59,6 +61,7 @@ namespace Microsoft.Wim
             /// <summary>
             /// Converts a <see cref="System.DateTime"/> to a <see cref="FILETIME"/>.
             /// </summary>
+            /// <param name="dateTime">The <see cref="DateTime"/> to convert.</param>
             public static implicit operator FILETIME(DateTime dateTime)
             {
                 return new FILETIME(dateTime);
@@ -71,7 +74,6 @@ namespace Microsoft.Wim
             public DateTime ToDateTime()
             {
                 // Convert the file time to a long and then to a DateTime
-                //
                 return DateTime.FromFileTimeUtc((long)dwHighDateTime << 32 | dwLowDateTime);
             }
 
@@ -83,7 +85,6 @@ namespace Microsoft.Wim
             public override string ToString()
             {
                 // Call the DateTime.ToString() method
-                //
                 return ((DateTime)this).ToString(CultureInfo.CurrentCulture);
             }
 
@@ -96,7 +97,6 @@ namespace Microsoft.Wim
             public string ToString(IFormatProvider provider)
             {
                 // Call the DateTime.ToString() method
-                //
                 return ((DateTime)this).ToString(provider);
             }
 
@@ -112,7 +112,6 @@ namespace Microsoft.Wim
             public string ToString(string format)
             {
                 // Call the DateTime.ToString() method
-                //
                 return ((DateTime)this).ToString(format, CultureInfo.CurrentCulture);
             }
 
@@ -129,7 +128,6 @@ namespace Microsoft.Wim
             public string ToString(string format, IFormatProvider provider)
             {
                 // Call the DateTime.ToString() method
-                //
                 return ((DateTime)this).ToString(format, provider);
             }
         }
@@ -143,7 +141,8 @@ namespace Microsoft.Wim
             /// <summary>
             /// Specifies the full path to the .wim file.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string WimPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string WimPath;
 
             /// <summary>
             /// Specifies a GUID structure containing the unique identifier for the Windows® image (.wim) file.
@@ -195,12 +194,14 @@ namespace Microsoft.Wim
             /// <summary>
             /// Specifies the full path to the .wim file.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string WimPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string WimPath;
 
             /// <summary>
             /// Specifies the full path to the directory where the image is mounted.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string MountPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string MountPath;
 
             /// <summary>
             /// Specifies the image index within the .wim file specified in WimPath.
@@ -210,7 +211,8 @@ namespace Microsoft.Wim
             /// <summary>
             /// Specifies if the image was mounted with support for saving changes.
             /// </summary>
-            [MarshalAs(UnmanagedType.Bool)] public bool MountedForRW;
+            [MarshalAs(UnmanagedType.Bool)]
+            public bool MountedForRW;
         }
 
         /// <summary>
@@ -222,12 +224,14 @@ namespace Microsoft.Wim
             /// <summary>
             /// Specifies the full path to the .wim file.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string WimPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string WimPath;
 
             /// <summary>
             /// Specifies the full path to the directory where the image is mounted.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string MountPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string MountPath;
 
             /// <summary>
             /// Specifies the image index within the .wim file specified in WimPath.
@@ -249,12 +253,14 @@ namespace Microsoft.Wim
             /// <summary>
             /// Specifies the full path to the .wim file.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string WimPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string WimPath;
 
             /// <summary>
             /// Specifies the full path to the directory where the image is mounted.
             /// </summary>
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string MountPath;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string MountPath;
 
             /// <summary>
             /// Specifies the image index within the .wim file specified in WimPath.
@@ -264,7 +270,8 @@ namespace Microsoft.Wim
             /// <summary>
             /// Specifies if the image was mounted with support for saving changes.
             /// </summary>
-            [MarshalAs(UnmanagedType.Bool)] public bool MountedForRW;
+            [MarshalAs(UnmanagedType.Bool)]
+            public bool MountedForRW;
         }
 
         /// <summary>
@@ -276,14 +283,14 @@ namespace Microsoft.Wim
             /// <summary>
             /// The file attributes of a file.
             /// </summary>
-            public FileAttributes dwFileAttributes;
+            public FileAttributes FileAttributes;
 
             /// <summary>
             /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure that specifies when a file or directory was created.
             ///
             /// If the underlying file system does not support creation time, this member is zero.
             /// </summary>
-            public FILETIME ftCreationTime;
+            public FILETIME CreationTime;
 
             /// <summary>
             /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure.
@@ -294,7 +301,7 @@ namespace Microsoft.Wim
             ///
             /// On the FAT file system, the specified date for both files and directories is correct, but the time of day is always set to midnight.
             /// </summary>
-            public FILETIME ftLastAccessTime;
+            public FILETIME LastAccessTime;
 
             /// <summary>
             /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure.
@@ -303,39 +310,39 @@ namespace Microsoft.Wim
             ///
             /// For a directory, the structure specifies when the directory is created. If the underlying file system does not support last write time, this member is zero.
             /// </summary>
-            public FILETIME ftLastWriteTime;
+            public FILETIME LastWriteTime;
 
             /// <summary>
             /// The high-order DWORD value of the file size, in bytes.
             ///
             /// This value is zero unless the file size is greater than MAXDWORD.
             ///
-            /// The size of the file is equal to (nFileSizeHigh * (MAXDWORD+1)) + nFileSizeLow.
+            /// The size of the file is equal to (FileSizeHigh * (MAXDWORD+1)) + FileSizeLow.
             /// </summary>
-            public DWORD nFileSizeHigh;
+            public DWORD FileSizeHigh;
 
             /// <summary>
             /// The low-order DWORD value of the file size, in bytes.
             /// </summary>
-            public DWORD nFileSizeLow;
+            public DWORD FileSizeLow;
 
             /// <summary>
-            /// If the dwFileAttributes member includes the FILE_ATTRIBUTE_REPARSE_POINT attribute, this member specifies the re-parse point tag.
+            /// If the FileAttributes member includes the FILE_ATTRIBUTE_REPARSE_POINT attribute, this member specifies the re-parse point tag.
             ///
             /// Otherwise, this value is undefined and should not be used.
             /// </summary>
-            public DWORD dwReserved0;
+            public DWORD Reserved0;
 
             /// <summary>
             /// Reserved for future use.
             /// </summary>
-            public DWORD dwReserved1;
+            public DWORD Reserved1;
 
             /// <summary>
             /// The name of the file.
             /// </summary>
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            public string cFileName;
+            public string FileName;
 
             /// <summary>
             /// An alternative name for the file.
@@ -343,12 +350,12 @@ namespace Microsoft.Wim
             /// This name is in the classic 8.3 file name format.
             /// </summary>
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
-            public string cAlternateFileName;
+            public string AlternateFileName;
 
             /// <summary>
-            /// Gets the file size by combining nFileSizeLow and nFileSizeHigh.
+            /// Gets the file size by combining FileSizeLow and FileSizeHigh.
             /// </summary>
-            public long FileSize => (nFileSizeHigh * ((long)DWORD.MaxValue + 1)) + nFileSizeLow;
+            public long FileSize => (FileSizeHigh * ((long)DWORD.MaxValue + 1)) + FileSizeLow;
         }
     }
 }
