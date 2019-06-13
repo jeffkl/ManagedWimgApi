@@ -6,7 +6,9 @@
     <SignAssembly>true</SignAssembly>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <!--<RunCodeAnalysis>true</RunCodeAnalysis>-->
+    <ArtifactsPath>..\..\artifacts\$(MSBuildProjectName)</ArtifactsPath>
+    <CopyArtifactsAfterTargets>Pack</CopyArtifactsAfterTargets>
+    <DefaultArtifactsFileMatch>*nupkg</DefaultArtifactsFileMatch>
     <LangVersion>Latest</LangVersion>
     <NoWarn>NU5125</NoWarn>
   </PropertyGroup>

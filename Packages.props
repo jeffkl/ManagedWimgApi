@@ -8,6 +8,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <GlobalPackageReference Include="Microsoft.Build.Artifacts" Version="1.0.68" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="2.3.105" />
   </ItemGroup>
 
