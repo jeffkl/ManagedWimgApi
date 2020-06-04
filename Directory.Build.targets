@@ -3,6 +3,9 @@
   <PropertyGroup>
     <DebugType Condition="'$(Configuration)' == 'Debug'">Full</DebugType>
     <DebugType Condition="'$(Configuration)' == 'Release'">PdbOnly</DebugType>
+
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)key.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,5 +14,5 @@
     </Compile>
   </ItemGroup>
 
-  <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.0.79" />
 </Project>

@@ -4,5 +4,6 @@
     <DefaultItemExcludes>*log</DefaultItemExcludes>
     <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 </Project>
