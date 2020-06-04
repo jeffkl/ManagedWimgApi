@@ -270,7 +270,7 @@ namespace Microsoft.Wim.Tests
             Win32Exception invalidParameterException = Should.Throw<Win32Exception>(() =>
                 WimgApi.MountImage(MountPath, TestWimPath, 10));
 
-            invalidParameterException.Message.ShouldBe("The parameter is incorrect");
+            invalidParameterException.Message.ShouldStartWith("The parameter is incorrect");
         }
 
         [Fact]
