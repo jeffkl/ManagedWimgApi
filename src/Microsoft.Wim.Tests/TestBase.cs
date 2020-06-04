@@ -12,19 +12,20 @@ namespace Microsoft.Wim.Tests
     [Collection(nameof(TestWimTemplate))]
     public abstract class TestBase : IDisposable
     {
-        private readonly string _testDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
-        private string _capturePath;
+        private DirectoryInfo _capturePath;
+        private WimHandle _testEsdHandle;
+        private string _testEsdPath;
         private WimHandle _testWimHandle;
         private string _testWimPath;
 
         protected TestBase(TestWimTemplate template)
         {
             Template = template;
-            TempPath = Directory.CreateDirectory(Path.Combine(_testDirectory, "temp")).FullName;
-            ApplyPath = Directory.CreateDirectory(Path.Combine(_testDirectory, "apply")).FullName;
-            MountPath = Directory.CreateDirectory(Path.Combine(_testDirectory, "mount")).FullName;
+            TempPath = Directory.CreateDirectory(Path.Combine(TestDirectory, "temp")).FullName;
+            ApplyPath = Directory.CreateDirectory(Path.Combine(TestDirectory, "apply")).FullName;
+            MountPath = Directory.CreateDirectory(Path.Combine(TestDirectory, "mount")).FullName;
 
-            CaptureWimPath = Path.Combine(_testDirectory, "capture.wim");
+            CaptureWimPath = Path.Combine(TestDirectory, "capture.wim");
         }
 
         protected string ApplyPath { get; }
@@ -35,12 +36,12 @@ namespace Microsoft.Wim.Tests
             {
                 if (_capturePath == null)
                 {
-                    _capturePath = Directory.CreateDirectory(Path.Combine(_testDirectory, "capture")).FullName;
+                    _capturePath = Directory.CreateDirectory(Path.Combine(TestDirectory, "capture"));
 
-                    TestWimTemplate.CreateTestFiles(_capturePath, TestWimTemplate.FileCount, TestWimTemplate.FileLineCount);
+                    TestWimTemplate.CreateTestFiles(_capturePath.FullName);
                 }
 
-                return _capturePath;
+                return _capturePath.FullName;
             }
         }
 
@@ -52,7 +53,37 @@ namespace Microsoft.Wim.Tests
 
         protected string TempPath { get; }
 
-        protected string TestDirectory => _testDirectory;
+        protected string TestDirectory { get; } = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
+
+        protected WimHandle TestEsdHandle
+        {
+            get
+            {
+                if (_testEsdHandle == null)
+                {
+                    _testEsdHandle = WimgApi.CreateFile(TestEsdPath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.Chunked, WimCompressionType.Lzms);
+
+                    WimgApi.SetTemporaryPath(_testEsdHandle, TempPath);
+                }
+
+                return _testEsdHandle;
+            }
+        }
+
+        protected string TestEsdPath
+        {
+            get
+            {
+                if (_testEsdPath == null)
+                {
+                    _testEsdPath = Path.Combine(TestDirectory, "test.esd");
+
+                    File.Copy(Template.EsdFullPath, _testEsdPath);
+                }
+
+                return _testEsdPath;
+            }
+        }
 
         protected WimHandle TestWimHandle
         {
@@ -75,9 +106,9 @@ namespace Microsoft.Wim.Tests
             {
                 if (_testWimPath == null)
                 {
-                    _testWimPath = Path.Combine(_testDirectory, "test.wim");
+                    _testWimPath = Path.Combine(TestDirectory, "test.wim");
 
-                    File.Copy(Template.FullPath, _testWimPath);
+                    File.Copy(Template.WimFullPath, _testWimPath);
                 }
 
                 return _testWimPath;
@@ -87,8 +118,9 @@ namespace Microsoft.Wim.Tests
         public virtual void Dispose()
         {
             _testWimHandle?.Dispose();
+            _testEsdHandle?.Dispose();
 
-            Directory.Delete(_testDirectory, recursive: true);
+            Directory.Delete(TestDirectory, recursive: true);
         }
 
         protected Exception ShouldThrow<T>(string paramName, Action action)
