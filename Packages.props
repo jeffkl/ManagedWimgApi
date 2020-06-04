@@ -1,21 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
   <ItemGroup>
     <PackageReference Update="Shouldly" Version="3.0.2" />
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <PackageReference Update="xunit" Version="2.4.1" />
     <PackageReference Update="xunit.runner.visualstudio" Version="2.4.2" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <GlobalPackageReference Include="Microsoft.Build.Artifacts" Version="2.0.35" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.1.91" />
-  </ItemGroup>
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
 
-  <ItemGroup Condition=" '$(EnableStyleCop)' != 'false' ">
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
-    <Compile Include="..\GlobalSuppressions.cs" />
-    <AdditionalFiles Include="..\..\stylecop.json" Visible="False" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\GlobalSuppressions.cs" Link="%(Filename)%(Extension)" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" Visible="False" />
 
     <GlobalPackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.0.0" />
     <GlobalPackageReference Include="Microsoft.NetFramework.Analyzers" Version="3.0.0" />

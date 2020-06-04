@@ -4,16 +4,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ArtifactsPath>..\..\artifacts\$(MSBuildProjectName)</ArtifactsPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Label="Package properties">
-    <IncludeSymbols>true</IncludeSymbols>
     <Description>Managed Windows Imaging API (WIMGAPI)</Description>
-    <Authors>jeffkl</Authors>
-    <Copyright>Copyright ©. All rights reserved.</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/jeffkl/ManagedWimgApi</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/jeffkl/ManagedWimgApi.git</RepositoryUrl>
-    <PackageTags>Wimgapi</PackageTags>
   </PropertyGroup>
 </Project>
