@@ -16,24 +16,24 @@ namespace Microsoft.Wim.Tests
         public const int FileLineCount = 1000;
         public const int ImageCount = 2;
 
-        private const string TestWimTemplateFilename = @"test_template.wim";
-
-        private readonly string _testWimTemplateDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
-
-        private readonly Lazy<string> _testWimTemplatePathLazy;
-
-        private readonly string _testWimTempPath;
+        private readonly Lazy<string> _esdTemplatePathLazy;
+        private readonly string _tempDirectory;
+        private readonly string _templateDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}")).FullName;
+        private readonly Lazy<string> _wimTemplatePathLazy;
 
         public TestWimTemplate()
         {
-            _testWimTempPath = Directory.CreateDirectory(Path.Combine(_testWimTemplateDirectory, "temp")).FullName;
+            _tempDirectory = Directory.CreateDirectory(Path.Combine(_templateDirectory, "temp")).FullName;
 
-            _testWimTemplatePathLazy = new Lazy<string>(CreateTemplateImage, isThreadSafe: true);
+            _wimTemplatePathLazy = new Lazy<string>(() => CreateTemplateImage("test_template.wim", WimCreateFileOptions.None, WimCompressionType.Lzx));
+            _esdTemplatePathLazy = new Lazy<string>(() => CreateTemplateImage("test_template.esd", WimCreateFileOptions.Chunked, WimCompressionType.Lzms));
         }
 
-        public string FullPath => _testWimTemplatePathLazy.Value;
+        public string EsdFullPath => _esdTemplatePathLazy.Value;
 
-        public static void CreateTestFiles(string path, int fileCount, int lineCount)
+        public string WimFullPath => _wimTemplatePathLazy.Value;
+
+        public static void CreateTestFiles(string path, int fileCount = FileCount, int lineCount = FileLineCount)
         {
             for (int i = 0; i < fileCount; i++)
             {
@@ -51,21 +51,21 @@ namespace Microsoft.Wim.Tests
 
         public void Dispose()
         {
-            Directory.Delete(_testWimTemplateDirectory, recursive: true);
+            Directory.Delete(_templateDirectory, recursive: true);
         }
 
-        private string CaptureTemplateImage(string capturePath)
+        private string CaptureTemplateImage(string filename, string capturePath, WimCreateFileOptions createFileOptions, WimCompressionType compressionType)
         {
-            string imagePath = Path.Combine(_testWimTemplateDirectory, TestWimTemplateFilename);
+            string imagePath = Path.Combine(_templateDirectory, filename);
 
             if (!Directory.Exists(capturePath))
             {
                 throw new DirectoryNotFoundException(String.Format(CultureInfo.CurrentCulture, "Could not find part of the path '{0}'", capturePath));
             }
 
-            using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Write, WimCreationDisposition.CreateNew, WimCreateFileOptions.None, WimCompressionType.Lzx))
+            using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Write, WimCreationDisposition.CreateNew, createFileOptions, compressionType))
             {
-                WimgApi.SetTemporaryPath(wimHandle, _testWimTempPath);
+                WimgApi.SetTemporaryPath(wimHandle, _tempDirectory);
 
                 for (int i = 0; i < ImageCount; i++)
                 {
@@ -125,14 +125,14 @@ namespace Microsoft.Wim.Tests
             return imagePath;
         }
 
-        private string CreateTemplateImage()
+        private string CreateTemplateImage(string filename, WimCreateFileOptions createFileOptions, WimCompressionType compressionType)
         {
-            string capturePath = Directory.CreateDirectory(Path.Combine(_testWimTemplateDirectory, "capture")).FullName;
+            string capturePath = Directory.CreateDirectory(Path.Combine(_templateDirectory, Guid.NewGuid().ToString("N"))).FullName;
 
-            CreateTestFiles(capturePath, FileCount, FileLineCount);
+            CreateTestFiles(capturePath);
             try
             {
-                return CaptureTemplateImage(capturePath);
+                return CaptureTemplateImage(filename, capturePath, createFileOptions, compressionType);
             }
             finally
             {
