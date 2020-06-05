@@ -194,7 +194,7 @@ namespace Microsoft.Wim.Tests
         {
             XmlDocument xmlDocument = new XmlDocument()
             {
-                XmlResolver = null
+                XmlResolver = null,
             };
 
             XmlDocumentFragment fragment = xmlDocument.CreateDocumentFragment();

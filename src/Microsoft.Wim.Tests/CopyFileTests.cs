@@ -60,7 +60,7 @@ namespace Microsoft.Wim.Tests
             Win32Exception win32Exception = Should.Throw<Win32Exception>(() =>
                 WimgApi.CopyFile(TestWimPath, _destinationPath, WimCopyFileOptions.FailIfExists));
 
-            win32Exception.Message.ShouldBe("The file exists");
+            win32Exception.Message.ShouldStartWith("The file exists");
         }
 
         [Fact]

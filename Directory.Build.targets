@@ -1,15 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
   <PropertyGroup>
     <DebugType Condition="'$(Configuration)' == 'Debug'">Full</DebugType>
-    <DebugType Condition="'$(Configuration)' == 'Release'">PdbOnly</DebugType>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\GlobalSuppressions.cs" Condition="'$(EnableStyleCop)' == 'true'">
-      <Link>GlobalSuppressions.cs</Link>
-    </Compile>
-  </ItemGroup>
-
-  <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.0.79" />
 </Project>
