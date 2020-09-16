@@ -6,12 +6,12 @@ variables:
   MSBuildArguments: '"/BinaryLogger:$(Build.SourcesDirectory)\$(ArtifactsDirectoryName)\msbuild.binlog"'
   BuildConfiguration: 'Debug'
   BuildPlatform: 'Any CPU'
-  DotNetCoreVersion: '3.1.300'
+  DotNetCoreVersion: '3.x'
 
 pool:
   vmImage: 'windows-2019'
 trigger:
-  batch: true
+  batch: 'true'
   branches:
     include:
     - 'master'
