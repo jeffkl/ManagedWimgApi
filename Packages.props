@@ -15,7 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)src\GlobalSuppressions.cs" Link="%(Filename)%(Extension)" />
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\stylecop.json" Visible="False" />
 
-    <GlobalPackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" />
+    <GlobalPackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" />
     <GlobalPackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" />
     <GlobalPackageReference Include="Roslyn.Diagnostics.Analyzers" Version="3.3.3" />
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="3.2.2" />
