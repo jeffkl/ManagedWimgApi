@@ -1,15 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29011.400
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Wim", "src\Microsoft.Wim\Microsoft.Wim.csproj", "{2D098368-E3DE-4C16-B5BD-6223A6476483}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{ACEBD36D-52B4-4F23-9758-E695BCE247FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Wim.Tests", "src\Microsoft.Wim.Tests\Microsoft.Wim.Tests.csproj", "{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{891ED303-4B28-422E-8D68-4A64CB5F5827}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		azure-pipelines.yml = azure-pipelines.yml
 		CONTRIBUTING.md = CONTRIBUTING.md
+		.github\dependabot.yml = .github\dependabot.yml
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.rsp = Directory.Build.rsp
 		Directory.Build.targets = Directory.Build.targets
@@ -22,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{ACEBD36D
 		version.json = version.json
 		wimgapi.h = wimgapi.h
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Wim.Tests", "src\Microsoft.Wim.Tests\Microsoft.Wim.Tests.csproj", "{559FF8BC-727A-4BE2-8BC0-F23DD129FE4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
