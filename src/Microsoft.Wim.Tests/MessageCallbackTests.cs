@@ -19,28 +19,28 @@ namespace Microsoft.Wim.Tests
         public void GetMessageCallbackCount_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.GetMessageCallbackCount(null));
+                WimgApi.GetMessageCallbackCount(wimHandle: null!));
         }
 
         [Fact]
         public void RegisterMessageCallback_ThrowsArgumentNullException_messageCallback()
         {
             ShouldThrow<ArgumentNullException>("messageCallback", () =>
-                WimgApi.RegisterMessageCallback(TestWimHandle, null));
+                WimgApi.RegisterMessageCallback(TestWimHandle, messageCallback: null!));
         }
 
         [Fact]
         public void RegisterMessageCallback_ThrowsArgumentNullException_messageCallbackGlobal()
         {
             ShouldThrow<ArgumentNullException>("messageCallback", () =>
-                WimgApi.RegisterMessageCallback(null));
+                WimgApi.RegisterMessageCallback(messageCallback: null!));
         }
 
         [Fact]
         public void RegisterMessageCallback_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.RegisterMessageCallback(null, TestMessageCallback));
+                WimgApi.RegisterMessageCallback(wimHandle: null!, TestMessageCallback));
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Microsoft.Wim.Tests
             argumentOutOfRangeException.Message.ShouldStartWith("Message callback is not registered.");
         }
 
-        private WimMessageResult TestMessageCallback(WimMessageType messageType, object message, object userData)
+        private WimMessageResult TestMessageCallback(WimMessageType messageType, object message, object? userData)
         {
             return WimMessageResult.Done;
         }

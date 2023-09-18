@@ -40,14 +40,14 @@ namespace Microsoft.Wim.Tests
         public void CopyFileTest_ThrowsArgumentNullException_destinationFile()
         {
             ShouldThrow<ArgumentNullException>("destinationFile", () =>
-                WimgApi.CopyFile(string.Empty, null, WimCopyFileOptions.None));
+                WimgApi.CopyFile(string.Empty, destinationFile: null!, WimCopyFileOptions.None));
         }
 
         [Fact]
         public void CopyFileTest_ThrowsArgumentNullException_sourceFile()
         {
             ShouldThrow<ArgumentNullException>("sourceFile", () =>
-                WimgApi.CopyFile(null, string.Empty, WimCopyFileOptions.None));
+                WimgApi.CopyFile(sourceFile: null!, destinationFile: string.Empty, WimCopyFileOptions.None));
         }
 
         [Fact]
@@ -68,11 +68,14 @@ namespace Microsoft.Wim.Tests
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            CopyFileProgressAction CopyFileProgressCallback(CopyFileProgress progress, object userData)
+            CopyFileProgressAction CopyFileProgressCallback(CopyFileProgress progress, object? userData)
             {
                 _callbackCalled = true;
 
-                ((StringBuilder)userData).Append(CallbackText);
+                if (userData is StringBuilder sb)
+                {
+                    sb.Append(CallbackText);
+                }
 
                 return CopyFileProgressAction.Quiet;
             }

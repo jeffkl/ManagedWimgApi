@@ -33,7 +33,7 @@ namespace Microsoft.Wim.Tests
         public void CreateFileTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>
-                WimgApi.CreateFile(null, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None));
+                WimgApi.CreateFile(path: null!, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None));
         }
     }
 }

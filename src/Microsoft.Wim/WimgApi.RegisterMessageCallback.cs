@@ -22,7 +22,7 @@ namespace Microsoft.Wim
         public static int RegisterMessageCallback(WimMessageCallback messageCallback)
         {
             // Call an overload
-            return RegisterMessageCallback(messageCallback, null);
+            return RegisterMessageCallback(messageCallback, userData: null);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Microsoft.Wim
         /// <returns>-1 if the callback is already registered, otherwise the zero-based index of the callback.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        public static int RegisterMessageCallback(WimMessageCallback messageCallback, object userData)
+        public static int RegisterMessageCallback(WimMessageCallback messageCallback, object? userData)
         {
             // Call an overload
             return RegisterMessageCallback(WimHandle.Null, messageCallback, userData);
@@ -50,7 +50,7 @@ namespace Microsoft.Wim
         public static int RegisterMessageCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
             // Call an overload
-            return WimgApi.RegisterMessageCallback(wimHandle, messageCallback, null);
+            return WimgApi.RegisterMessageCallback(wimHandle, messageCallback, userData: null);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Microsoft.Wim
         /// <returns>-1 if the callback is already registered, otherwise the zero-based index of the callback.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        public static int RegisterMessageCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object userData)
+        public static int RegisterMessageCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object? userData)
         {
             // See if wimHandle is null
             if (wimHandle == null)

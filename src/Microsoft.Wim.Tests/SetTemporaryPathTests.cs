@@ -26,14 +26,14 @@ namespace Microsoft.Wim.Tests
         public void SetTemporaryPathTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>
-                WimgApi.SetTemporaryPath(TestWimHandle, null));
+                WimgApi.SetTemporaryPath(TestWimHandle, path: null!));
         }
 
         [Fact]
         public void SetTemporaryPathTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SetTemporaryPath(null, string.Empty));
+                WimgApi.SetTemporaryPath(wimHandle: null!, path: string.Empty));
         }
 
         [Fact]

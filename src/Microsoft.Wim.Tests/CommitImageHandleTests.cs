@@ -61,7 +61,7 @@ namespace Microsoft.Wim.Tests
         public void CommitImageHandleTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
-                WimgApi.CommitImageHandle(null, false, WimCommitImageOptions.None));
+                WimgApi.CommitImageHandle(null!, false, WimCommitImageOptions.None));
         }
     }
 }

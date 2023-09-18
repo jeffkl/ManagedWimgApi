@@ -5,6 +5,7 @@
     <Deterministic>true</Deterministic>
     <LangVersion>Latest</LangVersion>
     <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
     <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
     <SignAssembly>true</SignAssembly>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

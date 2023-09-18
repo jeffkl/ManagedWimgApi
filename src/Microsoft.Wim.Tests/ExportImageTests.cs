@@ -70,7 +70,7 @@ namespace Microsoft.Wim.Tests
         public void ExportImageTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
-                WimgApi.ExportImage(null, null, WimExportImageOptions.None));
+                WimgApi.ExportImage(imageHandle: null!, wimHandle: null!, WimExportImageOptions.None));
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace Microsoft.Wim.Tests
                 WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                    WimgApi.ExportImage(imageHandleCopy, null, WimExportImageOptions.None));
+                    WimgApi.ExportImage(imageHandleCopy, wimHandle: null!, WimExportImageOptions.None));
             }
         }
 

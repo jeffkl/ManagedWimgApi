@@ -65,7 +65,7 @@ namespace Microsoft.Wim
                 bool success = messageCallback == null
                     ? WimgApi.NativeMethods.WIMUnregisterMessageCallback(
                         wimHandle,
-                        fpMessageProc: null)
+                        fpMessageProc: default)
                     : WimgApi.NativeMethods.WIMUnregisterMessageCallback(
                         wimHandle,
                         wimHandle == WimHandle.Null
@@ -126,7 +126,7 @@ namespace Microsoft.Wim
             /// </returns>
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool WIMUnregisterMessageCallback([Optional] WimHandle hWim, WimgApi.WIMMessageCallback fpMessageProc);
+            public static extern bool WIMUnregisterMessageCallback([Optional] WimHandle hWim, WimgApi.WIMMessageCallback? fpMessageProc);
         }
     }
 }

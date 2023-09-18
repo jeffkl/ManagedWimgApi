@@ -52,12 +52,12 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets or sets the marshaled value of wParam.
         /// </summary>
-        protected TParam1 Param1 { get; set; }
+        protected TParam1? Param1 { get; set; }
 
         /// <summary>
         /// Gets or sets the marshaled value of lParam.
         /// </summary>
-        protected TParam2 Param2 { get; set; }
+        protected TParam2? Param2 { get; set; }
 
         /// <summary>
         /// Gets the wParam object from the native callback function.
@@ -103,7 +103,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full path of the file that failed to be captured or applied.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
     }
 
     /// <summary>
@@ -160,7 +160,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the path of the image being unmounted.
         /// </summary>
-        public string MountPath => Param1;
+        public string? MountPath => Param1;
     }
 
     /// <summary>
@@ -201,7 +201,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full path of the file to be compressed.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the file that failed to be captured or applied.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
 
         /// <summary>
         /// Gets the Win32® error code indicating the cause of the failure.
@@ -259,18 +259,18 @@ namespace Microsoft.Wim
             }
 
             // Marshal the struct and cast it as a WimFileInfo object
-            Param2 = new WimFileInfo(Param1, lParam);
+            Param2 = Param1 == null ? null : new WimFileInfo(Param1, lParam);
         }
 
         /// <summary>
         /// Gets a <see cref="WimFileInfo" /> object containing information about the file being applied.
         /// </summary>
-        public WimFileInfo FileInfo => Param2;
+        public WimFileInfo? FileInfo => Param2;
 
         /// <summary>
         /// Gets the full file path of the file or directory to be potentially captured or applied.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
     }
 
     /// <summary>
@@ -293,7 +293,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the existing mounted image.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
     }
 
     /// <summary>
@@ -319,7 +319,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the file with the failure during the image capture or apply operation.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
 
         /// <summary>
         /// Gets the Win32® error code indicating the cause of the error.
@@ -381,7 +381,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the file or the directory to be captured or applied.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
 
         /// <summary>
         /// Gets or sets a value indicating whether gets or sets a boolean indicating whether the file or the directory must be captured or applied.
@@ -453,7 +453,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path to the file that had the failure during the apply operation.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
 
         /// <summary>
         /// Gets the Win32® error code indicating the cause of the error.
@@ -573,7 +573,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets or sets the full file path of the .wim part that is about to be created.
         /// </summary>
-        public string PartPath
+        public string? PartPath
         {
             get => Param1;
             set
@@ -629,7 +629,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the stale mount directory.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
     }
 
     /// <summary>
@@ -687,7 +687,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the message text.
         /// </summary>
-        public string Text => Param2;
+        public string? Text => Param2;
     }
 
     /// <summary>
@@ -713,7 +713,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the file with the failure during the image capture or apply operation.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
 
         /// <summary>
         /// Gets the Win32® error code indicating the cause of the error.
@@ -744,7 +744,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the full file path of the file with the failure during the image capture or apply operation.
         /// </summary>
-        public string Path => Param1;
+        public string? Path => Param1;
 
         /// <summary>
         /// Gets the Win32® error code indicating the cause of the error.

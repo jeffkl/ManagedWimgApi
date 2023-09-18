@@ -60,7 +60,7 @@ namespace Microsoft.Wim.Tests
 
             if (!Directory.Exists(capturePath))
             {
-                throw new DirectoryNotFoundException(String.Format(CultureInfo.CurrentCulture, "Could not find part of the path '{0}'", capturePath));
+                throw new DirectoryNotFoundException(string.Format(CultureInfo.CurrentCulture, "Could not find part of the path '{0}'", capturePath));
             }
 
             using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Write, WimCreationDisposition.CreateNew, createFileOptions, compressionType))
@@ -75,9 +75,11 @@ namespace Microsoft.Wim.Tests
                     }
                 }
 
-                XmlDocument xmlDocument = WimgApi.GetImageInformationAsXmlDocument(wimHandle);
+                XmlDocument? xmlDocument = WimgApi.GetImageInformationAsXmlDocument(wimHandle);
 
-                XmlNodeList imageNodes = xmlDocument.SelectNodes("//WIM/IMAGE");
+                xmlDocument.ShouldNotBeNull();
+
+                XmlNodeList? imageNodes = xmlDocument.SelectNodes("//WIM/IMAGE");
 
                 imageNodes.ShouldNotBeNull();
 
@@ -110,11 +112,11 @@ namespace Microsoft.Wim.Tests
 
                     imageNode.AppendChild(fragment);
 
-                    fragment.InnerXml = $@"<NAME>Test Image {imageNode.Attributes["INDEX"].Value}</NAME>";
+                    fragment.InnerXml = $@"<NAME>Test Image {imageNode.Attributes["INDEX"]?.Value}</NAME>";
 
                     imageNode.AppendChild(fragment);
 
-                    fragment.InnerXml = $@"<DESCRIPTION>Test Image {imageNode.Attributes["INDEX"].Value}</DESCRIPTION>";
+                    fragment.InnerXml = $@"<DESCRIPTION>Test Image {imageNode.Attributes["INDEX"]?.Value}</DESCRIPTION>";
 
                     imageNode.AppendChild(fragment);
 

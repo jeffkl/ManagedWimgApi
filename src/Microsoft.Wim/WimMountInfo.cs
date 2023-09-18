@@ -123,7 +123,7 @@ namespace Microsoft.Wim
         public static WimMountInfo GetMountInfo(string mountPath)
         {
             // Stores the handle to the image
-            WimHandle imageHandle = null;
+            WimHandle? imageHandle = null;
 
             try
             {

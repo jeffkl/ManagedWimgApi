@@ -59,7 +59,7 @@ namespace Microsoft.Wim
         /// <param name="userData">An object containing data to be used by the progress callback method.</param>
         /// <exception cref="ArgumentNullException"><paramref name="sourceFile" /> or <paramref name="destinationFile" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        public static void CopyFile(string sourceFile, string destinationFile, WimCopyFileOptions options, CopyFileProgressCallback copyFileProgressCallback, object userData)
+        public static void CopyFile(string sourceFile, string destinationFile, WimCopyFileOptions options, CopyFileProgressCallback? copyFileProgressCallback, object? userData)
         {
             // See if sourceFile is null
             if (sourceFile == null)

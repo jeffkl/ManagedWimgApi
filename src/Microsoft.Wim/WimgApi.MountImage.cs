@@ -74,7 +74,7 @@ namespace Microsoft.Wim
         public static void MountImage(string mountPath, string imagePath, int imageIndex)
         {
             // Call an overload
-            WimgApi.MountImage(mountPath, imagePath, imageIndex, tempPath: null);
+            WimgApi.MountImage(mountPath, imagePath, imageIndex, tempPath: default);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Microsoft.Wim
         /// <exception cref="FileNotFoundException"><paramref name="imagePath" /> does not exist.</exception>
         /// <exception cref="IndexOutOfRangeException"><paramref name="imageIndex" /> is less than 1.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        public static void MountImage(string mountPath, string imagePath, int imageIndex, string tempPath)
+        public static void MountImage(string mountPath, string imagePath, int imageIndex, string? tempPath)
         {
             // See if mountPath is null
             if (mountPath == null)
@@ -197,7 +197,7 @@ namespace Microsoft.Wim
             /// </remarks>
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool WIMMountImage(string pszMountPath, string pszWimFileName, DWORD dwImageIndex, [Optional] string pszTempPath);
+            public static extern bool WIMMountImage(string pszMountPath, string pszWimFileName, DWORD dwImageIndex, [Optional] string? pszTempPath);
 
             /// <summary>
             /// Mounts an image in a Windows® image (.wim) file to the specified directory.

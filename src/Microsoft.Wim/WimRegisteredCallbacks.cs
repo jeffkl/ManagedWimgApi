@@ -89,7 +89,7 @@ namespace Microsoft.Wim
         /// <param name="userData">User-defined data to pass to the callback.</param>
         /// <returns><see langword="true" /> if the callback was successfully registered, otherwise <see langword="false" />.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="messageCallback" /> is <see langword="null" />.</exception>
-        public bool RegisterCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object userData)
+        public bool RegisterCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object? userData)
         {
             // See if wimHandle is null
             if (wimHandle == null)
@@ -129,7 +129,7 @@ namespace Microsoft.Wim
         /// <param name="userData">User-defined data to pass to the callback.</param>
         /// <returns><see langword="true" /> if the callback was successfully registered, otherwise <see langword="false" />.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
-        public bool RegisterCallback(WimMessageCallback messageCallback, object userData)
+        public bool RegisterCallback(WimMessageCallback messageCallback, object? userData)
         {
             // See if messageCallback is null
             if (messageCallback == null)

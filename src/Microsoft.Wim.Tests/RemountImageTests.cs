@@ -49,7 +49,7 @@ namespace Microsoft.Wim.Tests
         public void RemountImageTest_ThrowsArgumentNullException_mountPath()
         {
             ShouldThrow<ArgumentNullException>("mountPath", () =>
-                WimgApi.RemountImage(null));
+                WimgApi.RemountImage(mountPath: null!));
         }
 
         [Fact]

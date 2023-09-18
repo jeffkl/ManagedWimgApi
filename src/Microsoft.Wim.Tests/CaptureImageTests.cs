@@ -39,14 +39,14 @@ namespace Microsoft.Wim.Tests
         public void CaptureImageTest_ThrowsArgumentNullException_path()
         {
             ShouldThrow<ArgumentNullException>("path", () =>
-                WimgApi.CaptureImage(TestWimHandle, null, WimCaptureImageOptions.None));
+                WimgApi.CaptureImage(TestWimHandle, path: null!, WimCaptureImageOptions.None));
         }
 
         [Fact]
         public void CaptureImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.CaptureImage(null, TempPath, WimCaptureImageOptions.None));
+                WimgApi.CaptureImage(wimHandle: null!, TempPath, WimCaptureImageOptions.None));
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Microsoft.Wim.Tests
             _captureWithCallbackFileCount.ShouldBe(TestWimTemplate.FileCount);
         }
 
-        private WimMessageResult CaptureImageWithCallbackTestCallback(WimMessageType messageType, object message, object userData)
+        private WimMessageResult CaptureImageWithCallbackTestCallback(WimMessageType messageType, object message, object? userData)
         {
             _captureWithCallbackCalled = true;
 
@@ -106,11 +106,7 @@ namespace Microsoft.Wim.Tests
 
         private class CallbackObject
         {
-            public bool WasCalled
-            {
-                get;
-                set;
-            }
+            public bool WasCalled { get; set; }
         }
     }
 }
