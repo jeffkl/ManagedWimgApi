@@ -14,7 +14,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Removes images from all directories where they have been previously mounted.
         /// </summary>
-        /// <param name="removeAll"><c>true</c> to removes all mounted images, whether actively mounted or not, otherwise <c>false</c> to remove only images that are not actively mounted.</param>
+        /// <param name="removeAll"><see langword="true" /> to removes all mounted images, whether actively mounted or not, otherwise <see langword="false" /> to remove only images that are not actively mounted.</param>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void DeleteImageMounts(bool removeAll)
         {

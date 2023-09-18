@@ -15,15 +15,15 @@ namespace Microsoft.Wim
         /// <summary>
         /// Loads a volume image from a Windows® image (.wim) file.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by the <see cref="CreateFile"/> method.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by the <see cref="CreateFile" /> method.</param>
         /// <param name="index">The one-based index of the image to load. An image file may store multiple images.</param>
-        /// <returns>A <see cref="WimHandle"/> representing the volume image.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
-        /// <exception cref="IndexOutOfRangeException">index is less than 1
-        /// -or-
-        /// index is greater than the number of images in the Windows® imaging file.</exception>
+        /// <returns>A <see cref="WimHandle" /> representing the volume image.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="index" /> is less than 1
+        /// -or- <paramref name="index" /> is greater than the number of images in the Windows® imaging file.
+        /// </exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>You must call the <see cref="SetTemporaryPath"/> method before calling the <see cref="LoadImage"/> method so the image metadata can be extracted and processed from the temporary location.</remarks>
+        /// <remarks>You must call the <see cref="SetTemporaryPath" /> method before calling the <see cref="LoadImage" /> method so the image metadata can be extracted and processed from the temporary location.</remarks>
         public static WimHandle LoadImage(WimHandle wimHandle, int index)
         {
             // See if wimHandle is null

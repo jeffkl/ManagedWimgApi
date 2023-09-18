@@ -15,9 +15,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Returns the number of volume images stored in an image file.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
-        /// <returns>A <see cref="WimInfo"/> object containing information about the image file.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
+        /// <returns>A <see cref="WimInfo" /> object containing information about the image file.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimInfo GetAttributes(WimHandle wimHandle)
         {

@@ -15,9 +15,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets information about a mounted image of the specified mounted image handle.
         /// </summary>
-        /// <param name="imageHandle">A <see cref="WimHandle"/> of an image that has been mounted.</param>
-        /// <returns>A <see cref="WimMountInfo"/> object containing information about the mounted image.</returns>
-        /// <exception cref="ArgumentNullException">imageHandle is null.</exception>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> of an image that has been mounted.</param>
+        /// <returns>A <see cref="WimMountInfo" /> object containing information about the mounted image.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimMountInfo GetMountedImageInfoFromHandle(WimHandle imageHandle)
         {

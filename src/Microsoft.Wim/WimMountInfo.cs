@@ -72,7 +72,7 @@ namespace Microsoft.Wim
         private readonly WimgApi.WIM_MOUNT_INFO_LEVEL1 _wimMountInfo;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMountInfo"/> class.
+        /// Initializes a new instance of the <see cref="WimMountInfo" /> class.
         /// </summary>
         /// <param name="wimMountInfoPtr">A pointer to a native <see cref="WimgApi.WIM_MOUNT_INFO_LEVEL1" /> struct.</param>
         internal WimMountInfo(IntPtr wimMountInfoPtr)
@@ -81,12 +81,9 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMountInfo"/> class.
+        /// Initializes a new instance of the <see cref="WimMountInfo" /> class.
         /// </summary>
-        /// <param name="wimMountInfo">
-        /// A <see cref="WimgApi.WIM_MOUNT_INFO_LEVEL1" /> that contains information about the mounted
-        /// .wim file.
-        /// </param>
+        /// <param name="wimMountInfo">A <see cref="WimgApi.WIM_MOUNT_INFO_LEVEL1" /> that contains information about the mounted .wim file.</param>
         internal WimMountInfo(WimgApi.WIM_MOUNT_INFO_LEVEL1 wimMountInfo)
         {
             // Store the WIM_MOUNT_INFO_LEVEL1 struct
@@ -153,7 +150,7 @@ namespace Microsoft.Wim
     public sealed class WimMountInfoCollection : ReadOnlyCollection<WimMountInfo>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMountInfoCollection"/> class.
+        /// Initializes a new instance of the <see cref="WimMountInfoCollection" /> class.
         /// </summary>
         /// <param name="list">A list of <see cref="WimMountInfo" /> objects to wrap as a collection.</param>
         internal WimMountInfoCollection(IList<WimMountInfo> list)

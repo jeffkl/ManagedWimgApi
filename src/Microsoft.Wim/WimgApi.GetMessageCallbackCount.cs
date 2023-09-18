@@ -15,7 +15,6 @@ namespace Microsoft.Wim
         /// Gets the count of callback routines currently registered by the imaging library.
         /// </summary>
         /// <returns>The number of message callback functions currently registered.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
         public static int GetMessageCallbackCount()
         {
             return GetMessageCallbackCount(WimHandle.Null);
@@ -24,9 +23,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the count of callback routines currently registered by the imaging library.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
         /// <returns>The number of message callback functions currently registered.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         public static int GetMessageCallbackCount(WimHandle wimHandle)
         {
             // See if wimHandle is null

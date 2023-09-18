@@ -65,7 +65,7 @@ namespace Microsoft.Wim
         /// <param name="imageHandle">A handle to a volume image returned by the <see cref="LoadImage" /> or <see cref="CaptureImage" /> methods.</param>
         /// <param name="path">The root drive or the directory path where the image data will be applied.</param>
         /// <param name="options">Specifies how the file is to be treated and what features are to be used.</param>
-        /// <exception cref="ArgumentNullException">imageHandle is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="OperationCanceledException">The operation of applying the image was aborted by a callback returning <see cref="WimMessageResult.Abort" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void ApplyImage(WimHandle imageHandle, string path, WimApplyImageOptions options)

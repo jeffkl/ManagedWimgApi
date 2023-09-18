@@ -19,9 +19,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets information about an image within the .wim (Windows image) file.
         /// </summary>
-        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
-        /// <returns>An <see cref="IXPathNavigable"/> object containing XML information about the volume image.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <param name="wimHandle">Either a <see cref="WimHandle" /> returned from <see cref="CreateFile" />, <see cref="LoadImage" />, or <see cref="CaptureImage" />.</param>
+        /// <returns>An <see cref="IXPathNavigable" /> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static IXPathNavigable GetImageInformation(WimHandle wimHandle)
         {
@@ -49,9 +49,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets information about an image within the .wim (Windows image) file.
         /// </summary>
-        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
-        /// <returns>A <see cref="String"/> object containing XML information about the volume image.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <param name="wimHandle">Either a <see cref="WimHandle" /> returned from <see cref="CreateFile" />, <see cref="LoadImage" />, or <see cref="CaptureImage" />.</param>
+        /// <returns>A <see cref="String" /> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static string GetImageInformationAsString(WimHandle wimHandle)
         {
@@ -86,9 +86,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets information about an image within the .wim (Windows image) file.
         /// </summary>
-        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
-        /// <returns>AN <see cref="XDocument"/> object containing XML information about the volume image.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <param name="wimHandle">Either a <see cref="WimHandle" /> returned from <see cref="CreateFile" />, <see cref="LoadImage" />, or <see cref="CaptureImage" />.</param>
+        /// <returns>An <see cref="XDocument" /> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static XDocument GetImageInformationAsXDocument(WimHandle wimHandle)
         {
@@ -100,9 +100,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets information about an image within the .wim (Windows image) file.
         /// </summary>
-        /// <param name="wimHandle">Either a <see cref="WimHandle"/> returned from <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/>.</param>
-        /// <returns>AN <see cref="XDocument"/> object containing XML information about the volume image.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <param name="wimHandle">Either a <see cref="WimHandle" /> returned from <see cref="CreateFile" />, <see cref="LoadImage" />, or <see cref="CaptureImage" />.</param>
+        /// <returns>An <see cref="XDocument" /> object containing XML information about the volume image.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static XmlDocument GetImageInformationAsXmlDocument(WimHandle wimHandle)
         {

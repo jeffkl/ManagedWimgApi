@@ -8,12 +8,9 @@ using System.Collections.Generic;
 namespace Microsoft.Wim
 {
     /// <summary>
-    /// Represents a collection of registered callbacks.  Callbacks can be registered globally or per <see cref="WimHandle" />.
+    /// Represents a collection of registered callbacks. Callbacks can be registered globally or per <see cref="WimHandle" />.
     /// </summary>
-    /// <remarks>
-    /// This class is not thread safe.  Locks should be used when adding, removing, or checking the existence of
-    /// items.
-    /// </remarks>
+    /// <remarks>This class is not thread safe. Locks should be used when adding, removing, or checking the existence of items.</remarks>
     internal sealed class WimRegisteredCallbacks
     {
         /// <summary>
@@ -27,16 +24,12 @@ namespace Microsoft.Wim
         private readonly Dictionary<WimMessageCallback, WimMessageCallbackWrapper> _registeredCallbacksGlobal = new Dictionary<WimMessageCallback, WimMessageCallbackWrapper>();
 
         /// <summary>
-        /// Gets a native callback for passing to the WIMGAPI for the specified registered callback associated with the
-        /// <see cref="WimHandle" />.
+        /// Gets a native callback for passing to the WIMGAPI for the specified registered callback associated with the <see cref="WimHandle" />.
         /// </summary>
         /// <param name="wimHandle">A <see cref="WimHandle" /> of a windows image file.</param>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method that was registered.</param>
         /// <returns>A <see cref="WimgApi.WIMMessageCallback" /> method that can be passed to the native WIMGAPI.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// The specified handle has no registered callbacks or the specified callback
-        /// is not registered for the handle.
-        /// </exception>
+        /// <exception cref="InvalidOperationException">The specified handle has no registered callbacks or the specified callback is not registered for the handle.</exception>
         public WimgApi.WIMMessageCallback GetNativeCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
             // Verify the callback is registered for the handle
@@ -54,7 +47,6 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method that was registered.</param>
         /// <returns>A <see cref="WimgApi.WIMMessageCallback" /> method that can be passed to the native WIMGAPI.</returns>
-        /// ///
         /// <exception cref="InvalidOperationException">The specified callback is not registered.</exception>
         public WimgApi.WIMMessageCallback GetNativeCallback(WimMessageCallback messageCallback)
         {
@@ -73,7 +65,7 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="wimHandle">A <see cref="WimHandle" /> of a windows image file.</param>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method that was registered.</param>
-        /// <returns><c>true</c> if the callback is registered, otherwise <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the callback is registered, otherwise <see langword="false" />.</returns>
         public bool IsCallbackRegistered(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
             return _registeredCallbacksByHandle.ContainsKey(wimHandle) && _registeredCallbacksByHandle[wimHandle].ContainsKey(messageCallback);
@@ -83,7 +75,7 @@ namespace Microsoft.Wim
         /// Gets a value indicating if the specified callback is globally registered.
         /// </summary>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method that was registered.</param>
-        /// <returns><c>true</c> if the callback is registered, otherwise <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the callback is registered, otherwise <see langword="false" />.</returns>
         public bool IsCallbackRegistered(WimMessageCallback messageCallback)
         {
             return _registeredCallbacksGlobal.ContainsKey(messageCallback);
@@ -95,8 +87,8 @@ namespace Microsoft.Wim
         /// <param name="wimHandle">A <see cref="WimHandle" /> of a windows image file.</param>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method to register.</param>
         /// <param name="userData">User-defined data to pass to the callback.</param>
-        /// <returns><c>true</c> if the callback was successfully registered, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle or messageCallback is null.</exception>
+        /// <returns><see langword="true" /> if the callback was successfully registered, otherwise <see langword="false" />.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="messageCallback" /> is <see langword="null" />.</exception>
         public bool RegisterCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object userData)
         {
             // See if wimHandle is null
@@ -135,8 +127,8 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method to register.</param>
         /// <param name="userData">User-defined data to pass to the callback.</param>
-        /// <returns><c>true</c> if the callback was successfully registered, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">messageCallback is null.</exception>
+        /// <returns><see langword="true" /> if the callback was successfully registered, otherwise <see langword="false" />.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         public bool RegisterCallback(WimMessageCallback messageCallback, object userData)
         {
             // See if messageCallback is null
@@ -162,8 +154,8 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="wimHandle">A <see cref="WimHandle" /> of a windows image file.</param>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method to un-register.</param>
-        /// <returns><c>true</c> if the callback was successfully un-registered, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle or messageCallback is null.</exception>
+        /// <returns><see langword="true" /> if the callback was successfully un-registered, otherwise <see langword="false" />.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="messageCallback" /> is <see langword="null" />.</exception>
         public bool UnregisterCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
             // See if wimHandle is null
@@ -201,8 +193,8 @@ namespace Microsoft.Wim
         /// Un-registers the specified callback.
         /// </summary>
         /// <param name="messageCallback">The <see cref="WimMessageCallback" /> method to un-register.</param>
-        /// <returns><c>true</c> if the callback was successfully un-registered, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">messageCallback is null.</exception>
+        /// <returns><see langword="true" /> if the callback was successfully un-registered, otherwise <see langword="false" />.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         public bool UnregisterCallback(WimMessageCallback messageCallback)
         {
             // See if messageCallback is null
@@ -227,8 +219,8 @@ namespace Microsoft.Wim
         /// Un-registers all callbacks for the specified <see cref="WimHandle" />.
         /// </summary>
         /// <param name="wimHandle">A <see cref="WimHandle" /> of a windows image file.</param>
-        /// <returns><c>true</c> if the all of the callbacks were successfully un-registered, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
+        /// <returns><see langword="true" /> if the all of the callbacks were successfully un-registered, otherwise <see langword="false" />.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
         public bool UnregisterCallbacks(WimHandle wimHandle)
         {
             // See if wimHandle is null
@@ -252,7 +244,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Un-registers all globally registered callbacks and callbacks associated with <see cref="WimHandle" /> objects.
         /// </summary>
-        /// <returns><c>true</c> if the all of the callbacks were successfully un-registered, otherwise <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the all of the callbacks were successfully un-registered, otherwise <see langword="false" />.</returns>
         public bool UnregisterCallbacks()
         {
             // Clear the dictionary of handles and callbacks

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Wim
 {
     /// <summary>
-    /// Specifies what the count represents for a <see cref="WimMessageScanning"/> object.
+    /// Specifies what the count represents for a <see cref="WimMessageScanning" /> object.
     /// </summary>
     public enum WimMessageScanningType
     {
@@ -31,7 +31,7 @@ namespace Microsoft.Wim
     public abstract class WimMessage<TParam1, TParam2>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessage{W, L}"/> class.
+        /// Initializes a new instance of the <see cref="WimMessage{W, L}" /> class.
         /// </summary>
         /// <param name="wParam">The first IntPtr object from the native callback function.</param>
         /// <param name="lParam">The second IntPtr object from the native callback function.</param>
@@ -71,7 +71,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageAlignment : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageAlignment"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageAlignment" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -112,7 +112,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageCleanupScanningDrive : WimMessage<char, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageCleanupScanningDrive"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageCleanupScanningDrive" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -138,7 +138,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageCleanupUnmountingImage : WimMessage<string, bool>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageCleanupUnmountingImage"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageCleanupUnmountingImage" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -169,7 +169,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageCompress : WimMessage<string, bool>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageCompress"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageCompress" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -210,7 +210,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageError : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageError"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageError" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -241,7 +241,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageFileInfo : WimMessage<string, WimFileInfo>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageFileInfo"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageFileInfo" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -263,7 +263,7 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Gets a <see cref="WimFileInfo"/> object containing information about the file being applied.
+        /// Gets a <see cref="WimFileInfo" /> object containing information about the file being applied.
         /// </summary>
         public WimFileInfo FileInfo => Param2;
 
@@ -279,7 +279,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageImageAlreadyMounted : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageImageAlreadyMounted"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageImageAlreadyMounted" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -302,7 +302,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageInformation : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageInformation"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageInformation" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -333,7 +333,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageMountCleanupProgress : WimMessage<int, TimeSpan>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageMountCleanupProgress"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageMountCleanupProgress" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -348,7 +348,7 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Gets a <see cref="TimeSpan"/> containing the estimated amount of time until the cleanup operation is complete.
+        /// Gets a <see cref="TimeSpan" /> containing the estimated amount of time until the cleanup operation is complete.
         /// </summary>
         public TimeSpan EstimatedTimeRemaining => Param2;
 
@@ -364,7 +364,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageProcess : WimMessage<string, bool>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageProcess"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageProcess" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -405,7 +405,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageProgress : WimMessage<int, TimeSpan>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageProgress"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageProgress" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -420,7 +420,7 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Gets a <see cref="TimeSpan"/> object that contains an estimated amount of time until the image application is complete.
+        /// Gets a <see cref="TimeSpan" /> object that contains an estimated amount of time until the image application is complete.
         /// </summary>
         public TimeSpan EstimatedTimeRemaining => Param2;
 
@@ -431,12 +431,12 @@ namespace Microsoft.Wim
     }
 
     /// <summary>
-    /// Represents a message when an I/O error occurs during a <see cref="WimgApi.ApplyImage"/> operation.
+    /// Represents a message when an I/O error occurs during a <see cref="WimgApi.ApplyImage" /> operation.
     /// </summary>
     public sealed class WimMessageRetry : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageRetry"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageRetry" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -467,7 +467,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageScanning : WimMessage<int, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageScanning"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageScanning" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -483,12 +483,12 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Gets the number of objects that were scanned.  Use the <see cref="CountType"/> property to determine if the count represents files or directories.
+        /// Gets the number of objects that were scanned. Use the <see cref="CountType" /> property to determine if the count represents files or directories.
         /// </summary>
         public int Count => Param2;
 
         /// <summary>
-        /// Gets a value indicating what <see cref="CountType"/> that the <see cref="Count"/> property represents.
+        /// Gets a value indicating what <see cref="CountType" /> that the <see cref="Count" /> property represents.
         /// </summary>
         public WimMessageScanningType CountType => (WimMessageScanningType)Param1;
     }
@@ -499,7 +499,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageSetPosition : WimMessage<int, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageSetPosition"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageSetPosition" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -525,7 +525,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageSetRange : WimMessage<int, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageSetRange"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageSetRange" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -556,7 +556,7 @@ namespace Microsoft.Wim
         private bool isPathModified;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageSplit"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageSplit" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -580,8 +580,6 @@ namespace Microsoft.Wim
             {
                 Param1 = value;
 
-                // Free the previous buffer
-                // We don't want to free the memory allocated by the native API, only the memory we have allocated.
                 if (isPathModified)
                 {
                     Marshal.FreeHGlobal(Marshal.ReadIntPtr(WParam));
@@ -617,7 +615,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageStaleMountDirectory : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageStaleMountDirectory"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageStaleMountDirectory" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -640,7 +638,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageStaleMountFile : WimMessage<long, char>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageStaleMountFile"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageStaleMountFile" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -672,7 +670,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageText : WimMessage<int, string>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageText"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageText" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -698,7 +696,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageWarning : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageWarning"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageWarning" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>
@@ -729,7 +727,7 @@ namespace Microsoft.Wim
     public sealed class WimMessageWarningObjectId : WimMessage<string, int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageWarningObjectId"/> class.
+        /// Initializes a new instance of the <see cref="WimMessageWarningObjectId" /> class.
         /// </summary>
         /// <param name="wParam">The wParam object from the native callback function.</param>
         /// <param name="lParam">The lParam object from the native callback function.</param>

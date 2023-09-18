@@ -17,7 +17,7 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="messageCallback">An application-defined callback function.</param>
         /// <returns>The zero-based index of the callback.</returns>
-        /// <exception cref="ArgumentNullException">messageCallback is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static int RegisterMessageCallback(WimMessageCallback messageCallback)
         {
@@ -31,7 +31,7 @@ namespace Microsoft.Wim
         /// <param name="messageCallback">An application-defined callback method.</param>
         /// <param name="userData">A pointer that specifies an application-defined value to be passed to the callback function.</param>
         /// <returns>-1 if the callback is already registered, otherwise the zero-based index of the callback.</returns>
-        /// <exception cref="ArgumentNullException">messageCallback is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static int RegisterMessageCallback(WimMessageCallback messageCallback, object userData)
         {
@@ -42,10 +42,10 @@ namespace Microsoft.Wim
         /// <summary>
         /// Registers a function to be called with imaging-specific data for only the specified WIM file.
         /// </summary>
-        /// <param name="wimHandle">An optional <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
+        /// <param name="wimHandle">An optional <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
         /// <param name="messageCallback">An application-defined callback function.</param>
         /// <returns>The zero-based index of the callback.</returns>
-        /// <exception cref="ArgumentNullException">messageCallback is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static int RegisterMessageCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
@@ -56,11 +56,11 @@ namespace Microsoft.Wim
         /// <summary>
         /// Registers a function to be called with imaging-specific data for only the specified WIM file.
         /// </summary>
-        /// <param name="wimHandle">An optional <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
+        /// <param name="wimHandle">An optional <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
         /// <param name="messageCallback">An application-defined callback method.</param>
         /// <param name="userData">A pointer that specifies an application-defined value to be passed to the callback function.</param>
         /// <returns>-1 if the callback is already registered, otherwise the zero-based index of the callback.</returns>
-        /// <exception cref="ArgumentNullException">messageCallback is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="messageCallback" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static int RegisterMessageCallback(WimHandle wimHandle, WimMessageCallback messageCallback, object userData)
         {

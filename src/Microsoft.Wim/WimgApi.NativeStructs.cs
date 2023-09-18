@@ -34,10 +34,9 @@ namespace Microsoft.Wim
             public DWORD dwHighDateTime;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="FILETIME"/> struct.
-            /// Creates a new instance of the FILETIME struct.
+            /// Initializes a new instance of the <see cref="FILETIME" /> struct.
             /// </summary>
-            /// <param name="dateTime">A <see cref="DateTime"/> object to copy data from.</param>
+            /// <param name="dateTime">A <see cref="DateTime" /> object to copy data from.</param>
             public FILETIME(DateTime dateTime)
             {
                 // Get the file time as a long in Utc
@@ -51,27 +50,27 @@ namespace Microsoft.Wim
             }
 
             /// <summary>
-            /// Converts a <see cref="FILETIME"/> to a <see cref="System.DateTime"/>.
+            /// Converts a <see cref="FILETIME" /> to a <see cref="System.DateTime" />.
             /// </summary>
-            /// <param name="fileTime">The <see cref="FILETIME"/> to convert.</param>
+            /// <param name="fileTime">The <see cref="FILETIME" /> to convert.</param>
             public static implicit operator DateTime(FILETIME fileTime)
             {
                 return fileTime.ToDateTime();
             }
 
             /// <summary>
-            /// Converts a <see cref="System.DateTime"/> to a <see cref="FILETIME"/>.
+            /// Converts a <see cref="System.DateTime" /> to a <see cref="FILETIME" />.
             /// </summary>
-            /// <param name="dateTime">The <see cref="DateTime"/> to convert.</param>
+            /// <param name="dateTime">The <see cref="DateTime" /> to convert.</param>
             public static implicit operator FILETIME(DateTime dateTime)
             {
                 return new FILETIME(dateTime);
             }
 
             /// <summary>
-            /// Gets the current FILETIME as a <see cref="DateTime"/> object.
+            /// Gets the current FILETIME as a <see cref="DateTime" /> object.
             /// </summary>
-            /// <returns>A <see cref="DateTime"/> object that represents the FILETIME.</returns>
+            /// <returns>A <see cref="DateTime" /> object that represents the FILETIME.</returns>
             public DateTime ToDateTime()
             {
                 // Convert the file time to a long and then to a DateTime
@@ -106,9 +105,10 @@ namespace Microsoft.Wim
             /// </summary>
             /// <param name="format">A standard or custom date and time format string.</param>
             /// <returns>A string representation of value of the current DateTime object as specified by format.</returns>
-            /// <exception cref="FormatException">The length of format is 1, and it is not one of the format specifier characters defined for DateTimeFormatInfo.
-            /// -or-
-            /// format does not contain a valid custom format pattern.</exception>
+            /// <exception cref="FormatException">
+            /// The length of format is 1, and it is not one of the format specifier characters defined for DateTimeFormatInfo.
+            /// -or- format does not contain a valid custom format pattern.
+            /// </exception>
             /// <exception cref="ArgumentOutOfRangeException">The date and time is outside the range of dates supported by the calendar used by the current culture.</exception>
             public string ToString(string format)
             {
@@ -122,9 +122,10 @@ namespace Microsoft.Wim
             /// <param name="format">A standard or custom date and time format string.</param>
             /// <param name="provider">An object that supplies culture-specific formatting information.</param>
             /// <returns>A string representation of value of the current DateTime object as specified by format and provider.</returns>
-            /// <exception cref="FormatException">The length of format is 1, and it is not one of the format specifier characters defined for DateTimeFormatInfo.
-            /// -or-
-            /// format does not contain a valid custom format pattern.</exception>
+            /// <exception cref="FormatException">
+            /// The length of format is 1, and it is not one of the format specifier characters defined for DateTimeFormatInfo.
+            /// -or- format does not contain a valid custom format pattern.
+            /// </exception>
             /// <exception cref="ArgumentOutOfRangeException">The date and time is outside the range of dates supported by the calendar used by the current culture.</exception>
             public string ToString(string format, IFormatProvider provider)
             {
@@ -287,14 +288,14 @@ namespace Microsoft.Wim
             public FileAttributes FileAttributes;
 
             /// <summary>
-            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure that specifies when a file or directory was created.
+            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME" /> structure that specifies when a file or directory was created.
             ///
             /// If the underlying file system does not support creation time, this member is zero.
             /// </summary>
             public FILETIME CreationTime;
 
             /// <summary>
-            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure.
+            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME" /> structure.
             ///
             /// For a file, the structure specifies when the file was last read from, written to, or for executable files, run.
             ///
@@ -305,7 +306,7 @@ namespace Microsoft.Wim
             public FILETIME LastAccessTime;
 
             /// <summary>
-            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME"/> structure.
+            /// A <see cref="System.Runtime.InteropServices.ComTypes.FILETIME" /> structure.
             ///
             /// For a file, the structure specifies when the file was last written to, truncated, or overwritten, for example, when WriteFile or SetEndOfFile are used. The date and time are not updated when file attributes or security descriptors are changed.
             ///

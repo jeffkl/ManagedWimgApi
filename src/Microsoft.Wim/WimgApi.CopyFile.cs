@@ -41,7 +41,7 @@ namespace Microsoft.Wim
         /// <param name="sourceFile">The name of an existing .wim file.</param>
         /// <param name="destinationFile">The name of the new file.</param>
         /// <param name="options">Specifies how the file is to be copied.</param>
-        /// <exception cref="ArgumentNullException">sourceFile or destinationFile is null.</exception>
+        /// <exception cref="ArgumentNullException">sourceFile or destinationFile is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void CopyFile(string sourceFile, string destinationFile, WimCopyFileOptions options)
         {
@@ -55,9 +55,9 @@ namespace Microsoft.Wim
         /// <param name="sourceFile">The name of an existing .wim file.</param>
         /// <param name="destinationFile">The name of the new file.</param>
         /// <param name="options">Specifies how the file is to be copied.</param>
-        /// <param name="copyFileProgressCallback">A <see cref="CopyFileProgressCallback"/> method to call when progress is made copying the file and allowing the user to cancel the operation.</param>
+        /// <param name="copyFileProgressCallback">A <see cref="CopyFileProgressCallback" /> method to call when progress is made copying the file and allowing the user to cancel the operation.</param>
         /// <param name="userData">An object containing data to be used by the progress callback method.</param>
-        /// <exception cref="ArgumentNullException">sourceFile or destinationFile is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="sourceFile" /> or <paramref name="destinationFile" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void CopyFile(string sourceFile, string destinationFile, WimCopyFileOptions options, CopyFileProgressCallback copyFileProgressCallback, object userData)
         {

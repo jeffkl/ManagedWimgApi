@@ -14,10 +14,10 @@ namespace Microsoft.Wim
         /// <summary>
         /// Sets the location where temporary imaging files are to be stored.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by the <see cref="CreateFile"/> method.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by the <see cref="CreateFile" /> method.</param>
         /// <param name="path">The path where temporary image (.wim) files are to be stored during capture or application. This is the directory where the image is captured or applied.</param>
-        /// <exception cref="ArgumentNullException">wimHandle or path is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">path does not exist.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="path" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="path" /> does not exist.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void SetTemporaryPath(WimHandle wimHandle, string path)
         {

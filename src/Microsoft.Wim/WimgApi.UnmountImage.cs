@@ -19,11 +19,11 @@ namespace Microsoft.Wim
         /// <param name="mountPath">The full file path of the directory to which the .wim file was mounted.</param>
         /// <param name="imagePath">The full file name of the .wim file that must be unmounted.</param>
         /// <param name="imageIndex">Specifies the index of the image in the .wim file that must be unmounted.</param>
-        /// <param name="commitChanges"><c>true</c> to commit changes made to the .wim file if any, otherwise <c>false</c> to discard changes.  This parameter has no effect if the .wim file was mounted not to enable edits.</param>
-        /// <exception cref="ArgumentNullException">mountPath or imagePath is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">mountPath does not exist.</exception>
-        /// <exception cref="FileNotFoundException">imagePath does not exist.</exception>
-        /// <exception cref="IndexOutOfRangeException">index is less than 1.</exception>
+        /// <param name="commitChanges"><see langword="true" /> to commit changes made to the .wim file if any, otherwise <see langword="false" /> to discard changes. This parameter has no effect if the .wim file was mounted not to enable edits.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="mountPath" /> or <paramref name="imagePath" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="mountPath" /> does not exist.</exception>
+        /// <exception cref="FileNotFoundException"><paramref name="imagePath" /> does not exist.</exception>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="imageIndex" /> is less than 1.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         /// <remarks>This method unmaps the contents of the given image in the .wim file from the specified mount directory. After the successful completion of this operation, users or applications will not be able to access the contents of the image previously mapped under the mount directory.</remarks>
         public static void UnmountImage(string mountPath, string imagePath, int imageIndex, bool commitChanges)
@@ -69,8 +69,8 @@ namespace Microsoft.Wim
         /// <summary>
         /// Unmounts a mounted image in a Windows® image (.wim) file from the specified directory.
         /// </summary>
-        /// <param name="imageHandle">A <see cref="WimHandle"/> of an image previously mounted with <see cref="MountImage(WimHandle, string, WimMountImageOptions)"/>.</param>
-        /// <exception cref="ArgumentNullException">imageHandle is null.</exception>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> of an image previously mounted with <see cref="MountImage(WimHandle, string, WimMountImageOptions)" />.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void UnmountImage(WimHandle imageHandle)
         {
