@@ -10,18 +10,10 @@ namespace Microsoft.Wim
     /// An application defined method to be called when messages are set from the Windows® imaging API.
     /// </summary>
     /// <param name="messageType">The <see cref="WimMessageType" /> of the message.</param>
-    /// <param name="message">
-    /// An object containing information about the message.  The object's type depends on the messageType
-    /// parameter.
-    /// </param>
+    /// <param name="message">An object containing information about the message. The object's type depends on the messageType parameter.</param>
     /// <param name="userData">A user-defined object passed when the callback was registered.</param>
-    /// <returns>
-    /// To indicate success and to enable other subscribers to process the message return
-    /// <see cref="WimMessageResult.Success" />. To prevent other subscribers from receiving the message, return
-    /// <see cref="WimMessageResult.Done" />. To cancel an image apply or image capture, return
-    /// <see cref="WimMessageResult.Abort" /> when handling the <see cref="WimMessageProcess" /> message.
-    /// </returns>
-    public delegate WimMessageResult WimMessageCallback(WimMessageType messageType, object message, object userData);
+    /// <returns>To indicate success and to enable other subscribers to process the message return <see cref="WimMessageResult.Success" />. To prevent other subscribers from receiving the message, return <see cref="WimMessageResult.Done" />. To cancel an image apply or image capture, return <see cref="WimMessageResult.Abort" /> when handling the <see cref="WimMessageProcess" /> message.</returns>
+    public delegate WimMessageResult WimMessageCallback(WimMessageType messageType, object message, object? userData);
 
     /// <summary>
     /// Specifies the result of a WimMessageCallback.
@@ -211,8 +203,7 @@ namespace Microsoft.Wim
     }
 
     /// <summary>
-    /// Represents a wrapper class for the native callback functionality.  This class exposes a native callback and then calls
-    /// the managed callback with marshaled values.
+    /// Represents a wrapper class for the native callback functionality. This class exposes a native callback and then calls the managed callback with marshaled values.
     /// </summary>
     internal sealed class WimMessageCallbackWrapper
     {
@@ -224,18 +215,14 @@ namespace Microsoft.Wim
         /// <summary>
         /// The user's custom data to pass around.
         /// </summary>
-        private readonly object _userData;
+        private readonly object? _userData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimMessageCallbackWrapper"/> class.
-        /// Initializes a new instance of the WimMessageCallbackWrapper class.
+        /// Initializes a new instance of the <see cref="WimMessageCallbackWrapper" /> class. Initializes a new instance of the WimMessageCallbackWrapper class.
         /// </summary>
-        /// <param name="callback">
-        /// A <see cref="WimMessageCallback" /> delegate to call when a message is received from the
-        /// Windows® Imaging API.
-        /// </param>
+        /// <param name="callback">A <see cref="WimMessageCallback" /> delegate to call when a message is received from the Windows® Imaging API.</param>
         /// <param name="userData">An object containing data to be used by the method.</param>
-        public WimMessageCallbackWrapper(WimMessageCallback callback, object userData)
+        public WimMessageCallbackWrapper(WimMessageCallback callback, object? userData)
         {
             // Store the values
             _callback = callback;
@@ -254,23 +241,14 @@ namespace Microsoft.Wim
         /// A callback method for messages.
         /// </summary>
         /// <param name="messageId">Specifies the sent message.</param>
-        /// <param name="wParam">
-        /// A pointer to the first set of information.  Specifies additional message information. The contents of this parameter depend on the value of
-        /// the MessageId parameter.
-        /// </param>
-        /// <param name="lParam">
-        /// A pointer to the second set of information.  Specifies additional message information. The contents of this parameter depend on the value of
-        /// the MessageId parameter.
-        /// </param>
-        /// <param name="userData">
-        /// A handle that specifies the user-defined value passed to the WIMRegisterMessageCallback
-        /// function.  This is currently not used.
-        /// </param>
-        /// <returns>A <see cref="WimMessageResult"/> object with the result.</returns>
+        /// <param name="wParam">A pointer to the first set of information. Specifies additional message information. The contents of this parameter depend on the value of the MessageId parameter.</param>
+        /// <param name="lParam">A pointer to the second set of information. Specifies additional message information. The contents of this parameter depend on the value of the MessageId parameter.</param>
+        /// <param name="userData">A handle that specifies the user-defined value passed to the WIMRegisterMessageCallback function. This is currently not used.</param>
+        /// <returns>A <see cref="WimMessageResult" /> object with the result.</returns>
         private WimMessageResult WimMessageCallback(WimMessageType messageId, IntPtr wParam, IntPtr lParam, IntPtr userData)
         {
             // Create a default message object as null
-            object message = null;
+            object? message = null;
 
             // Create a message object depending on the message type
             switch (messageId)
@@ -366,13 +344,12 @@ namespace Microsoft.Wim
                     break;
 
                 default:
-                    // Some messages are sent that aren't documented, so they are discarded and not sent to the user at this time
-                    // When the messages are documented, they can be added to this wrapper
+                    // Some messages are sent that aren't documented, so they are discarded and not sent to the user at this time When the messages are documented, they can be added to this wrapper
                     return WimMessageResult.Done;
             }
 
-            // Call the users callback, pass the message type, message, and user data.  Return the users result value.
-            return _callback(messageId, message, _userData);
+            // Call the users callback, pass the message type, message, and user data. Return the users result value.
+            return _callback(messageId, message!, _userData);
         }
     }
 }

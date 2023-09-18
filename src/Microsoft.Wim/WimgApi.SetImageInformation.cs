@@ -16,11 +16,11 @@ namespace Microsoft.Wim
         /// <summary>
         /// Stores information about an image in the Windows® image (.wim) file.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of an image returned by the <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/> methods.</param>
-        /// <param name="imageInfoXml">An <see cref="IXPathNavigable"/> object that contains information about the volume image.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="wimHandle"/> or <paramref name="imageInfoXml"/> is null.</exception>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of an image returned by the <see cref="CreateFile" />, <see cref="LoadImage" />, or <see cref="CaptureImage" /> methods.</param>
+        /// <param name="imageInfoXml">An <see cref="IXPathNavigable" /> object that contains information about the volume image.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="imageInfoXml" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>If the wimHandle parameter is from the <see cref="CreateFile"/> method, then the XML data must be enclosed by &lt;WIM&gt;&lt;/WIM&gt; tags. If the input handle is from the <see cref="LoadImage"/> or <see cref="CaptureImage"/> methods, then the XML data must be enclosed by &lt;IMAGE&gt;&lt;/IMAGE&gt; tags.</remarks>
+        /// <remarks>If the wimHandle parameter is from the <see cref="CreateFile" /> method, then the XML data must be enclosed by &lt;WIM&gt;&lt;/WIM&gt; tags. If the input handle is from the <see cref="LoadImage" /> or <see cref="CaptureImage" /> methods, then the XML data must be enclosed by &lt;IMAGE&gt;&lt;/IMAGE&gt; tags.</remarks>
         public static void SetImageInformation(WimHandle wimHandle, IXPathNavigable imageInfoXml)
         {
             if (wimHandle == null)
@@ -33,17 +33,17 @@ namespace Microsoft.Wim
                 throw new ArgumentNullException(nameof(imageInfoXml));
             }
 
-            SetImageInformation(wimHandle, imageInfoXml.CreateNavigator()?.OuterXml);
+            SetImageInformation(wimHandle, imageInfoXml.CreateNavigator().OuterXml);
         }
 
         /// <summary>
         /// Stores information about an image in the Windows® image (.wim) file.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of an image returned by the <see cref="CreateFile"/>, <see cref="LoadImage"/>, or <see cref="CaptureImage"/> methods.</param>
-        /// <param name="imageInfoXml">A <see cref="String"/> object that contains information about the volume image.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="wimHandle"/> or <paramref name="imageInfoXml"/> is null.</exception>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of an image returned by the <see cref="CreateFile" />, <see cref="LoadImage" />, or <see cref="CaptureImage" /> methods.</param>
+        /// <param name="imageInfoXml">A <see cref="string" /> object that contains information about the volume image.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="imageInfoXml" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>If the wimHandle parameter is from the <see cref="CreateFile"/> method, then the XML data must be enclosed by &lt;WIM&gt;&lt;/WIM&gt; tags. If the input handle is from the <see cref="LoadImage"/> or <see cref="CaptureImage"/> methods, then the XML data must be enclosed by &lt;IMAGE&gt;&lt;/IMAGE&gt; tags.</remarks>
+        /// <remarks>If the <paramref name="wimHandle" /> is from the <see cref="CreateFile" /> method, then the XML data must be enclosed by &lt;WIM&gt;&lt;/WIM&gt; tags. If the input handle is from the <see cref="LoadImage" /> or <see cref="CaptureImage" /> methods, then the XML data must be enclosed by &lt;IMAGE&gt;&lt;/IMAGE&gt; tags.</remarks>
         public static void SetImageInformation(WimHandle wimHandle, string imageInfoXml)
         {
             // See if wimHandle is null

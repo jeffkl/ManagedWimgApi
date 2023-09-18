@@ -15,10 +15,10 @@ namespace Microsoft.Wim
         /// <summary>
         /// Extracts a file from within a Windows® image (.wim) file to a specified location.
         /// </summary>
-        /// <param name="imageHandle">A <see cref="WimHandle"/> opened by the <see cref="LoadImage"/> method.</param>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> opened by the <see cref="LoadImage" /> method.</param>
         /// <param name="sourceFile">The path to a file inside the image.</param>
         /// <param name="destinationFile">The full file path of the directory where the image path is to be extracted.</param>
-        /// <exception cref="ArgumentNullException">imageHandle, sourceFile, or destinationFile is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" />, <paramref name="sourceFile" />, or <paramref name="destinationFile" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void ExtractImagePath(WimHandle imageHandle, string sourceFile, string destinationFile)
         {

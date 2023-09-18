@@ -14,7 +14,7 @@ namespace Microsoft.Wim
         /// Unregisters a method from being called with imaging-specific data for all image handles.
         /// </summary>
         /// <param name="messageCallback">An application-defined callback method.</param>
-        /// <exception cref="ArgumentOutOfRangeException">messageCallback is not registered.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="messageCallback" /> is not registered.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void UnregisterMessageCallback(WimMessageCallback messageCallback)
         {
@@ -24,9 +24,9 @@ namespace Microsoft.Wim
         /// <summary>
         /// Unregisters a method from being called with imaging-specific data for only the specified WIM file.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
         /// <param name="messageCallback">An application-defined callback method.</param>
-        /// <exception cref="ArgumentOutOfRangeException">messageCallback is not registered.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="messageCallback" /> is not registered.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void UnregisterMessageCallback(WimHandle wimHandle, WimMessageCallback messageCallback)
         {
@@ -65,7 +65,7 @@ namespace Microsoft.Wim
                 bool success = messageCallback == null
                     ? WimgApi.NativeMethods.WIMUnregisterMessageCallback(
                         wimHandle,
-                        fpMessageProc: null)
+                        fpMessageProc: default)
                     : WimgApi.NativeMethods.WIMUnregisterMessageCallback(
                         wimHandle,
                         wimHandle == WimHandle.Null
@@ -126,7 +126,7 @@ namespace Microsoft.Wim
             /// </returns>
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool WIMUnregisterMessageCallback([Optional] WimHandle hWim, WimgApi.WIMMessageCallback fpMessageProc);
+            public static extern bool WIMUnregisterMessageCallback([Optional] WimHandle hWim, WimgApi.WIMMessageCallback? fpMessageProc);
         }
     }
 }

@@ -13,16 +13,16 @@ namespace Microsoft.Wim
     public static partial class WimgApi
     {
         /// <summary>
-        /// Removes an image from within a .wim (Windows image) file so it cannot be accessed. However, the file resources are still available for use by the <see cref="SetReferenceFile"/> method.
+        /// Removes an image from within a .wim (Windows image) file so it cannot be accessed. However, the file resources are still available for use by the <see cref="SetReferenceFile" /> method.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> to a .wim file returned by the <see cref="CreateFile"/> method. This handle must have <see cref="WimFileAccess.Write"/> access to delete the image. Split .wim files are not supported and the .wim file cannot have any open images.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> to a .wim file returned by the <see cref="CreateFile" /> method. This handle must have <see cref="WimFileAccess.Write" /> access to delete the image. Split .wim files are not supported and the .wim file cannot have any open images.</param>
         /// <param name="index">The one-based index of the image to delete. A .wim file might have multiple images stored within it.</param>
-        /// <exception cref="ArgumentNullException">wimHandle is null.</exception>
-        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/> is less than 1
-        /// -or-
-        /// <paramref name="index"/> is greater than the number of images in the Windows® imaging file.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.</exception>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="index" /> is less than 1
+        /// -or- <paramref name="index" /> is greater than the number of images in the Windows® imaging file.
+        /// </exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>You must call the <see cref="SetTemporaryPath"/> method before calling the <see cref="DeleteImage"/> method so the image metadata for the image can be extracted and processed from the temporary location.</remarks>
+        /// <remarks>You must call the <see cref="SetTemporaryPath" /> method before calling the <see cref="DeleteImage" /> method so the image metadata for the image can be extracted and processed from the temporary location.</remarks>
         public static void DeleteImage(WimHandle wimHandle, int index)
         {
             // See if wimHandle is null

@@ -48,7 +48,7 @@ namespace Microsoft.Wim.Tests
                 WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("destinationFile", () =>
-                    WimgApi.ExtractImagePath(imageHandleCopy, string.Empty, null));
+                    WimgApi.ExtractImagePath(imageHandleCopy, string.Empty, destinationFile: null!));
             }
         }
 
@@ -56,7 +56,7 @@ namespace Microsoft.Wim.Tests
         public void ExtractImagePathTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
-                WimgApi.ExtractImagePath(null, string.Empty, string.Empty));
+                WimgApi.ExtractImagePath(imageHandle: null!, string.Empty, string.Empty));
         }
 
         [Fact]
@@ -67,24 +67,19 @@ namespace Microsoft.Wim.Tests
                 WimHandle imageHandleCopy = imageHandle;
 
                 ShouldThrow<ArgumentNullException>("sourceFile", () =>
-                    WimgApi.ExtractImagePath(imageHandleCopy, null, string.Empty));
+                    WimgApi.ExtractImagePath(imageHandleCopy, sourceFile: null!, string.Empty));
             }
         }
 
         private IEnumerable<string> GetImageFiles(WimHandle imageHandle)
         {
-            List<string> files = new List<String>();
+            List<string> files = new List<string>();
 
-            WimMessageResult MessageCallback(WimMessageType messageType, object message, object userData)
+            WimMessageResult MessageCallback(WimMessageType messageType, object message, object? userData)
             {
-                if (messageType == WimMessageType.FileInfo)
+                if (messageType == WimMessageType.FileInfo && message is WimMessageFileInfo messageFileInfo && messageFileInfo.FileInfo != null && messageFileInfo.Path != null && (messageFileInfo.FileInfo.Attributes | FileAttributes.Directory) != FileAttributes.Directory && userData is List<string> fileList)
                 {
-                    WimMessageFileInfo messageFileInfo = (WimMessageFileInfo)message;
-
-                    if ((messageFileInfo.FileInfo.Attributes | FileAttributes.Directory) != FileAttributes.Directory)
-                    {
-                        ((List<String>)userData).Add(messageFileInfo.Path.Replace(ApplyPath, string.Empty));
-                    }
+                    fileList.Add(messageFileInfo.Path.Replace(ApplyPath, string.Empty));
                 }
 
                 return WimMessageResult.Done;

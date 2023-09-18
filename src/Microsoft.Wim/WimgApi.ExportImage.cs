@@ -40,12 +40,12 @@ namespace Microsoft.Wim
         /// <summary>
         /// Transfers the data of an image from one Windows® image (.wim) file to another.
         /// </summary>
-        /// <param name="imageHandle">A <see cref="WimHandle"/> opened by the <see cref="LoadImage"/> method.</param>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> returned by the <see cref="CreateFile"/> method.  This handle must have <see cref="WimFileAccess.Write"/> access to accept the exported image. Split .wim files are not supported.</param>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> opened by the <see cref="LoadImage" /> method.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> returned by the <see cref="CreateFile" /> method. This handle must have <see cref="WimFileAccess.Write" /> access to accept the exported image. Split .wim files are not supported.</param>
         /// <param name="options">Specifies how the image will be exported to the destination .wim file.</param>
-        /// <exception cref="ArgumentNullException">imageHandle or wimHandle is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" /> or <paramref name="wimHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>You must call the <see cref="SetTemporaryPath"/> method for both the source and the destination .wim files before calling the ExportImage method.</remarks>
+        /// <remarks>You must call the <see cref="SetTemporaryPath" /> method for both the source and the destination .wim files before calling the ExportImage method.</remarks>
         public static void ExportImage(WimHandle imageHandle, WimHandle wimHandle, WimExportImageOptions options)
         {
             // See if imageHandle is null
@@ -61,7 +61,7 @@ namespace Microsoft.Wim
             }
 
             // Call the native function
-            if (!WimgApi.NativeMethods.WIMExportImage(imageHandle, wimHandle, (UInt32)options))
+            if (!WimgApi.NativeMethods.WIMExportImage(imageHandle, wimHandle, (uint)options))
             {
                 // Throw a Win32Exception based on the last error code
                 throw new Win32Exception();
@@ -91,7 +91,7 @@ namespace Microsoft.Wim
             /// </remarks>
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool WIMExportImage(WimHandle hImage, WimHandle hWim, UInt32 dwFlags);
+            public static extern bool WIMExportImage(WimHandle hImage, WimHandle hWim, uint dwFlags);
         }
     }
 }

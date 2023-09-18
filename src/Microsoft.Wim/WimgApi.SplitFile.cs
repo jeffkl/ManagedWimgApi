@@ -16,11 +16,11 @@ namespace Microsoft.Wim
         /// <summary>
         /// Enables a large Windows® image (.wim) file to be split into smaller parts for replication or storage on smaller forms of media.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
         /// <param name="partPath">The path of the first file piece of the spanned set.</param>
         /// <param name="partSize">The size of the initial piece of the spanned set. This value will also be the default size used for subsequent pieces.</param>
-        /// <exception cref="ArgumentNullException">wimHandle or partPath is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">Directory of partPath does not exist.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="partPath" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="partPath" /> does not exist.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void SplitFile(WimHandle wimHandle, string partPath, long partSize)
         {
@@ -58,10 +58,10 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets the minimum size needed to to create a split WIM.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by <see cref="CreateFile"/>.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by <see cref="CreateFile" />.</param>
         /// <param name="partPath">The path of the first file piece of the spanned set.</param>
         /// <returns>The minimum space required to split the WIM.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle or partPath is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> or <paramref name="partPath" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static long SplitFile(WimHandle wimHandle, string partPath)
         {

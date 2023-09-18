@@ -17,8 +17,8 @@ namespace Microsoft.Wim
         /// Reactivates a mounted image that was previously mounted to the specified directory.
         /// </summary>
         /// <param name="mountPath">The full file path of the directory to which the .wim file must be remounted.</param>
-        /// <exception cref="ArgumentNullException">mountPath is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">mountPath does not exist.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="mountPath" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="mountPath" /> does not exist.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void RemountImage(string mountPath)
         {

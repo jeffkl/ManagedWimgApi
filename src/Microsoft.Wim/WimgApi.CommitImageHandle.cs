@@ -47,11 +47,11 @@ namespace Microsoft.Wim
         /// <summary>
         /// Saves the changes from a mounted image back to the.wim file.
         /// </summary>
-        /// <param name="imageHandle">A <see cref="WimHandle"/> opened by the <see cref="LoadImage"/> method. The .wim file must have been opened with a <see cref="WimFileAccess.Mount"/> flag in call to <see cref="CreateFile" />.</param>
-        /// <param name="append"><c>true</c> to append the modified image to the .wim file.  <c>false</c> to commit the changes to the original image.</param>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> opened by the <see cref="LoadImage" /> method. The .wim file must have been opened with a <see cref="WimFileAccess.Mount" /> flag in call to <see cref="CreateFile" />.</param>
+        /// <param name="append"><see langword="true" /> to append the modified image to the .wim file. <see langword="false" /> to commit the changes to the original image.</param>
         /// <param name="options">Specifies the features to use during the capture.</param>
-        /// <returns>If append is <c>true</c>, a <see cref="WimHandle"/> of the new image, otherwise a null handle.</returns>
-        /// <exception cref="ArgumentNullException">imageHandle is null.</exception>
+        /// <returns>If append is <see langword="true" />, a <see cref="WimHandle" /> of the new image, otherwise a <see langword="null" /> handle.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimHandle CommitImageHandle(WimHandle imageHandle, bool append, WimCommitImageOptions options)
         {

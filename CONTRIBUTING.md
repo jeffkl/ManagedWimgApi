@@ -4,7 +4,7 @@ discussion can be had around the overall implementation.
 
 Once your issue has been discussed, fork this repository and open the Solution File in Visual
 Studio or the source code in your favorite editor.  To compile the code, build in Visual Studio
-or run MSBuild.exe against src\dirs.proj.
+or run MSBuild.exe.
 
 Send off your pull request and it'll get reviewed as soon as possible.
 

@@ -32,7 +32,7 @@ namespace Microsoft.Wim
         private static readonly object LockObject = new object();
 
         /// <summary>
-        /// An instance of the <see cref="WimRegisteredCallbacks"/> class for keeping track of registered callbacks.
+        /// An instance of the <see cref="WimRegisteredCallbacks" /> class for keeping track of registered callbacks.
         /// </summary>
         private static readonly WimRegisteredCallbacks RegisteredCallbacks = new WimRegisteredCallbacks();
     }

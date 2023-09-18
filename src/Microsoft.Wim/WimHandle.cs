@@ -15,8 +15,8 @@ namespace Microsoft.Wim
         /// <summary>
         /// Closes an open Windows® imaging (.wim) file or image handle.
         /// </summary>
-        /// <param name="handle">A <see cref="WimHandle"/> to an open, image-based object.</param>
-        /// <returns><c>true</c> if the handle was successfully closed, otherwise <c>false</c>.</returns>
+        /// <param name="handle">A <see cref="WimHandle" /> to an open, image-based object.</param>
+        /// <returns><see langword="true" /> if the handle was successfully closed, otherwise <see langword="false" />.</returns>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         internal static bool CloseHandle(IntPtr handle)
         {
@@ -64,12 +64,12 @@ namespace Microsoft.Wim
     public sealed class WimHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         /// <summary>
-        /// Represents a <c>null</c> handle.
+        /// Represents a <see langword="null" /> handle.
         /// </summary>
         public static readonly WimHandle Null = new WimHandle();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimHandle"/> class.
+        /// Initializes a new instance of the <see cref="WimHandle" /> class.
         /// </summary>
         internal WimHandle()
             : base(true)
@@ -78,7 +78,7 @@ namespace Microsoft.Wim
             handle = IntPtr.Zero;
         }
 
-        /// <inheritdoc cref="SafeHandle.ReleaseHandle"/>
+        /// <inheritdoc cref="SafeHandle.ReleaseHandle" />
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {

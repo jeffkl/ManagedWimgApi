@@ -51,11 +51,12 @@ namespace Microsoft.Wim
         /// <param name="wimHandle">The handle to a .wim file returned by <see cref="CreateFile" />.</param>
         /// <param name="path">The root drive or directory path from where the image data is captured.</param>
         /// <param name="options">Specifies the features to use during the capture.</param>
-        /// <returns>A <see cref="WimHandle"/> of the image if the method succeeded, otherwise false.</returns>
-        /// <exception cref="ArgumentNullException">wimHandle is null.
+        /// <returns>A <see cref="WimHandle" /> of the image if the method succeeded, otherwise false.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is <see langword="null" />.
         /// -or-
-        /// path is null.</exception>
-        /// <exception cref="DirectoryNotFoundException"><paramref name="path"/> does not exist.</exception>
+        /// <paramref name="path" /> is <see langword="null" />.
+        /// </exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="path" /> does not exist.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimHandle CaptureImage(WimHandle wimHandle, string path, WimCaptureImageOptions options)
         {

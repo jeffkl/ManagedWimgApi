@@ -13,7 +13,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Returns the number of volume images stored in a Windows® image (.wim) file.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim file returned by the <see cref="CreateFile"/> method.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim file returned by the <see cref="CreateFile" /> method.</param>
         /// <returns>The number of images in the .wim file. If this value is zero, then the image file is invalid or does not contain any images that can be applied.</returns>
         public static int GetImageCount(WimHandle wimHandle)
         {

@@ -42,7 +42,7 @@ namespace Microsoft.Wim.Tests
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                WimMessageResult MessageCallback(WimMessageType messageType, object message, object userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
+                WimMessageResult MessageCallback(WimMessageType messageType, object message, object? userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
 
                 WimgApi.RegisterMessageCallback(wimHandle, MessageCallback);
 
@@ -66,7 +66,7 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void ApplyImageTest_NoApply()
         {
-            WimMessageResult MessageCallback(WimMessageType messageType, object message, object userData)
+            WimMessageResult MessageCallback(WimMessageType messageType, object message, object? userData)
             {
                 if (messageType == WimMessageType.SetRange)
                 {
@@ -106,7 +106,7 @@ namespace Microsoft.Wim.Tests
         public void ApplyImageTest_ThrowsArgumentNullException_imageHandle()
         {
             ShouldThrow<ArgumentNullException>("imageHandle", () =>
-                WimgApi.ApplyImage(null, string.Empty, WimApplyImageOptions.None));
+                WimgApi.ApplyImage(imageHandle: null!, string.Empty, WimApplyImageOptions.None));
         }
     }
 }

@@ -39,12 +39,12 @@ namespace Microsoft.Wim
         RPFix = WimgApi.WIM_ATTRIBUTE_RP_FIX,
 
         /// <summary>
-        /// The .wim file has been split into multiple pieces by the <see cref="WimgApi.SplitFile(WimHandle, string, long)"/> method.
+        /// The .wim file has been split into multiple pieces by the <see cref="WimgApi.SplitFile(WimHandle, string, long)" /> method.
         /// </summary>
         Spanned = WimgApi.WIM_ATTRIBUTE_SPANNED,
 
         /// <summary>
-        /// The .wim file contains integrity data that can be used by the <see cref="WimgApi.CopyFile(string, string, WimCopyFileOptions)"/> or <see cref="WimgApi.CreateFile"/> method.
+        /// The .wim file contains integrity data that can be used by the <see cref="WimgApi.CopyFile(string, string, WimCopyFileOptions)" /> or <see cref="WimgApi.CreateFile" /> method.
         /// </summary>
         VerifyData = WimgApi.WIM_ATTRIBUTE_VERIFY_DATA,
     }
@@ -60,7 +60,7 @@ namespace Microsoft.Wim
         private readonly WimgApi.WIM_INFO _wimInfo;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimInfo"/> class.
+        /// Initializes a new instance of the <see cref="WimInfo" /> class.
         /// </summary>
         /// <param name="wimInfoPtr">A pointer to a native <see cref="WimgApi.WIM_INFO" /> struct.</param>
         internal WimInfo(IntPtr wimInfoPtr)
@@ -69,7 +69,7 @@ namespace Microsoft.Wim
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WimInfo"/> class.
+        /// Initializes a new instance of the <see cref="WimInfo" /> class.
         /// </summary>
         /// <param name="wimInfo">A <see cref="WimgApi.WIM_INFO" /> that contains information about the .wim file.</param>
         internal WimInfo(WimgApi.WIM_INFO wimInfo)
@@ -84,14 +84,12 @@ namespace Microsoft.Wim
         public WimInfoAttributes Attributes => (WimInfoAttributes)_wimInfo.WimAttributes;
 
         /// <summary>
-        /// Gets the index of the bootable image in the .wim file. If this value is zero, then there are no bootable images
-        /// available. To set a bootable image, call the WIMSetBootImage function.
+        /// Gets the index of the bootable image in the .wim file. If this value is zero, then there are no bootable images available. To set a bootable image, call the WIMSetBootImage function.
         /// </summary>
         public int BootIndex => (int)_wimInfo.BootIndex;
 
         /// <summary>
-        /// Gets a <see cref="WimCompressionType" /> value that indicates the method of compression used to compress resources in
-        /// the .wim file.
+        /// Gets a <see cref="WimCompressionType" /> value that indicates the method of compression used to compress resources in the .wim file.
         /// </summary>
         public WimCompressionType CompressionType => _wimInfo.CompressionType;
 
@@ -111,8 +109,7 @@ namespace Microsoft.Wim
         public int ImageCount => (int)_wimInfo.ImageCount;
 
         /// <summary>
-        /// Gets the part number of the current .wim file in a spanned set.  This value should be one, unless the data of the .wim
-        /// file was originally split by the <see cref="WimgApi.SplitFile(WimHandle, string, long)" /> method.
+        /// Gets the part number of the current .wim file in a spanned set. This value should be one, unless the data of the .wim file was originally split by the <see cref="WimgApi.SplitFile(WimHandle, string, long)" /> method.
         /// </summary>
         public int PartNumber => _wimInfo.PartNumber;
 
@@ -122,8 +119,7 @@ namespace Microsoft.Wim
         public string Path => _wimInfo.WimPath;
 
         /// <summary>
-        /// Gets the total number of .wim file parts in a spanned set. This value must be one, unless the data of the .wim file was
-        /// originally split via the <see cref="WimgApi.SplitFile(WimHandle, string, long)" /> method.
+        /// Gets the total number of .wim file parts in a spanned set. This value must be one, unless the data of the .wim file was originally split via the <see cref="WimgApi.SplitFile(WimHandle, string, long)" /> method.
         /// </summary>
         public int TotalParts => _wimInfo.TotalParts;
     }

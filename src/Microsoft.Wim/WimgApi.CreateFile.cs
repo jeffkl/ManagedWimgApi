@@ -53,7 +53,7 @@ namespace Microsoft.Wim
         CreateNew = WimgApi.WIM_CREATE_NEW,
 
         /// <summary>
-        /// Opens the image file if it exists. If the file does not exist and the caller requests <see cref="WimFileAccess.Write"/> access, the function makes the file.
+        /// Opens the image file if it exists. If the file does not exist and the caller requests <see cref="WimFileAccess.Write" /> access, the function makes the file.
         /// </summary>
         OpenAlways = WimgApi.WIM_OPEN_ALWAYS,
 
@@ -112,12 +112,12 @@ namespace Microsoft.Wim
         /// Makes a new image file or opens an existing image file.
         /// </summary>
         /// <param name="path">The name of the file to create or to open.</param>
-        /// <param name="desiredAccess">The type of <see cref="WimFileAccess"/> to the object. An application can obtain read access, write access, read/write access, or device query access.</param>
-        /// <param name="creationDisposition">The <see cref="WimCreationDisposition"/> to take on files that exist, and which action to take when files do not exist.</param>
-        /// <param name="options"><see cref="WimCreateFileOptions"/> to be used for the specified file.</param>
-        /// <param name="compressionType">The <see cref="WimCompressionType"/> to be used for a newly created image file.  If the file already exists, then this value is ignored.</param>
-        /// <returns>A <see cref="WimHandle"/> object representing the file.</returns>
-        /// <exception cref="ArgumentNullException">path is null.</exception>
+        /// <param name="desiredAccess">The type of <see cref="WimFileAccess" /> to the object. An application can obtain read access, write access, read/write access, or device query access.</param>
+        /// <param name="creationDisposition">The <see cref="WimCreationDisposition" /> to take on files that exist, and which action to take when files do not exist.</param>
+        /// <param name="options"><see cref="WimCreateFileOptions" /> to be used for the specified file.</param>
+        /// <param name="compressionType">The <see cref="WimCompressionType" /> to be used for a newly created image file. If the file already exists, then this value is ignored.</param>
+        /// <returns>A <see cref="WimHandle" /> object representing the file.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="path" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimHandle CreateFile(string path, WimFileAccess desiredAccess, WimCreationDisposition creationDisposition, WimCreateFileOptions options, WimCompressionType compressionType)
         {

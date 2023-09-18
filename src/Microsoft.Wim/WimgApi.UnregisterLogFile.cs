@@ -13,8 +13,8 @@ namespace Microsoft.Wim
         /// <summary>
         /// Unregisters a log file for debugging or tracing purposes from the current WIMGAPI session.
         /// </summary>
-        /// <param name="logFile">The path to a log file previously specified in a call to the <see cref="RegisterLogFile"/> method.</param>
-        /// <exception cref="ArgumentNullException">logFile is null.</exception>
+        /// <param name="logFile">The path to a log file previously specified in a call to the <see cref="RegisterLogFile" /> method.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="logFile" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void UnregisterLogFile(string logFile)
         {

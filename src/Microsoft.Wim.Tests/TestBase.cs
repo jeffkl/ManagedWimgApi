@@ -12,11 +12,11 @@ namespace Microsoft.Wim.Tests
     [Collection(nameof(TestWimTemplate))]
     public abstract class TestBase : IDisposable
     {
-        private DirectoryInfo _capturePath;
-        private WimHandle _testEsdHandle;
-        private string _testEsdPath;
-        private WimHandle _testWimHandle;
-        private string _testWimPath;
+        private DirectoryInfo? _capturePath;
+        private WimHandle? _testEsdHandle;
+        private string? _testEsdPath;
+        private WimHandle? _testWimHandle;
+        private string? _testWimPath;
 
         protected TestBase(TestWimTemplate template)
         {

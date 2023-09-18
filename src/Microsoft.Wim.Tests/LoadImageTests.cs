@@ -27,7 +27,7 @@ namespace Microsoft.Wim.Tests
         public void DeleteImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.DeleteImage(null, 1));
+                WimgApi.DeleteImage(null!, 1));
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Microsoft.Wim.Tests
         public void LoadImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.LoadImage(null, 1));
+                WimgApi.LoadImage(null!, 1));
         }
 
         [Fact]

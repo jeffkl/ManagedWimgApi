@@ -13,13 +13,13 @@ namespace Microsoft.Wim
     public static partial class WimgApi
     {
         /// <summary>
-        /// Gets a <see cref="WimHandle"/> for the .wim file and a <see cref="WimHandle"/> for the image corresponding to a mounted image directory.
+        /// Gets a <see cref="WimHandle" /> for the .wim file and a <see cref="WimHandle" /> for the image corresponding to a mounted image directory.
         /// </summary>
         /// <param name="mountPath">The full file path of the directory to which the .wim file has been mounted.</param>
-        /// <param name="readOnly"><c>true</c> to get a handle that cannot commit changes, regardless of the access level requested at mount time, otherwise <c>false</c>.</param>
-        /// <param name="imageHandle">A <see cref="WimHandle"/>corresponding to the image mounted at the specified path.</param>
-        /// <returns>A <see cref="WimHandle"/>corresponding to the .wim file mounted at the specified path.</returns>
-        /// <exception cref="ArgumentNullException">mountPath is null.</exception>
+        /// <param name="readOnly"><see langword="true" /> to get a handle that cannot commit changes, regardless of the access level requested at mount time, otherwise <see langword="false" />.</param>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> corresponding to the image mounted at the specified path.</param>
+        /// <returns>A <see cref="WimHandle" /> corresponding to the .wim file mounted at the specified path.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="mountPath" /> is <see langword="null" />.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimHandle GetMountedImageHandle(string mountPath, bool readOnly, out WimHandle imageHandle)
         {

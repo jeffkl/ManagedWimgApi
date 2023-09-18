@@ -35,9 +35,9 @@ namespace Microsoft.Wim
     public static partial class WimgApi
     {
         /// <summary>
-        /// Gets a <see cref="WimMountInfoCollection"/> containing <see cref="WimMountInfo"/> objects that represent a list of images that are currently mounted.
+        /// Gets a <see cref="WimMountInfoCollection" /> containing <see cref="WimMountInfo" /> objects that represent a list of images that are currently mounted.
         /// </summary>
-        /// <returns>A <see cref="WimMountInfoCollection"/> containing <see cref="WimMountInfo"/> objects.</returns>
+        /// <returns>A <see cref="WimMountInfoCollection" /> containing <see cref="WimMountInfo" /> objects.</returns>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static WimMountInfoCollection GetMountedImageInfo()
         {

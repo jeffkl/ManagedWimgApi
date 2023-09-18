@@ -29,28 +29,28 @@ namespace Microsoft.Wim.Tests
         public void SetBootImageTest_ThrowsArgumentNullException_wimHandle()
         {
             ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                WimgApi.SetBootImage(null, 1));
+                WimgApi.SetBootImage(wimHandle: null!, imageIndex: 1));
         }
 
         [Fact]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_minusOne()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.SetBootImage(TestWimHandle, -1));
+                WimgApi.SetBootImage(TestWimHandle, imageIndex: -1));
         }
 
         [Fact]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_outOfRange()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.SetBootImage(TestWimHandle, TestWimTemplate.ImageCount + 2));
+                WimgApi.SetBootImage(TestWimHandle, imageIndex: TestWimTemplate.ImageCount + 2));
         }
 
         [Fact]
         public void SetBootImageTest_ThrowsIndexOutOfRangeException_zero()
         {
             Should.Throw<IndexOutOfRangeException>(() =>
-                WimgApi.SetBootImage(TestWimHandle, 0));
+                WimgApi.SetBootImage(TestWimHandle, imageIndex: 0));
         }
     }
 }

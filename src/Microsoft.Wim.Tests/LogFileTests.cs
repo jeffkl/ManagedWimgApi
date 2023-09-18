@@ -52,14 +52,14 @@ namespace Microsoft.Wim.Tests
         public void RegisterLogFileTest_ThrowsArgumentNullException_logFile()
         {
             ShouldThrow<ArgumentNullException>("logFile", () =>
-                WimgApi.RegisterLogFile(null));
+                WimgApi.RegisterLogFile(logFile: null!));
         }
 
         [Fact]
         public void UnregisterLogFileTest_ThrowsArgumentNullException_logFile()
         {
             ShouldThrow<ArgumentNullException>("logFile", () =>
-                WimgApi.UnregisterLogFile(null));
+                WimgApi.UnregisterLogFile(logFile: null!));
         }
     }
 }

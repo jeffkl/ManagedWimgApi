@@ -52,18 +52,18 @@ namespace Microsoft.Wim
     public static partial class WimgApi
     {
         /// <summary>
-        /// Enables the <see cref="ApplyImage"/> and <see cref="CaptureImage"/> methods to use alternate .wim files for file resources. This can enable optimization of storage when multiple images are captured with similar data.
+        /// Enables the <see cref="ApplyImage" /> and <see cref="CaptureImage" /> methods to use alternate .wim files for file resources. This can enable optimization of storage when multiple images are captured with similar data.
         /// </summary>
-        /// <param name="wimHandle">A <see cref="WimHandle"/> of a .wim (Windows image) file returned by the <see cref="CreateFile"/> method.</param>
+        /// <param name="wimHandle">A <see cref="WimHandle" /> of a .wim (Windows image) file returned by the <see cref="CreateFile" /> method.</param>
         /// <param name="path">The path of the .wim file to be added to the reference list.</param>
         /// <param name="mode">Specifies whether the .wim file is added to the reference list or replaces other entries.</param>
         /// <param name="options">Specifies options when adding the .wim file to the reference list.</param>
-        /// <exception cref="ArgumentNullException">wimHandle is null
+        /// <exception cref="ArgumentNullException"><paramref name="wimHandle" /> is null
         /// -or-
-        /// mode is not WimSetReferenceMode.Replace and path is null.</exception>
-        /// <exception cref="FileNotFoundException">path does not exist.</exception>
+        /// <paramref name="mode" /> is not WimSetReferenceMode.Replace and <paramref name="path" /> is <see langword="null" />.</exception>
+        /// <exception cref="FileNotFoundException"><paramref name="path" /> does not exist.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>If <c>null</c> is passed in for the path parameter and <see cref="WimSetReferenceMode.Replace"/> is passed for the mode parameter, then the reference list is completely cleared, and no file resources are extracted during the <see cref="ApplyImage"/> method.</remarks>
+        /// <remarks>If <see langword="null" /> is passed in for the path parameter and <see cref="WimSetReferenceMode.Replace" /> is passed for the mode parameter, then the reference list is completely cleared, and no file resources are extracted during the <see cref="ApplyImage" /> method.</remarks>
         public static void SetReferenceFile(WimHandle wimHandle, string path, WimSetReferenceMode mode, WimSetReferenceOptions options)
         {
             // See if wimHandle is null

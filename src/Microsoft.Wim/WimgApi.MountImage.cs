@@ -66,15 +66,15 @@ namespace Microsoft.Wim
         /// <param name="mountPath">The full file path of the directory to which the .wim file has to be mounted.</param>
         /// <param name="imagePath">The full file name of the .wim file that has to be mounted.</param>
         /// <param name="imageIndex">An index of the image in the .wim file that has to be mounted.</param>
-        /// <exception cref="ArgumentNullException">mountPath or imagePath is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">mountPath does not exist.</exception>
-        /// <exception cref="FileNotFoundException">imagePath does not exist.</exception>
-        /// <exception cref="IndexOutOfRangeException">index is less than 1.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="mountPath" /> or <paramref name="imagePath" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="mountPath" /> does not exist.</exception>
+        /// <exception cref="FileNotFoundException"><paramref name="imageIndex" /> does not exist.</exception>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="imageIndex" /> is less than 1.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
         public static void MountImage(string mountPath, string imagePath, int imageIndex)
         {
             // Call an overload
-            WimgApi.MountImage(mountPath, imagePath, imageIndex, tempPath: null);
+            WimgApi.MountImage(mountPath, imagePath, imageIndex, tempPath: default);
         }
 
         /// <summary>
@@ -83,13 +83,13 @@ namespace Microsoft.Wim
         /// <param name="mountPath">The full file path of the directory to which the .wim file has to be mounted.</param>
         /// <param name="imagePath">The full file name of the .wim file that has to be mounted.</param>
         /// <param name="imageIndex">The one-based index of the image in the .wim file that is to be mounted.</param>
-        /// <param name="tempPath">The full file path to the temporary directory in which changes to the .wim file can be tracked.  If this parameter is <c>null</c>, the image will not be mounted for edits.</param>
-        /// <exception cref="ArgumentNullException">mountPath or imagePath is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">mountPath does not exist.</exception>
-        /// <exception cref="FileNotFoundException">imagePath does not exist.</exception>
-        /// <exception cref="IndexOutOfRangeException">index is less than 1.</exception>
+        /// <param name="tempPath">The full file path to the temporary directory in which changes to the .wim file can be tracked. If this parameter is <see langword="null" />, the image will not be mounted for edits.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="mountPath" /> or <paramref name="imagePath" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="mountPath" /> does not exist.</exception>
+        /// <exception cref="FileNotFoundException"><paramref name="imagePath" /> does not exist.</exception>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="imageIndex" /> is less than 1.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        public static void MountImage(string mountPath, string imagePath, int imageIndex, string tempPath)
+        public static void MountImage(string mountPath, string imagePath, int imageIndex, string? tempPath)
         {
             // See if mountPath is null
             if (mountPath == null)
@@ -132,13 +132,13 @@ namespace Microsoft.Wim
         /// <summary>
         /// Mounts an image in a Windows® image (.wim) file to the specified directory.
         /// </summary>
-        /// <param name="imageHandle">A <see cref="WimHandle"/> of a a volume image returned by the <see cref="LoadImage"/> or <see cref="CaptureImage"/> method. The WIM file must have been opened with <see cref="WimFileAccess.Mount"/> flag in call to <see cref="CreateFile"/>.</param>
+        /// <param name="imageHandle">A <see cref="WimHandle" /> of a a volume image returned by the <see cref="LoadImage" /> or <see cref="CaptureImage" /> method. The WIM file must have been opened with <see cref="WimFileAccess.Mount" /> flag in call to <see cref="CreateFile" />.</param>
         /// <param name="mountPath">The full file path of the directory to which the .wim file has to be mounted.</param>
         /// <param name="options">Specifies how the file is to be treated and what features are to be used.</param>
-        /// <exception cref="ArgumentNullException">imageHandle or mountPath is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">mountPath does not exist.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="imageHandle" /> or <paramref name="mountPath" /> is <see langword="null" />.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="mountPath" /> does not exist.</exception>
         /// <exception cref="Win32Exception">The Windows® Imaging API reported a failure.</exception>
-        /// <remarks>This method maps the contents of the given image in a .wim file to the specified mount directory. After the successful completion of this operation, users or applications can access the contents of the image mapped under the mount directory. The WIM file containing the image must be opened with <see cref="WimFileAccess.Mount"/> access. Use the <see cref="UnmountImage(WimHandle)"/> method to unmount the image from the mount directory.</remarks>
+        /// <remarks>This method maps the contents of the given image in a .wim file to the specified mount directory. After the successful completion of this operation, users or applications can access the contents of the image mapped under the mount directory. The WIM file containing the image must be opened with <see cref="WimFileAccess.Mount" /> access. Use the <see cref="UnmountImage(WimHandle)" /> method to unmount the image from the mount directory.</remarks>
         public static void MountImage(WimHandle imageHandle, string mountPath, WimMountImageOptions options)
         {
             // See if imageHandle is null
@@ -197,7 +197,7 @@ namespace Microsoft.Wim
             /// </remarks>
             [DllImport(WimgApiDllName, CallingConvention = WimgApiCallingConvention, CharSet = WimgApiCharSet, SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool WIMMountImage(string pszMountPath, string pszWimFileName, DWORD dwImageIndex, [Optional] string pszTempPath);
+            public static extern bool WIMMountImage(string pszMountPath, string pszWimFileName, DWORD dwImageIndex, [Optional] string? pszTempPath);
 
             /// <summary>
             /// Mounts an image in a Windows® image (.wim) file to the specified directory.

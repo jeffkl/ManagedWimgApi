@@ -12,10 +12,10 @@ namespace Microsoft.Wim
     /// <summary>
     /// Specifies a method to call during process of a file copy.
     /// </summary>
-    /// <param name="progress">A <see cref="CopyFileProgress"/> containing the status of the file copy.</param>
+    /// <param name="progress">A <see cref="CopyFileProgress" /> containing the status of the file copy.</param>
     /// <param name="userData">User specified data that was passed to the original copy method.</param>
-    /// <returns>A <see cref="CopyFileProgressAction"/> value indicating if the file copy should be canceled.</returns>
-    public delegate CopyFileProgressAction CopyFileProgressCallback(CopyFileProgress progress, object userData);
+    /// <returns>A <see cref="CopyFileProgressAction" /> value indicating if the file copy should be canceled.</returns>
+    public delegate CopyFileProgressAction CopyFileProgressCallback(CopyFileProgress progress, object? userData);
 
     /// <summary>
     /// Indicates the action to take during copy file progress.
@@ -65,14 +65,14 @@ namespace Microsoft.Wim
     public sealed class CopyFileProgress
     {
         /// <summary>
-        /// The <see cref="CopyFileProgressCallback"/> method the user wants called when progress is made.
+        /// The <see cref="CopyFileProgressCallback" /> method the user wants called when progress is made.
         /// </summary>
-        private readonly CopyFileProgressCallback _progressCallback;
+        private readonly CopyFileProgressCallback? _progressCallback;
 
         /// <summary>
         /// Stores the user data and is passed to the user's callback.
         /// </summary>
-        private readonly object _userData;
+        private readonly object? _userData;
 
         /// <summary>
         /// The DateTime when the file copy began.
@@ -80,13 +80,13 @@ namespace Microsoft.Wim
         private DateTime _timeStarted = DateTime.MinValue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CopyFileProgress"/> class.
+        /// Initializes a new instance of the <see cref="CopyFileProgress" /> class.
         /// </summary>
         /// <param name="sourceFilePath">The full path to the source file being copied.</param>
         /// <param name="destinationFilePath">The full path to the destination file being copied.</param>
-        /// <param name="copyProgressCallback">A <see cref="CopyFileProgressCallback"/> method to call when progress is made.</param>
+        /// <param name="copyProgressCallback">A <see cref="CopyFileProgressCallback" /> method to call when progress is made.</param>
         /// <param name="userData">An object containing data to be used by the method.</param>
-        public CopyFileProgress(string sourceFilePath, string destinationFilePath, CopyFileProgressCallback copyProgressCallback, object userData)
+        public CopyFileProgress(string sourceFilePath, string destinationFilePath, CopyFileProgressCallback? copyProgressCallback, object? userData)
         {
             // Save the input parameters (Validation should be done by CopyFileEx since this is an internal constructor)
             SourceFilePath = sourceFilePath;
