@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <XunitRunnerVisualStudioVersion>2.5.1</XunitRunnerVisualStudioVersion>
+    <XunitRunnerVisualStudioVersion>2.5.3</XunitRunnerVisualStudioVersion>
     <XunitRunnerVisualStudioVersion Condition="'$(TargetFramework)' == 'netcoreapp3.1'">2.4.5</XunitRunnerVisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
