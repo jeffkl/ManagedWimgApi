@@ -33,7 +33,7 @@ namespace Microsoft.Wim
                 throw new ArgumentNullException(nameof(imageInfoXml));
             }
 
-            SetImageInformation(wimHandle, imageInfoXml.CreateNavigator().OuterXml);
+            SetImageInformation(wimHandle, imageInfoXml.CreateNavigator()!.OuterXml);
         }
 
         /// <summary>

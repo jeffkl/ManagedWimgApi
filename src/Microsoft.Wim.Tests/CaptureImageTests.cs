@@ -22,17 +22,13 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void CaptureImageTest()
         {
-            using (WimHandle wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress))
-            {
-                WimgApi.SetTemporaryPath(wimHandle, TempPath);
+            using WimHandle wimHandle = WimgApi.CreateFile(CaptureWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Xpress);
+            WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                using (WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None))
-                {
-                    int imageCount = WimgApi.GetImageCount(wimHandle);
+            using WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None);
+            int imageCount = WimgApi.GetImageCount(wimHandle);
 
-                    imageCount.ShouldBe(1);
-                }
-            }
+            imageCount.ShouldBe(1);
         }
 
         [Fact]
@@ -68,9 +64,7 @@ namespace Microsoft.Wim.Tests
                 WimgApi.RegisterMessageCallback(wimHandle, CaptureImageWithCallbackTestCallback, userData);
                 try
                 {
-                    using (WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None))
-                    {
-                    }
+                    using WimHandle imageHandle = WimgApi.CaptureImage(wimHandle, CapturePath, WimCaptureImageOptions.None);
                 }
                 finally
                 {

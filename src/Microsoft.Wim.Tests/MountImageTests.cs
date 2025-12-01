@@ -25,28 +25,26 @@ namespace Microsoft.Wim.Tests
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
             {
-                using (WimHandle actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, true, out WimHandle actualImageHandle))
+                using WimHandle actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, true, out WimHandle actualImageHandle);
+                try
                 {
-                    try
-                    {
-                        actualWimHandle.ShouldNotBeNull();
+                    actualWimHandle.ShouldNotBeNull();
 
-                        actualImageHandle.ShouldNotBeNull();
+                    actualImageHandle.ShouldNotBeNull();
 
-                        WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
+                    WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
 
-                        wimMountInfo.ShouldNotBeNull();
+                    wimMountInfo.ShouldNotBeNull();
 
-                        wimMountInfo.ImageIndex.ShouldBe(1);
-                        wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
-                        wimMountInfo.Path.ShouldBe(TestWimPath);
-                        wimMountInfo.ReadOnly.ShouldBeTrue();
-                        wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
-                    }
-                    finally
-                    {
-                        actualImageHandle.Dispose();
-                    }
+                    wimMountInfo.ImageIndex.ShouldBe(1);
+                    wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
+                    wimMountInfo.Path.ShouldBe(TestWimPath);
+                    wimMountInfo.ReadOnly.ShouldBeTrue();
+                    wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
+                }
+                finally
+                {
+                    actualImageHandle.Dispose();
                 }
             });
         }
@@ -56,28 +54,26 @@ namespace Microsoft.Wim.Tests
         {
             ExecuteAgainstMountedImage((wimHandle, imageHandle) =>
             {
-                using (WimHandle actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, false, out WimHandle actualImageHandle))
+                using WimHandle actualWimHandle = WimgApi.GetMountedImageHandle(MountPath, false, out WimHandle actualImageHandle);
+                try
                 {
-                    try
-                    {
-                        actualWimHandle.ShouldNotBeNull();
+                    actualWimHandle.ShouldNotBeNull();
 
-                        actualImageHandle.ShouldNotBeNull();
+                    actualImageHandle.ShouldNotBeNull();
 
-                        WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
+                    WimMountInfo wimMountInfo = WimgApi.GetMountedImageInfoFromHandle(actualImageHandle);
 
-                        wimMountInfo.ShouldNotBeNull();
+                    wimMountInfo.ShouldNotBeNull();
 
-                        wimMountInfo.ImageIndex.ShouldBe(1);
-                        wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
-                        wimMountInfo.Path.ShouldBe(TestWimPath);
-                        wimMountInfo.ReadOnly.ShouldBeTrue();
-                        wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
-                    }
-                    finally
-                    {
-                        actualImageHandle.Dispose();
-                    }
+                    wimMountInfo.ImageIndex.ShouldBe(1);
+                    wimMountInfo.MountPath.ShouldBe(MountPath, StringCompareShould.IgnoreCase);
+                    wimMountInfo.Path.ShouldBe(TestWimPath);
+                    wimMountInfo.ReadOnly.ShouldBeTrue();
+                    wimMountInfo.State.ShouldBe(WimMountPointState.Mounted);
+                }
+                finally
+                {
+                    actualImageHandle.Dispose();
                 }
             });
         }
@@ -187,25 +183,21 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void MountImageHandleTest_ThrowsArgumentNullException_mountPath()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimHandle imageHandleCopy = imageHandle;
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimHandle imageHandleCopy = imageHandle;
 
-                ShouldThrow<ArgumentNullException>("mountPath", () =>
-                    WimgApi.MountImage(imageHandleCopy, mountPath: null!, WimMountImageOptions.None));
-            }
+            ShouldThrow<ArgumentNullException>("mountPath", () =>
+                WimgApi.MountImage(imageHandleCopy, mountPath: null!, WimMountImageOptions.None));
         }
 
         [Fact]
         public void MountImageHandleTest_ThrowsDirectoryNotFoundException_mountPath()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimHandle imageHandleCopy = imageHandle;
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimHandle imageHandleCopy = imageHandle;
 
-                Should.Throw<DirectoryNotFoundException>(() =>
-                    WimgApi.MountImage(imageHandleCopy, Path.Combine(TestDirectory, Guid.NewGuid().ToString()), WimMountImageOptions.None));
-            }
+            Should.Throw<DirectoryNotFoundException>(() =>
+                WimgApi.MountImage(imageHandleCopy, Path.Combine(TestDirectory, Guid.NewGuid().ToString()), WimMountImageOptions.None));
         }
 
         [Fact]
@@ -331,30 +323,26 @@ namespace Microsoft.Wim.Tests
 
         internal static void ExecuteAgainstMountedImage(string imagePath, string mountPath, string tempPath, bool readOnly, Action<WimHandle, WimHandle> action)
         {
-            using (WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using WimHandle wimHandle = WimgApi.CreateFile(imagePath, WimFileAccess.Read | WimFileAccess.Write | WimFileAccess.Mount, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None);
+            WimgApi.SetTemporaryPath(wimHandle, tempPath);
+
+            using WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1);
+            WimMountImageOptions flags = WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix;
+
+            if (readOnly)
             {
-                WimgApi.SetTemporaryPath(wimHandle, tempPath);
+                flags |= WimMountImageOptions.ReadOnly;
+            }
 
-                using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
-                {
-                    WimMountImageOptions flags = WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix;
+            WimgApi.MountImage(imageHandle, mountPath, flags);
 
-                    if (readOnly)
-                    {
-                        flags |= WimMountImageOptions.ReadOnly;
-                    }
-
-                    WimgApi.MountImage(imageHandle, mountPath, flags);
-
-                    try
-                    {
-                        action?.Invoke(wimHandle, imageHandle);
-                    }
-                    finally
-                    {
-                        WimgApi.UnmountImage(imageHandle);
-                    }
-                }
+            try
+            {
+                action?.Invoke(wimHandle, imageHandle);
+            }
+            finally
+            {
+                WimgApi.UnmountImage(imageHandle);
             }
         }
 

@@ -23,14 +23,12 @@ namespace Microsoft.Wim.Tests
         {
             string[] splitWims = CreateSplitWim().ToArray();
 
-            using (WimHandle wimHandle = WimgApi.CreateFile(splitWims[0], WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
-            {
-                WimgApi.SetTemporaryPath(wimHandle, TempPath);
+            using WimHandle wimHandle = WimgApi.CreateFile(splitWims[0], WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None);
+            WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                foreach (string referenceFile in splitWims.Skip(1))
-                {
-                    WimgApi.SetReferenceFile(wimHandle, referenceFile, WimSetReferenceMode.Append, WimSetReferenceOptions.None);
-                }
+            foreach (string referenceFile in splitWims.Skip(1))
+            {
+                WimgApi.SetReferenceFile(wimHandle, referenceFile, WimSetReferenceMode.Append, WimSetReferenceOptions.None);
             }
         }
 

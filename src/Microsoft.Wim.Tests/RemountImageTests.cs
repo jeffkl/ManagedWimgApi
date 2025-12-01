@@ -22,26 +22,24 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void RemountImageTest()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix | WimMountImageOptions.ReadOnly);
+
+            try
             {
-                WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix | WimMountImageOptions.ReadOnly);
+                VerifyMountState(imageHandle, WimMountPointState.Mounted);
 
-                try
-                {
-                    VerifyMountState(imageHandle, WimMountPointState.Mounted);
+                KillWimServ();
 
-                    KillWimServ();
+                VerifyMountState(imageHandle, WimMountPointState.Remountable);
 
-                    VerifyMountState(imageHandle, WimMountPointState.Remountable);
+                WimgApi.RemountImage(MountPath);
 
-                    WimgApi.RemountImage(MountPath);
-
-                    VerifyMountState(imageHandle, WimMountPointState.Mounted);
-                }
-                finally
-                {
-                    WimgApi.UnmountImage(imageHandle);
-                }
+                VerifyMountState(imageHandle, WimMountPointState.Mounted);
+            }
+            finally
+            {
+                WimgApi.UnmountImage(imageHandle);
             }
         }
 

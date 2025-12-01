@@ -23,12 +23,10 @@ namespace Microsoft.Wim.Tests
 
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                using (WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.Chunked, WimCompressionType.Lzms))
-                {
-                    WimgApi.SetTemporaryPath(wimHandle, TempPath);
+                using WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.Chunked, WimCompressionType.Lzms);
+                WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                    WimgApi.ExportImage(imageHandle, wimHandle, WimExportImageOptions.None);
-                }
+                WimgApi.ExportImage(imageHandle, wimHandle, WimExportImageOptions.None);
             }
 
             File.Exists(exportWimPath).ShouldBeTrue();
@@ -53,12 +51,10 @@ namespace Microsoft.Wim.Tests
 
             using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
             {
-                using (WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Lzx))
-                {
-                    WimgApi.SetTemporaryPath(wimHandle, TempPath);
+                using WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.Lzx);
+                WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                    WimgApi.ExportImage(imageHandle, wimHandle, WimExportImageOptions.None);
-                }
+                WimgApi.ExportImage(imageHandle, wimHandle, WimExportImageOptions.None);
             }
 
             File.Exists(exportWimPath).ShouldBeTrue();
@@ -76,13 +72,11 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void ExportImageTest_ThrowsArgumentNullException_wimHandle()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimHandle imageHandleCopy = imageHandle;
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimHandle imageHandleCopy = imageHandle;
 
-                ShouldThrow<ArgumentNullException>("wimHandle", () =>
-                    WimgApi.ExportImage(imageHandleCopy, wimHandle: null!, WimExportImageOptions.None));
-            }
+            ShouldThrow<ArgumentNullException>("wimHandle", () =>
+                WimgApi.ExportImage(imageHandleCopy, wimHandle: null!, WimExportImageOptions.None));
         }
 
         [Fact]
@@ -92,12 +86,10 @@ namespace Microsoft.Wim.Tests
 
             using (WimHandle imageHandle = WimgApi.LoadImage(TestEsdHandle, 1))
             {
-                using (WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.None))
-                {
-                    WimgApi.SetTemporaryPath(wimHandle, TempPath);
+                using WimHandle wimHandle = WimgApi.CreateFile(exportWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, WimCompressionType.None);
+                WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                    WimgApi.ExportImage(imageHandle, wimHandle, WimExportImageOptions.None);
-                }
+                WimgApi.ExportImage(imageHandle, wimHandle, WimExportImageOptions.None);
             }
 
             File.Exists(exportWimPath).ShouldBeTrue();

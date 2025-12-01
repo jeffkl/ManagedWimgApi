@@ -37,8 +37,6 @@ namespace Microsoft.Wim
             }
 
             // See if the directory of partPath does not exist
-            //
-            // ReSharper disable once AssignNullToNotNullAttribute
             if (!Directory.Exists(Path.GetDirectoryName(partPath)))
             {
                 throw new DirectoryNotFoundException($"Could not find part of the path '{Path.GetDirectoryName(partPath)}'");

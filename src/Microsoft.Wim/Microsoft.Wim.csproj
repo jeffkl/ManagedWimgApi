@@ -1,9 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ArtifactsPath>..\..\artifacts\$(MSBuildProjectName)</ArtifactsPath>
     <Description>Managed Windows Imaging API (WIMGAPI)</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="D:\ManagedWimgApi\src\GlobalSuppressions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
 </Project>

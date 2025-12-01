@@ -24,9 +24,7 @@ namespace Microsoft.Wim.Tests
         [InlineData(WimCompressionType.Xpress)]
         public void CreateFileTest(WimCompressionType compressionType)
         {
-            using (WimHandle wimHandle = WimgApi.CreateFile(CreateWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, compressionType))
-            {
-            }
+            using WimHandle wimHandle = WimgApi.CreateFile(CreateWimPath, WimFileAccess.Write, WimCreationDisposition.CreateAlways, WimCreateFileOptions.None, compressionType);
         }
 
         [Fact]

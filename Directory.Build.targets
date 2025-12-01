@@ -16,5 +16,7 @@
           Pack="true"
           PackagePath="/"
           Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory).editorconfig"
+          Link="%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

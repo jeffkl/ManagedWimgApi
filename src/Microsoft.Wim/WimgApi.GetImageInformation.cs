@@ -37,13 +37,9 @@ namespace Microsoft.Wim
                 DtdProcessing = DtdProcessing.Prohibit,
             };
 
-            using (StringReader stringReader = new StringReader(xml))
-            {
-                using (XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings))
-                {
-                    return new XPathDocument(xmlReader);
-                }
-            }
+            using StringReader stringReader = new StringReader(xml);
+            using XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings);
+            return new XPathDocument(xmlReader);
         }
 
         /// <summary>
@@ -120,13 +116,11 @@ namespace Microsoft.Wim
 
             using (StringReader stringReader = new StringReader(xml))
             {
-                using (XmlReader xmlReader = new XmlTextReader(stringReader)
+                using XmlReader xmlReader = new XmlTextReader(stringReader)
                 {
                     DtdProcessing = DtdProcessing.Prohibit,
-                })
-                {
-                    xmlDocument.Load(xmlReader);
-                }
+                };
+                xmlDocument.Load(xmlReader);
             }
 
             return xmlDocument;

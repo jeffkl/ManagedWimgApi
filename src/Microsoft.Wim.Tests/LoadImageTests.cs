@@ -51,14 +51,12 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void LoadImageTest()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                imageHandle.ShouldNotBeNull();
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            imageHandle.ShouldNotBeNull();
 
-                imageHandle.IsInvalid.ShouldBeFalse();
+            imageHandle.IsInvalid.ShouldBeFalse();
 
-                imageHandle.IsClosed.ShouldBeFalse();
-            }
+            imageHandle.IsClosed.ShouldBeFalse();
         }
 
         [Fact]
