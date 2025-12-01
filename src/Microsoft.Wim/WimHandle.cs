@@ -79,7 +79,6 @@ namespace Microsoft.Wim
         }
 
         /// <inheritdoc cref="SafeHandle.ReleaseHandle" />
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
             return !IsInvalid && WimgApi.CloseHandle(handle);

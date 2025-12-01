@@ -64,7 +64,7 @@ namespace Microsoft.Wim
         /// </summary>
         /// <param name="wimInfoPtr">A pointer to a native <see cref="WimgApi.WIM_INFO" /> struct.</param>
         internal WimInfo(IntPtr wimInfoPtr)
-            : this((WimgApi.WIM_INFO)Marshal.PtrToStructure(wimInfoPtr, typeof(WimgApi.WIM_INFO)))
+            : this(wimInfoPtr.ToStructure<WimgApi.WIM_INFO>())
         {
         }
 

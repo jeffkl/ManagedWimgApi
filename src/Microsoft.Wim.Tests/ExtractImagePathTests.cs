@@ -22,34 +22,30 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void ExtractImagePathTest()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            foreach (string file in GetImageFiles(imageHandle).Take(10))
             {
-                foreach (string file in GetImageFiles(imageHandle).Take(10))
-                {
-                    string fileName = Path.GetFileName(file);
+                string fileName = Path.GetFileName(file);
 
-                    fileName.ShouldNotBeNull();
+                fileName.ShouldNotBeNull();
 
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    string destinationPath = Path.Combine(TestDirectory, fileName);
+                // ReSharper disable once AssignNullToNotNullAttribute
+                string destinationPath = Path.Combine(TestDirectory, fileName);
 
-                    WimgApi.ExtractImagePath(imageHandle, file, destinationPath);
+                WimgApi.ExtractImagePath(imageHandle, file, destinationPath);
 
-                    File.Exists(destinationPath).ShouldBeTrue();
-                }
+                File.Exists(destinationPath).ShouldBeTrue();
             }
         }
 
         [Fact]
         public void ExtractImagePathTest_ThrowsArgumentNullException_destinationFile()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimHandle imageHandleCopy = imageHandle;
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimHandle imageHandleCopy = imageHandle;
 
-                ShouldThrow<ArgumentNullException>("destinationFile", () =>
-                    WimgApi.ExtractImagePath(imageHandleCopy, string.Empty, destinationFile: null!));
-            }
+            ShouldThrow<ArgumentNullException>("destinationFile", () =>
+                WimgApi.ExtractImagePath(imageHandleCopy, string.Empty, destinationFile: null!));
         }
 
         [Fact]
@@ -62,13 +58,11 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void ExtractImagePathTest_ThrowsArgumentNullException_sourceFile()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimHandle imageHandleCopy = imageHandle;
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimHandle imageHandleCopy = imageHandle;
 
-                ShouldThrow<ArgumentNullException>("sourceFile", () =>
-                    WimgApi.ExtractImagePath(imageHandleCopy, sourceFile: null!, string.Empty));
-            }
+            ShouldThrow<ArgumentNullException>("sourceFile", () =>
+                WimgApi.ExtractImagePath(imageHandleCopy, sourceFile: null!, string.Empty));
         }
 
         private IEnumerable<string> GetImageFiles(WimHandle imageHandle)

@@ -28,7 +28,11 @@ namespace Microsoft.Wim
             }
 
             // Calculate the size of the buffer needed
+#if NET5_0_OR_GREATER
+            int mountInfoSize = Marshal.SizeOf<WIM_MOUNT_INFO_LEVEL1>();
+#else
             int mountInfoSize = Marshal.SizeOf(typeof(WimgApi.WIM_MOUNT_INFO_LEVEL1));
+#endif
 
             // Allocate a buffer for the native function
             IntPtr mountInfoPtr = Marshal.AllocHGlobal(mountInfoSize);

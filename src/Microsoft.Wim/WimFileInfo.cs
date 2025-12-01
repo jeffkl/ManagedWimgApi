@@ -42,7 +42,7 @@ namespace Microsoft.Wim
         /// <param name="fullPath">The full path to the file or directory.</param>
         /// <param name="findDataPtr">A pointer to a <see cref="WimgApi.WIN32_FIND_DATA" /> containing information about the file or directory.</param>
         internal WimFileInfo(string fullPath, IntPtr findDataPtr)
-            : this(fullPath, (WimgApi.WIN32_FIND_DATA)Marshal.PtrToStructure(findDataPtr, typeof(WimgApi.WIN32_FIND_DATA)))
+            : this(fullPath, findDataPtr.ToStructure<WimgApi.WIN32_FIND_DATA>())
         {
         }
 
@@ -64,7 +64,7 @@ namespace Microsoft.Wim
         /// <summary>
         /// Gets a string representing the directory's full path.
         /// </summary>
-        public string DirectoryName => Path.GetDirectoryName(FullName);
+        public string DirectoryName => Path.GetDirectoryName(FullName)!;
 
         /// <summary>
         /// Gets the string representing the extension part of the file.

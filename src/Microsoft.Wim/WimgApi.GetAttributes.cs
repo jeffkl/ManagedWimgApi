@@ -28,7 +28,11 @@ namespace Microsoft.Wim
             }
 
             // Calculate the size of the buffer needed
+#if NET5_0_OR_GREATER
+            uint wimInfoSize = (DWORD)Marshal.SizeOf<WIM_INFO>();
+#else
             uint wimInfoSize = (DWORD)Marshal.SizeOf(typeof(WimgApi.WIM_INFO));
+#endif
 
             // Allocate a buffer to receive the native struct
             IntPtr wimInfoPtr = Marshal.AllocHGlobal((int)wimInfoSize);

@@ -26,10 +26,8 @@ namespace Microsoft.Wim.Tests
             {
                 WimgApi.SetTemporaryPath(wimHandle, TempPath);
 
-                using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
-                {
-                    WimgApi.ApplyImage(imageHandle, ApplyPath, WimApplyImageOptions.Index | WimApplyImageOptions.DisableDirectoryAcl | WimApplyImageOptions.DisableFileAcl | WimApplyImageOptions.DisableRPFix);
-                }
+                using WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1);
+                WimgApi.ApplyImage(imageHandle, ApplyPath, WimApplyImageOptions.Index | WimApplyImageOptions.DisableDirectoryAcl | WimApplyImageOptions.DisableFileAcl | WimApplyImageOptions.DisableRPFix);
             }
 
             Directory.EnumerateFiles(ApplyPath).Count().ShouldBe(TestWimTemplate.FileCount);
@@ -38,28 +36,24 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void ApplyImageTest_Abort()
         {
-            using (WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None))
+            using WimHandle wimHandle = WimgApi.CreateFile(TestWimPath, WimFileAccess.Read, WimCreationDisposition.OpenExisting, WimCreateFileOptions.None, WimCompressionType.None);
+            WimgApi.SetTemporaryPath(wimHandle, TempPath);
+
+            WimMessageResult MessageCallback(WimMessageType messageType, object message, object? userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
+
+            WimgApi.RegisterMessageCallback(wimHandle, MessageCallback);
+
+            try
             {
-                WimgApi.SetTemporaryPath(wimHandle, TempPath);
+                using WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1);
+                WimHandle imageHandleCopy = imageHandle;
 
-                WimMessageResult MessageCallback(WimMessageType messageType, object message, object? userData) => messageType == WimMessageType.Process ? WimMessageResult.Abort : WimMessageResult.Done;
-
-                WimgApi.RegisterMessageCallback(wimHandle, MessageCallback);
-
-                try
-                {
-                    using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
-                    {
-                        WimHandle imageHandleCopy = imageHandle;
-
-                        Should.Throw<OperationCanceledException>(() =>
-                            WimgApi.ApplyImage(imageHandleCopy, ApplyPath, WimApplyImageOptions.NoApply));
-                    }
-                }
-                finally
-                {
-                    WimgApi.UnregisterMessageCallback(wimHandle, MessageCallback);
-                }
+                Should.Throw<OperationCanceledException>(() =>
+                    WimgApi.ApplyImage(imageHandleCopy, ApplyPath, WimApplyImageOptions.NoApply));
+            }
+            finally
+            {
+                WimgApi.UnregisterMessageCallback(wimHandle, MessageCallback);
             }
         }
 
@@ -84,10 +78,8 @@ namespace Microsoft.Wim.Tests
 
                 try
                 {
-                    using (WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1))
-                    {
-                        WimgApi.ApplyImage(imageHandle, ApplyPath, WimApplyImageOptions.NoApply);
-                    }
+                    using WimHandle imageHandle = WimgApi.LoadImage(wimHandle, 1);
+                    WimgApi.ApplyImage(imageHandle, ApplyPath, WimApplyImageOptions.NoApply);
                 }
                 finally
                 {

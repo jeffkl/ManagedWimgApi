@@ -18,42 +18,38 @@ namespace Microsoft.Wim.Tests
         [Fact]
         public void CommitImageHandleTest()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix);
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix);
 
-                try
+            try
+            {
+                using (WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                 {
-                    using (WimgApi.CommitImageHandle(imageHandle, false, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
-                    {
-                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount);
-                    }
+                    WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount);
                 }
-                finally
-                {
-                    WimgApi.UnmountImage(imageHandle);
-                }
+            }
+            finally
+            {
+                WimgApi.UnmountImage(imageHandle);
             }
         }
 
         [Fact]
         public void CommitImageHandleTest_Append()
         {
-            using (WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1))
-            {
-                WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix);
+            using WimHandle imageHandle = WimgApi.LoadImage(TestWimHandle, 1);
+            WimgApi.MountImage(imageHandle, MountPath, WimMountImageOptions.Fast | WimMountImageOptions.DisableDirectoryAcl | WimMountImageOptions.DisableFileAcl | WimMountImageOptions.DisableRPFix);
 
-                try
+            try
+            {
+                using (WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
                 {
-                    using (WimgApi.CommitImageHandle(imageHandle, true, WimCommitImageOptions.DisableDirectoryAcl | WimCommitImageOptions.DisableFileAcl | WimCommitImageOptions.DisableRPFix))
-                    {
-                        WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount + 1);
-                    }
+                    WimgApi.GetImageCount(TestWimHandle).ShouldBe(TestWimTemplate.ImageCount + 1);
                 }
-                finally
-                {
-                    WimgApi.UnmountImage(imageHandle);
-                }
+            }
+            finally
+            {
+                WimgApi.UnmountImage(imageHandle);
             }
         }
 
