@@ -1,10 +1,11 @@
-﻿Microsoft.Wim.CopyFileProgress
-Microsoft.Wim.CopyFileProgress.CopyFileProgress(string sourceFilePath, string destinationFilePath, Microsoft.Wim.CopyFileProgressCallback copyProgressCallback, object userData) -> void
-Microsoft.Wim.CopyFileProgress.CopyProgressHandler(ulong totalFileSize, ulong totalBytesTransferred, ulong streamSize, ulong streamBytesTransferred, uint streamNumber, uint callbackReason, System.IntPtr sourceFile, System.IntPtr destinationFile, System.IntPtr data) -> Microsoft.Wim.CopyFileProgressAction
-Microsoft.Wim.CopyFileProgress.DestinationFilePath.get -> string
+#nullable enable
+Microsoft.Wim.CopyFileProgress
+Microsoft.Wim.CopyFileProgress.CopyFileProgress(string! sourceFilePath, string! destinationFilePath, Microsoft.Wim.CopyFileProgressCallback? copyProgressCallback, object? userData) -> void
+Microsoft.Wim.CopyFileProgress.CopyProgressHandler(ulong totalFileSize, ulong totalBytesTransferred, ulong streamSize, ulong streamBytesTransferred, uint streamNumber, uint callbackReason, nint sourceFile, nint destinationFile, nint data) -> Microsoft.Wim.CopyFileProgressAction
+Microsoft.Wim.CopyFileProgress.DestinationFilePath.get -> string!
 Microsoft.Wim.CopyFileProgress.EstimatedTimeRemaining.get -> System.TimeSpan
 Microsoft.Wim.CopyFileProgress.PercentComplete.get -> decimal
-Microsoft.Wim.CopyFileProgress.SourceFilePath.get -> string
+Microsoft.Wim.CopyFileProgress.SourceFilePath.get -> string!
 Microsoft.Wim.CopyFileProgress.TotalFileSize.get -> long
 Microsoft.Wim.CopyFileProgress.TransferredBytes.get -> long
 Microsoft.Wim.CopyFileProgressAction
@@ -70,15 +71,25 @@ Microsoft.Wim.WimFileInfo
 Microsoft.Wim.WimFileInfo.Attributes.get -> System.IO.FileAttributes
 Microsoft.Wim.WimFileInfo.CreationTime.get -> System.DateTime
 Microsoft.Wim.WimFileInfo.CreationTimeUtc.get -> System.DateTime
-Microsoft.Wim.WimFileInfo.DirectoryName.get -> string
-Microsoft.Wim.WimFileInfo.Extension.get -> string
-Microsoft.Wim.WimFileInfo.FullName.get -> string
+Microsoft.Wim.WimFileInfo.DirectoryName.get -> string!
+Microsoft.Wim.WimFileInfo.Extension.get -> string!
+Microsoft.Wim.WimFileInfo.FullName.get -> string!
 Microsoft.Wim.WimFileInfo.LastAccessTime.get -> System.DateTime
 Microsoft.Wim.WimFileInfo.LastAccessTimeUtc.get -> System.DateTime
 Microsoft.Wim.WimFileInfo.LastWriteTime.get -> System.DateTime
 Microsoft.Wim.WimFileInfo.LastWriteTimeUtc.get -> System.DateTime
 Microsoft.Wim.WimFileInfo.Length.get -> long
-Microsoft.Wim.WimFileInfo.Name.get -> string
+Microsoft.Wim.WimFileInfo.Name.get -> string!
+Microsoft.Wim.WimgApi
+Microsoft.Wim.WimgApi.FILETIME
+Microsoft.Wim.WimgApi.FILETIME.dwHighDateTime -> uint
+Microsoft.Wim.WimgApi.FILETIME.dwLowDateTime -> uint
+Microsoft.Wim.WimgApi.FILETIME.FILETIME() -> void
+Microsoft.Wim.WimgApi.FILETIME.FILETIME(System.DateTime dateTime) -> void
+Microsoft.Wim.WimgApi.FILETIME.ToDateTime() -> System.DateTime
+Microsoft.Wim.WimgApi.FILETIME.ToString(string! format) -> string!
+Microsoft.Wim.WimgApi.FILETIME.ToString(string! format, System.IFormatProvider! provider) -> string!
+Microsoft.Wim.WimgApi.FILETIME.ToString(System.IFormatProvider! provider) -> string!
 Microsoft.Wim.WimHandle
 Microsoft.Wim.WimInfo
 Microsoft.Wim.WimInfo.Attributes.get -> Microsoft.Wim.WimInfoAttributes
@@ -88,54 +99,54 @@ Microsoft.Wim.WimInfo.CreateOptions.get -> Microsoft.Wim.WimCreateFileOptions
 Microsoft.Wim.WimInfo.Guid.get -> System.Guid
 Microsoft.Wim.WimInfo.ImageCount.get -> int
 Microsoft.Wim.WimInfo.PartNumber.get -> int
-Microsoft.Wim.WimInfo.Path.get -> string
+Microsoft.Wim.WimInfo.Path.get -> string!
 Microsoft.Wim.WimInfo.TotalParts.get -> int
 Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimInfoAttributes.MetadataOnly = 2 -> Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimInfoAttributes.Normal = 0 -> Microsoft.Wim.WimInfoAttributes
-Microsoft.Wim.WimInfoAttributes.RPFix = 8 -> Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimInfoAttributes.ReadOnly = 32 -> Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimInfoAttributes.ResourceOnly = 1 -> Microsoft.Wim.WimInfoAttributes
+Microsoft.Wim.WimInfoAttributes.RPFix = 8 -> Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimInfoAttributes.Spanned = 16 -> Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimInfoAttributes.VerifyData = 4 -> Microsoft.Wim.WimInfoAttributes
 Microsoft.Wim.WimMessage<TParam1, TParam2>
-Microsoft.Wim.WimMessage<TParam1, TParam2>.LParam.get -> System.IntPtr
-Microsoft.Wim.WimMessage<TParam1, TParam2>.Param1.get -> TParam1
+Microsoft.Wim.WimMessage<TParam1, TParam2>.LParam.get -> nint
+Microsoft.Wim.WimMessage<TParam1, TParam2>.Param1.get -> TParam1?
 Microsoft.Wim.WimMessage<TParam1, TParam2>.Param1.set -> void
-Microsoft.Wim.WimMessage<TParam1, TParam2>.Param2.get -> TParam2
+Microsoft.Wim.WimMessage<TParam1, TParam2>.Param2.get -> TParam2?
 Microsoft.Wim.WimMessage<TParam1, TParam2>.Param2.set -> void
-Microsoft.Wim.WimMessage<TParam1, TParam2>.WParam.get -> System.IntPtr
-Microsoft.Wim.WimMessage<TParam1, TParam2>.WimMessage(System.IntPtr wParam, System.IntPtr lParam) -> void
+Microsoft.Wim.WimMessage<TParam1, TParam2>.WimMessage(nint wParam, nint lParam) -> void
+Microsoft.Wim.WimMessage<TParam1, TParam2>.WParam.get -> nint
 Microsoft.Wim.WimMessageAlignment
 Microsoft.Wim.WimMessageAlignment.AlignmentBoundary.get -> int
 Microsoft.Wim.WimMessageAlignment.AlignmentBoundary.set -> void
-Microsoft.Wim.WimMessageAlignment.Path.get -> string
+Microsoft.Wim.WimMessageAlignment.Path.get -> string?
 Microsoft.Wim.WimMessageCallback
 Microsoft.Wim.WimMessageCleanupScanningDrive
 Microsoft.Wim.WimMessageCleanupScanningDrive.DriveLetter.get -> char
 Microsoft.Wim.WimMessageCleanupUnmountingImage
 Microsoft.Wim.WimMessageCleanupUnmountingImage.IsComplete.get -> bool
-Microsoft.Wim.WimMessageCleanupUnmountingImage.MountPath.get -> string
+Microsoft.Wim.WimMessageCleanupUnmountingImage.MountPath.get -> string?
 Microsoft.Wim.WimMessageCompress
 Microsoft.Wim.WimMessageCompress.Compress.get -> bool
 Microsoft.Wim.WimMessageCompress.Compress.set -> void
-Microsoft.Wim.WimMessageCompress.Path.get -> string
+Microsoft.Wim.WimMessageCompress.Path.get -> string?
 Microsoft.Wim.WimMessageError
-Microsoft.Wim.WimMessageError.Path.get -> string
+Microsoft.Wim.WimMessageError.Path.get -> string?
 Microsoft.Wim.WimMessageError.Win32ErrorCode.get -> int
 Microsoft.Wim.WimMessageFileInfo
-Microsoft.Wim.WimMessageFileInfo.FileInfo.get -> Microsoft.Wim.WimFileInfo
-Microsoft.Wim.WimMessageFileInfo.Path.get -> string
+Microsoft.Wim.WimMessageFileInfo.FileInfo.get -> Microsoft.Wim.WimFileInfo?
+Microsoft.Wim.WimMessageFileInfo.Path.get -> string?
 Microsoft.Wim.WimMessageImageAlreadyMounted
-Microsoft.Wim.WimMessageImageAlreadyMounted.Path.get -> string
+Microsoft.Wim.WimMessageImageAlreadyMounted.Path.get -> string?
 Microsoft.Wim.WimMessageInformation
-Microsoft.Wim.WimMessageInformation.Path.get -> string
+Microsoft.Wim.WimMessageInformation.Path.get -> string?
 Microsoft.Wim.WimMessageInformation.Win32ErrorCode.get -> int
 Microsoft.Wim.WimMessageMountCleanupProgress
 Microsoft.Wim.WimMessageMountCleanupProgress.EstimatedTimeRemaining.get -> System.TimeSpan
 Microsoft.Wim.WimMessageMountCleanupProgress.PercentComplete.get -> int
 Microsoft.Wim.WimMessageProcess
-Microsoft.Wim.WimMessageProcess.Path.get -> string
+Microsoft.Wim.WimMessageProcess.Path.get -> string?
 Microsoft.Wim.WimMessageProcess.Process.get -> bool
 Microsoft.Wim.WimMessageProcess.Process.set -> void
 Microsoft.Wim.WimMessageProgress
@@ -147,7 +158,7 @@ Microsoft.Wim.WimMessageResult.Done = 4294967280 -> Microsoft.Wim.WimMessageResu
 Microsoft.Wim.WimMessageResult.SkipError = 4294967294 -> Microsoft.Wim.WimMessageResult
 Microsoft.Wim.WimMessageResult.Success = 0 -> Microsoft.Wim.WimMessageResult
 Microsoft.Wim.WimMessageRetry
-Microsoft.Wim.WimMessageRetry.Path.get -> string
+Microsoft.Wim.WimMessageRetry.Path.get -> string?
 Microsoft.Wim.WimMessageRetry.Win32ErrorCode.get -> int
 Microsoft.Wim.WimMessageScanning
 Microsoft.Wim.WimMessageScanning.Count.get -> int
@@ -160,17 +171,17 @@ Microsoft.Wim.WimMessageSetPosition.FileCount.get -> int
 Microsoft.Wim.WimMessageSetRange
 Microsoft.Wim.WimMessageSetRange.FileCount.get -> int
 Microsoft.Wim.WimMessageSplit
-Microsoft.Wim.WimMessageSplit.PartPath.get -> string
+Microsoft.Wim.WimMessageSplit.PartPath.get -> string?
 Microsoft.Wim.WimMessageSplit.PartPath.set -> void
 Microsoft.Wim.WimMessageSplit.PartSize.get -> long
 Microsoft.Wim.WimMessageSplit.PartSize.set -> void
 Microsoft.Wim.WimMessageStaleMountDirectory
-Microsoft.Wim.WimMessageStaleMountDirectory.Path.get -> string
+Microsoft.Wim.WimMessageStaleMountDirectory.Path.get -> string?
 Microsoft.Wim.WimMessageStaleMountFile
 Microsoft.Wim.WimMessageStaleMountFile.DriveLetter.get -> char
 Microsoft.Wim.WimMessageStaleMountFile.FilesDeleted.get -> long
 Microsoft.Wim.WimMessageText
-Microsoft.Wim.WimMessageText.Text.get -> string
+Microsoft.Wim.WimMessageText.Text.get -> string?
 Microsoft.Wim.WimMessageType
 Microsoft.Wim.WimMessageType.Alignment = 38016 -> Microsoft.Wim.WimMessageType
 Microsoft.Wim.WimMessageType.CleanupScanningDrive = 38027 -> Microsoft.Wim.WimMessageType
@@ -197,10 +208,10 @@ Microsoft.Wim.WimMessageType.Text = 38007 -> Microsoft.Wim.WimMessageType
 Microsoft.Wim.WimMessageType.Warning = 38021 -> Microsoft.Wim.WimMessageType
 Microsoft.Wim.WimMessageType.WarningObjectId = 38023 -> Microsoft.Wim.WimMessageType
 Microsoft.Wim.WimMessageWarning
-Microsoft.Wim.WimMessageWarning.Path.get -> string
+Microsoft.Wim.WimMessageWarning.Path.get -> string?
 Microsoft.Wim.WimMessageWarning.Win32ErrorCode.get -> int
 Microsoft.Wim.WimMessageWarningObjectId
-Microsoft.Wim.WimMessageWarningObjectId.Path.get -> string
+Microsoft.Wim.WimMessageWarningObjectId.Path.get -> string?
 Microsoft.Wim.WimMessageWarningObjectId.Win32ErrorCode.get -> int
 Microsoft.Wim.WimMountImageOptions
 Microsoft.Wim.WimMountImageOptions.DisableDirectoryAcl = 16 -> Microsoft.Wim.WimMountImageOptions
@@ -213,8 +224,8 @@ Microsoft.Wim.WimMountImageOptions.ReadOnly = 512 -> Microsoft.Wim.WimMountImage
 Microsoft.Wim.WimMountImageOptions.Verify = 2 -> Microsoft.Wim.WimMountImageOptions
 Microsoft.Wim.WimMountInfo
 Microsoft.Wim.WimMountInfo.ImageIndex.get -> int
-Microsoft.Wim.WimMountInfo.MountPath.get -> string
-Microsoft.Wim.WimMountInfo.Path.get -> string
+Microsoft.Wim.WimMountInfo.MountPath.get -> string!
+Microsoft.Wim.WimMountInfo.Path.get -> string!
 Microsoft.Wim.WimMountInfo.ReadOnly.get -> bool
 Microsoft.Wim.WimMountInfo.State.get -> Microsoft.Wim.WimMountPointState
 Microsoft.Wim.WimMountInfoCollection
@@ -234,60 +245,51 @@ Microsoft.Wim.WimSetReferenceOptions
 Microsoft.Wim.WimSetReferenceOptions.None = 0 -> Microsoft.Wim.WimSetReferenceOptions
 Microsoft.Wim.WimSetReferenceOptions.ShareWrite = 64 -> Microsoft.Wim.WimSetReferenceOptions
 Microsoft.Wim.WimSetReferenceOptions.Verify = 2 -> Microsoft.Wim.WimSetReferenceOptions
-Microsoft.Wim.WimgApi
-Microsoft.Wim.WimgApi.FILETIME
-Microsoft.Wim.WimgApi.FILETIME.FILETIME(System.DateTime dateTime) -> void
-Microsoft.Wim.WimgApi.FILETIME.ToDateTime() -> System.DateTime
-Microsoft.Wim.WimgApi.FILETIME.ToString(System.IFormatProvider provider) -> string
-Microsoft.Wim.WimgApi.FILETIME.ToString(string format) -> string
-Microsoft.Wim.WimgApi.FILETIME.ToString(string format, System.IFormatProvider provider) -> string
-Microsoft.Wim.WimgApi.FILETIME.dwHighDateTime -> uint
-Microsoft.Wim.WimgApi.FILETIME.dwLowDateTime -> uint
-override Microsoft.Wim.WimgApi.FILETIME.ToString() -> string
-static Microsoft.Wim.WimMountInfo.GetMountInfo(string mountPath) -> Microsoft.Wim.WimMountInfo
-static Microsoft.Wim.WimgApi.ApplyImage(Microsoft.Wim.WimHandle imageHandle, string path, Microsoft.Wim.WimApplyImageOptions options) -> void
-static Microsoft.Wim.WimgApi.CaptureImage(Microsoft.Wim.WimHandle wimHandle, string path, Microsoft.Wim.WimCaptureImageOptions options) -> Microsoft.Wim.WimHandle
-static Microsoft.Wim.WimgApi.CommitImageHandle(Microsoft.Wim.WimHandle imageHandle, bool append, Microsoft.Wim.WimCommitImageOptions options) -> Microsoft.Wim.WimHandle
-static Microsoft.Wim.WimgApi.CopyFile(string sourceFile, string destinationFile, Microsoft.Wim.WimCopyFileOptions options) -> void
-static Microsoft.Wim.WimgApi.CopyFile(string sourceFile, string destinationFile, Microsoft.Wim.WimCopyFileOptions options, Microsoft.Wim.CopyFileProgressCallback copyFileProgressCallback, object userData) -> void
-static Microsoft.Wim.WimgApi.CreateFile(string path, Microsoft.Wim.WimFileAccess desiredAccess, Microsoft.Wim.WimCreationDisposition creationDisposition, Microsoft.Wim.WimCreateFileOptions options, Microsoft.Wim.WimCompressionType compressionType) -> Microsoft.Wim.WimHandle
-static Microsoft.Wim.WimgApi.DeleteImage(Microsoft.Wim.WimHandle wimHandle, int index) -> void
+override Microsoft.Wim.WimgApi.FILETIME.ToString() -> string!
+static Microsoft.Wim.WimgApi.ApplyImage(Microsoft.Wim.WimHandle! imageHandle, string! path, Microsoft.Wim.WimApplyImageOptions options) -> void
+static Microsoft.Wim.WimgApi.CaptureImage(Microsoft.Wim.WimHandle! wimHandle, string! path, Microsoft.Wim.WimCaptureImageOptions options) -> Microsoft.Wim.WimHandle!
+static Microsoft.Wim.WimgApi.CommitImageHandle(Microsoft.Wim.WimHandle! imageHandle, bool append, Microsoft.Wim.WimCommitImageOptions options) -> Microsoft.Wim.WimHandle!
+static Microsoft.Wim.WimgApi.CopyFile(string! sourceFile, string! destinationFile, Microsoft.Wim.WimCopyFileOptions options) -> void
+static Microsoft.Wim.WimgApi.CopyFile(string! sourceFile, string! destinationFile, Microsoft.Wim.WimCopyFileOptions options, Microsoft.Wim.CopyFileProgressCallback? copyFileProgressCallback, object? userData) -> void
+static Microsoft.Wim.WimgApi.CreateFile(string! path, Microsoft.Wim.WimFileAccess desiredAccess, Microsoft.Wim.WimCreationDisposition creationDisposition, Microsoft.Wim.WimCreateFileOptions options, Microsoft.Wim.WimCompressionType compressionType) -> Microsoft.Wim.WimHandle!
+static Microsoft.Wim.WimgApi.DeleteImage(Microsoft.Wim.WimHandle! wimHandle, int index) -> void
 static Microsoft.Wim.WimgApi.DeleteImageMounts(bool removeAll) -> void
-static Microsoft.Wim.WimgApi.ExportImage(Microsoft.Wim.WimHandle imageHandle, Microsoft.Wim.WimHandle wimHandle, Microsoft.Wim.WimExportImageOptions options) -> void
-static Microsoft.Wim.WimgApi.ExtractImagePath(Microsoft.Wim.WimHandle imageHandle, string sourceFile, string destinationFile) -> void
+static Microsoft.Wim.WimgApi.ExportImage(Microsoft.Wim.WimHandle! imageHandle, Microsoft.Wim.WimHandle! wimHandle, Microsoft.Wim.WimExportImageOptions options) -> void
+static Microsoft.Wim.WimgApi.ExtractImagePath(Microsoft.Wim.WimHandle! imageHandle, string! sourceFile, string! destinationFile) -> void
 static Microsoft.Wim.WimgApi.FILETIME.implicit operator Microsoft.Wim.WimgApi.FILETIME(System.DateTime dateTime) -> Microsoft.Wim.WimgApi.FILETIME
 static Microsoft.Wim.WimgApi.FILETIME.implicit operator System.DateTime(Microsoft.Wim.WimgApi.FILETIME fileTime) -> System.DateTime
-static Microsoft.Wim.WimgApi.GetAttributes(Microsoft.Wim.WimHandle wimHandle) -> Microsoft.Wim.WimInfo
-static Microsoft.Wim.WimgApi.GetImageCount(Microsoft.Wim.WimHandle wimHandle) -> int
-static Microsoft.Wim.WimgApi.GetImageInformation(Microsoft.Wim.WimHandle wimHandle) -> System.Xml.XPath.IXPathNavigable
-static Microsoft.Wim.WimgApi.GetImageInformationAsString(Microsoft.Wim.WimHandle wimHandle) -> string
-static Microsoft.Wim.WimgApi.GetImageInformationAsXDocument(Microsoft.Wim.WimHandle wimHandle) -> System.Xml.Linq.XDocument
-static Microsoft.Wim.WimgApi.GetImageInformationAsXmlDocument(Microsoft.Wim.WimHandle wimHandle) -> System.Xml.XmlDocument
+static Microsoft.Wim.WimgApi.GetAttributes(Microsoft.Wim.WimHandle! wimHandle) -> Microsoft.Wim.WimInfo!
+static Microsoft.Wim.WimgApi.GetImageCount(Microsoft.Wim.WimHandle! wimHandle) -> int
+static Microsoft.Wim.WimgApi.GetImageInformation(Microsoft.Wim.WimHandle! wimHandle) -> System.Xml.XPath.IXPathNavigable?
+static Microsoft.Wim.WimgApi.GetImageInformationAsString(Microsoft.Wim.WimHandle! wimHandle) -> string?
+static Microsoft.Wim.WimgApi.GetImageInformationAsXDocument(Microsoft.Wim.WimHandle! wimHandle) -> System.Xml.Linq.XDocument?
+static Microsoft.Wim.WimgApi.GetImageInformationAsXmlDocument(Microsoft.Wim.WimHandle! wimHandle) -> System.Xml.XmlDocument?
 static Microsoft.Wim.WimgApi.GetMessageCallbackCount() -> int
-static Microsoft.Wim.WimgApi.GetMessageCallbackCount(Microsoft.Wim.WimHandle wimHandle) -> int
-static Microsoft.Wim.WimgApi.GetMountedImageHandle(string mountPath, bool readOnly, out Microsoft.Wim.WimHandle imageHandle) -> Microsoft.Wim.WimHandle
-static Microsoft.Wim.WimgApi.GetMountedImageInfo() -> Microsoft.Wim.WimMountInfoCollection
-static Microsoft.Wim.WimgApi.GetMountedImageInfoFromHandle(Microsoft.Wim.WimHandle imageHandle) -> Microsoft.Wim.WimMountInfo
-static Microsoft.Wim.WimgApi.LoadImage(Microsoft.Wim.WimHandle wimHandle, int index) -> Microsoft.Wim.WimHandle
-static Microsoft.Wim.WimgApi.MountImage(Microsoft.Wim.WimHandle imageHandle, string mountPath, Microsoft.Wim.WimMountImageOptions options) -> void
-static Microsoft.Wim.WimgApi.MountImage(string mountPath, string imagePath, int imageIndex) -> void
-static Microsoft.Wim.WimgApi.MountImage(string mountPath, string imagePath, int imageIndex, string tempPath) -> void
-static Microsoft.Wim.WimgApi.RegisterLogFile(string logFile) -> void
-static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimHandle wimHandle, Microsoft.Wim.WimMessageCallback messageCallback) -> int
-static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimHandle wimHandle, Microsoft.Wim.WimMessageCallback messageCallback, object userData) -> int
-static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimMessageCallback messageCallback) -> int
-static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimMessageCallback messageCallback, object userData) -> int
-static Microsoft.Wim.WimgApi.RemountImage(string mountPath) -> void
-static Microsoft.Wim.WimgApi.SetBootImage(Microsoft.Wim.WimHandle wimHandle, int imageIndex) -> void
-static Microsoft.Wim.WimgApi.SetImageInformation(Microsoft.Wim.WimHandle wimHandle, System.Xml.XPath.IXPathNavigable imageInfoXml) -> void
-static Microsoft.Wim.WimgApi.SetImageInformation(Microsoft.Wim.WimHandle wimHandle, string imageInfoXml) -> void
-static Microsoft.Wim.WimgApi.SetReferenceFile(Microsoft.Wim.WimHandle wimHandle, string path, Microsoft.Wim.WimSetReferenceMode mode, Microsoft.Wim.WimSetReferenceOptions options) -> void
-static Microsoft.Wim.WimgApi.SetTemporaryPath(Microsoft.Wim.WimHandle wimHandle, string path) -> void
-static Microsoft.Wim.WimgApi.SplitFile(Microsoft.Wim.WimHandle wimHandle, string partPath) -> long
-static Microsoft.Wim.WimgApi.SplitFile(Microsoft.Wim.WimHandle wimHandle, string partPath, long partSize) -> void
-static Microsoft.Wim.WimgApi.UnmountImage(Microsoft.Wim.WimHandle imageHandle) -> void
-static Microsoft.Wim.WimgApi.UnmountImage(string mountPath, string imagePath, int imageIndex, bool commitChanges) -> void
-static Microsoft.Wim.WimgApi.UnregisterLogFile(string logFile) -> void
-static Microsoft.Wim.WimgApi.UnregisterMessageCallback(Microsoft.Wim.WimHandle wimHandle, Microsoft.Wim.WimMessageCallback messageCallback) -> void
-static Microsoft.Wim.WimgApi.UnregisterMessageCallback(Microsoft.Wim.WimMessageCallback messageCallback) -> void
-static readonly Microsoft.Wim.WimHandle.Null -> Microsoft.Wim.WimHandle
+static Microsoft.Wim.WimgApi.GetMessageCallbackCount(Microsoft.Wim.WimHandle! wimHandle) -> int
+static Microsoft.Wim.WimgApi.GetMountedImageHandle(string! mountPath, bool readOnly, out Microsoft.Wim.WimHandle! imageHandle) -> Microsoft.Wim.WimHandle!
+static Microsoft.Wim.WimgApi.GetMountedImageInfo() -> Microsoft.Wim.WimMountInfoCollection!
+static Microsoft.Wim.WimgApi.GetMountedImageInfoFromHandle(Microsoft.Wim.WimHandle! imageHandle) -> Microsoft.Wim.WimMountInfo!
+static Microsoft.Wim.WimgApi.LoadImage(Microsoft.Wim.WimHandle! wimHandle, int index) -> Microsoft.Wim.WimHandle!
+static Microsoft.Wim.WimgApi.MountImage(Microsoft.Wim.WimHandle! imageHandle, string! mountPath, Microsoft.Wim.WimMountImageOptions options) -> void
+static Microsoft.Wim.WimgApi.MountImage(string! mountPath, string! imagePath, int imageIndex) -> void
+static Microsoft.Wim.WimgApi.MountImage(string! mountPath, string! imagePath, int imageIndex, string? tempPath) -> void
+static Microsoft.Wim.WimgApi.RegisterLogFile(string! logFile) -> void
+static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimHandle! wimHandle, Microsoft.Wim.WimMessageCallback! messageCallback) -> int
+static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimHandle! wimHandle, Microsoft.Wim.WimMessageCallback! messageCallback, object? userData) -> int
+static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimMessageCallback! messageCallback) -> int
+static Microsoft.Wim.WimgApi.RegisterMessageCallback(Microsoft.Wim.WimMessageCallback! messageCallback, object? userData) -> int
+static Microsoft.Wim.WimgApi.RemountImage(string! mountPath) -> void
+static Microsoft.Wim.WimgApi.SetBootImage(Microsoft.Wim.WimHandle! wimHandle, int imageIndex) -> void
+static Microsoft.Wim.WimgApi.SetImageInformation(Microsoft.Wim.WimHandle! wimHandle, string! imageInfoXml) -> void
+static Microsoft.Wim.WimgApi.SetImageInformation(Microsoft.Wim.WimHandle! wimHandle, System.Xml.XPath.IXPathNavigable! imageInfoXml) -> void
+static Microsoft.Wim.WimgApi.SetReferenceFile(Microsoft.Wim.WimHandle! wimHandle, string! path, Microsoft.Wim.WimSetReferenceMode mode, Microsoft.Wim.WimSetReferenceOptions options) -> void
+static Microsoft.Wim.WimgApi.SetTemporaryPath(Microsoft.Wim.WimHandle! wimHandle, string! path) -> void
+static Microsoft.Wim.WimgApi.SplitFile(Microsoft.Wim.WimHandle! wimHandle, string! partPath) -> long
+static Microsoft.Wim.WimgApi.SplitFile(Microsoft.Wim.WimHandle! wimHandle, string! partPath, long partSize) -> void
+static Microsoft.Wim.WimgApi.UnmountImage(Microsoft.Wim.WimHandle! imageHandle) -> void
+static Microsoft.Wim.WimgApi.UnmountImage(string! mountPath, string! imagePath, int imageIndex, bool commitChanges) -> void
+static Microsoft.Wim.WimgApi.UnregisterLogFile(string! logFile) -> void
+static Microsoft.Wim.WimgApi.UnregisterMessageCallback(Microsoft.Wim.WimHandle! wimHandle, Microsoft.Wim.WimMessageCallback! messageCallback) -> void
+static Microsoft.Wim.WimgApi.UnregisterMessageCallback(Microsoft.Wim.WimMessageCallback! messageCallback) -> void
+static Microsoft.Wim.WimMountInfo.GetMountInfo(string! mountPath) -> Microsoft.Wim.WimMountInfo!
+static readonly Microsoft.Wim.WimHandle.Null -> Microsoft.Wim.WimHandle!
